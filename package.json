@@ -1,0 +1,36 @@
+{
+  "name": "react-tooltips",
+  "version": "0.1.0",
+  "description": "Tooltips everywhere!",
+  "author": "Gil Barbara <gilbarbara@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gilbarbara/react-tooltips.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gilbarbara/react-tooltips/issues"
+  },
+  "homepage": "https://github.com/gilbarbara/react-tooltips#readme",
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "files": [
+    "es",
+    "lib",
+    "src"
+  ],
+  "keywords": [
+    "react",
+    "react-component",
+    "component",
+    "tooltip"
+  ],
+  "license": "MIT",
+  "peerDependencies": {
+    "react": "^15.0.0 || ^16.0.0",
+    "react-dom": "^15.0.0 || ^16.0.0",
+    "prop-types": "^15.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
