@@ -30,7 +30,51 @@
     "react-dom": "^15.0.0 || ^16.0.0",
     "prop-types": "^15.0.0"
   },
+  "dependencies": {
+    "popper.js": "^1.12.9"
+  },
+  "devDependencies": {
+    "autoprefixer": "^7.1.6",
+    "babel-core": "^6.26.0",
+    "babel-eslint": "^8.0.2",
+    "babel-jest": "^21.2.0",
+    "babel-plugin-array-includes": "^2.0.3",
+    "babel-plugin-istanbul": "^4.1.5",
+    "babel-plugin-transform-flow-strip-types": "^6.22.0",
+    "babel-plugin-transform-react-remove-prop-types": "^0.4.10",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-1": "^6.24.1",
+    "chalk": "^2.3.0",
+    "cross-env": "^5.1.1",
+    "enzyme": "^3.2.0",
+    "enzyme-adapter-react-16": "^1.1.0",
+    "eslint": "^4.12.0",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-babel": "^4.1.2",
+    "eslint-plugin-flowtype": "^2.39.1",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-jsx-a11y": "^6.0.2",
+    "eslint-plugin-react": "^7.5.1",
+    "flow-bin": "^0.59.0",
+    "husky": "^0.14.3",
+    "jest-cli": "^21.2.1",
+    "prop-types": "^15.6.0",
+    "react": "^16.1.1",
+    "react-addons-test-utils": "^15.6.2",
+    "react-dom": "^16.1.1",
+    "react-test-renderer": "^16.1.1",
+    "rimraf": "^2.6.2"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "npm run clean && npm run build:commonjs && npm run build:es",
+    "build:commonjs": "cross-env BABEL_ENV=commonjs babel src -d lib",
+    "build:es": "cross-env NODE_ENV=production babel src -d es",
+    "clean": "rimraf es && rimraf lib",
+    "lint": "eslint --ext .js --ext .jsx src test",
+    "test": "jest --coverage",
+    "test:watch": "jest --watch",
+    "precommit": "npm run lint && npm test",
+    "prepublishOnly": "npm run build"
   }
 }
