@@ -6,7 +6,8 @@ import deepmerge from 'deepmerge';
 
 import stylesDefault from './styles';
 
-const devNull = () => {};
+const devNull = () => {
+};
 
 export default class ReactTooltips extends React.Component {
   constructor(props) {
@@ -71,11 +72,13 @@ export default class ReactTooltips extends React.Component {
           element: this.arrow,
         },
         offset: {
-          offset: 10,
+          offset: '0, 5px',
         },
+        preventOverflow: {
+          padding: 40,
+        }
       },
       onCreate: (instance) => {
-        console.log(instance);
         if (instance.placement !== this.state.currentPlacement) {
           this.setState({ currentPlacement: instance.placement });
         }
@@ -86,8 +89,6 @@ export default class ReactTooltips extends React.Component {
         }
       }
     });
-
-    console.log(this.popper);
   }
 
   componentWillUnmount() {
@@ -126,7 +127,7 @@ export default class ReactTooltips extends React.Component {
   get arrowLayout() {
     const { currentPlacement } = this.state;
     let styles = {};
-    console.log('arrowLayout');
+
     if (currentPlacement.startsWith('top')) {
       styles = {
         bottom: this.styles.arrow.height,
@@ -142,6 +143,7 @@ export default class ReactTooltips extends React.Component {
       };
     }
     else if (currentPlacement.startsWith('left')) {
+      // noinspection JSSuspiciousNameCombination
       styles = {
         right: this.styles.arrow.height,
         top: 0,
@@ -150,7 +152,7 @@ export default class ReactTooltips extends React.Component {
     }
     else if (currentPlacement.startsWith('right')) {
       styles = {
-        left: this.styles.arrow.height,
+        left: 0,
         top: 0,
       };
     }
@@ -223,7 +225,10 @@ export default class ReactTooltips extends React.Component {
     const { children } = this.props;
 
     return (
-      <span className="react__tooltips" ref={c => (this.target = c)} style={{ position: 'relative' }}>
+      <span
+        ref={c => (this.target = c)}
+        className="react__tooltips"
+        style={{ position: 'relative' }}>
         {children}
         {
           ReactDOM.createPortal(
