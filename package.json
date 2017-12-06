@@ -31,6 +31,7 @@
     "prop-types": "^15.0.0"
   },
   "dependencies": {
+    "deepmerge": "^2.0.1",
     "popper.js": "^1.12.9"
   },
   "devDependencies": {
@@ -64,12 +65,14 @@
     "react-addons-test-utils": "^15.6.2",
     "react-dom": "^16.1.1",
     "react-test-renderer": "^16.1.1",
-    "rimraf": "^2.6.2"
+    "rimraf": "^2.6.2",
+    "watch-run": "^1.2.5"
   },
   "scripts": {
     "build": "npm run clean && npm run build:commonjs && npm run build:es",
     "build:commonjs": "cross-env BABEL_ENV=commonjs babel src -d lib",
     "build:es": "cross-env NODE_ENV=production babel src -d es",
+    "watch": "watch-run -p 'src/**/*.js' npm run build:es",
     "clean": "rimraf es && rimraf lib",
     "lint": "eslint --ext .js --ext .jsx src test",
     "test": "jest --coverage",

@@ -21,7 +21,9 @@ function setup(ownProps = props) {
 }
 
 describe('ReactTooltips', () => {
+  const wrapper = setup();
+
   it('should mount', () => {
-    // true
+    console.log(wrapper.debug());
   });
 });

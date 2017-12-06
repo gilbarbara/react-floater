@@ -84,16 +84,6 @@
         ]
       }
     ],
-    "valid-jsdoc": [
-      1, {
-        "prefer": {
-          "return": "returns"
-        },
-        "requireReturn": false,
-        "requireParamDescription": false,
-        "requireReturnDescription": false
-      }
-    ],
     "flowtype/require-parameter-type": [0, { "excludeArrowFunctions": true }],
     "import/no-dynamic-require": 0,
     "import/no-extraneous-dependencies": [2, { "devDependencies": true }],
