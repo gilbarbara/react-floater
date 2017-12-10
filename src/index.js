@@ -4,18 +4,30 @@ import PropTypes from 'prop-types';
 import Popper from 'popper.js';
 import deepmerge from 'deepmerge';
 
+import { isFixed, once, randomID } from './utils';
+
 import stylesDefault from './styles';
 
-const devNull = () => {
+const STATUS = {
+  IDLE: 'idle',
+  READY: 'ready',
+  OPENING: 'opening',
+  OPEN: 'open',
+  CLOSING: 'closing',
+  ERROR: 'error',
 };
 
 export default class ReactTooltips extends React.Component {
   constructor(props) {
     super(props);
 
+    this.id = props.id || randomID();
+
     this.portal = document.createElement('div');
+    this.portal.id = `tooltip__${this.id}`;
+
     this.state = {
-      isActive: false,
+      status: STATUS.IDLE,
       currentPlacement: props.placement,
     };
   }
@@ -25,17 +37,16 @@ export default class ReactTooltips extends React.Component {
     autoOpen: PropTypes.bool,
     callback: PropTypes.func,
     children: PropTypes.node.isRequired,
-    event: PropTypes.oneOf([
-      'hover', 'click'
+    content: PropTypes.node.isRequired,
+    event: PropTypes.oneOf(['hover', 'click']),
+    eventDelay: PropTypes.number,
+    footer: PropTypes.node,
+    id: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number,
     ]),
-    data: PropTypes.shape({
-      title: PropTypes.node,
-      content: PropTypes.node.isRequired,
-      footer: PropTypes.node,
-    }).isRequired,
-    lazyHover: PropTypes.bool,
-    onClick: PropTypes.func,
-    onHover: PropTypes.func,
+    offset: PropTypes.number,
+    open: PropTypes.bool,
     placement: PropTypes.oneOf([
       'top', 'top-start', 'top-end',
       'bottom', 'bottom-start', 'bottom-end',
@@ -43,27 +54,62 @@ export default class ReactTooltips extends React.Component {
       'right', 'right-start', 'right-end',
       'auto'
     ]),
-    showOverlay: PropTypes.bool,
     styles: PropTypes.object,
+    title: PropTypes.node,
   };
 
   static defaultProps = {
     animate: true,
-    autoShow: false,
-    callback: devNull,
+    autoOpen: false,
+    callback: () => {},
     event: 'click',
-    lazyHover: false,
-    onClick: devNull,
-    onHover: devNull,
-    placement: 'top',
+    eventDelay: 0.4,
+    offset: 15,
+    open: false,
+    placement: 'auto',
     showOverlay: false,
     styles: {},
   };
 
   componentDidMount() {
-    const { placement } = this.props;
-
     document.body.appendChild(this.portal);
+    this.init();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { open } = this.props;
+
+    if (open !== nextProps.open) {
+      this.toggle();
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { status } = this.state;
+    const { autoOpen, open } = this.props;
+
+    if (prevState.status === STATUS.IDLE && status === STATUS.READY) {
+      if (autoOpen || open) {
+        this.toggle();
+      }
+    }
+
+    if (
+      (prevState.status !== STATUS.OPENING && status === STATUS.OPENING)
+      || (prevState.status !== STATUS.CLOSING && status === STATUS.CLOSING)
+    ) {
+      once(this.tooltip, 'transitionend', this.handleTransitionEnd);
+    }
+  }
+
+  componentWillUnmount() {
+    this.popper.destroy();
+    document.body.removeChild(this.portal);
+  }
+
+  init() {
+    const { offset, placement } = this.props;
+    const behavior = ['top', 'bottom'].includes(placement) ? 'flip' : ['right', 'bottom-end', 'left', 'top-start'];
 
     this.popper = new Popper(this.target, this.tooltip, {
       placement,
@@ -72,28 +118,82 @@ export default class ReactTooltips extends React.Component {
           element: this.arrow,
         },
         offset: {
-          offset: '0, 5px',
+          offset: `0, ${offset}px`,
         },
         preventOverflow: {
-          padding: 40,
+          padding: 10,
+        },
+        flip: {
+          behavior,
+          padding: 20,
         }
       },
-      onCreate: (instance) => {
-        if (instance.placement !== this.state.currentPlacement) {
-          this.setState({ currentPlacement: instance.placement });
+      onCreate: (data) => {
+        this.setState({
+          currentPlacement: data.placement,
+          status: STATUS.READY,
+        });
+
+        if (data.placement !== data.originalPlacement) {
+          data.instance.update();
         }
       },
-      onUpdate: (instance) => {
-        if (instance.placement !== this.state.currentPlacement) {
-          this.setState({ currentPlacement: instance.placement });
+      onUpdate: (data) => {
+        if (data.placement !== this.state.currentPlacement) {
+          this.setState({ currentPlacement: data.placement });
         }
       }
     });
   }
 
-  componentWillUnmount() {
-    document.body.removeChild(this.portal);
+  toggle(cb = () => {}) {
+    this.setState({
+      status: this.state.status === STATUS.OPEN ? STATUS.CLOSING : STATUS.OPENING
+    }, cb);
   }
+
+  handleTransitionEnd = () => {
+    const { callback } = this.props;
+
+    this.setState({
+      status: this.state.status === STATUS.OPENING ? STATUS.OPEN : STATUS.READY
+    }, () => {
+      callback(this.state.status === STATUS.OPEN ? 'open' : 'close', this.props);
+    });
+  };
+
+  handleClick = () => {
+    const { event, open } = this.props;
+
+    if (event === 'click' && !open) {
+      this.toggle();
+    }
+  };
+
+  handleMouseEnter = () => {
+    const { event, open } = this.props;
+
+    if (event === 'hover' && !open) {
+      clearTimeout(this.eventDelayTimeout);
+      this.toggle();
+    }
+  };
+
+  handleMouseLeave = () => {
+    const { status } = this.state;
+    const { event, eventDelay, open } = this.props;
+
+    if (event === 'hover' && !open && [STATUS.OPENING, STATUS.OPEN].includes(status)) {
+      if (!eventDelay) {
+        this.toggle();
+      }
+      else {
+        this.eventDelayTimeout = setTimeout(() => {
+          this.toggle();
+        }, eventDelay * 1000);
+      }
+    }
+  };
 
   get styles() {
     const { styles } = this.props;
@@ -101,121 +201,149 @@ export default class ReactTooltips extends React.Component {
     return deepmerge(stylesDefault, styles);
   }
 
-  get tooltipLayout() {
-    const { currentPlacement } = this.state;
-    let padding;
+  get tooltipStyle() {
+    const { currentPlacement, status } = this.state;
+    const { animate } = this.props;
+    const { length } = this.styles.arrow;
+    let styles = {};
 
     if (currentPlacement.startsWith('top')) {
-      padding = `0 0 ${this.styles.arrow.height}px`;
+      styles.padding = `0 10px ${length}px`;
     }
     else if (currentPlacement.startsWith('bottom')) {
-      padding = `${this.styles.arrow.height}px 0 0`;
+      styles.padding = `${length}px 10px 0`;
     }
     else if (currentPlacement.startsWith('left')) {
-      padding = `0 ${this.styles.arrow.height}px 0 0`;
+      styles.padding = `0 ${length}px 0 0`;
     }
     else if (currentPlacement.startsWith('right')) {
-      padding = `0 0 0 ${this.styles.arrow.height}px`;
+      styles.padding = `0 0 0 ${length}px`;
+    }
+
+    if ([STATUS.OPENING, STATUS.OPEN].includes(status)) {
+      styles = { ...styles, ...this.styles.tooltipOpening };
+    }
+
+    if (status === STATUS.CLOSING) {
+      styles = { ...styles, ...this.styles.tooltipClosing };
+    }
+
+    if (status === STATUS.OPEN && animate && !isFixed(this.target)) {
+      styles = { ...styles, ...this.styles.tooltipAnimate };
     }
 
     return {
       ...this.styles.tooltip,
-      padding,
-    };
-  }
-
-  get arrowLayout() {
-    const { currentPlacement } = this.state;
-    let styles = {};
-
-    if (currentPlacement.startsWith('top')) {
-      styles = {
-        bottom: this.styles.arrow.height,
-        left: 0,
-        right: 0,
-      };
-    }
-    else if (currentPlacement.startsWith('bottom')) {
-      styles = {
-        top: 0,
-        left: 0,
-        right: 0,
-      };
-    }
-    else if (currentPlacement.startsWith('left')) {
-      // noinspection JSSuspiciousNameCombination
-      styles = {
-        right: this.styles.arrow.height,
-        top: 0,
-        bottom: 0,
-      };
-    }
-    else if (currentPlacement.startsWith('right')) {
-      styles = {
-        left: 0,
-        top: 0,
-      };
-    }
-
-    return {
-      ...this.styles.arrowWrapper,
       ...styles,
     };
   }
 
-  get arrowIcon() {
+  get arrowStyle() {
     const { currentPlacement } = this.state;
-    const { arrow } = this.styles;
+    const { length } = this.styles.arrow;
+    const styles = {
+      position: 'absolute',
+    };
 
-    const { height, width } = arrow;
-    const scale = width / 16;
-    let rotate = '0';
-    let x = width;
-    let y = height;
-
-    if (currentPlacement.startsWith('bottom')) {
-      rotate = '180 8 4';
+    if (currentPlacement.startsWith('top')) {
+      styles.bottom = length;
+      styles.left = 0;
+      styles.right = 0;
+    }
+    else if (currentPlacement.startsWith('bottom')) {
+      styles.top = 0;
+      styles.left = 0;
+      styles.right = 0;
     }
     else if (currentPlacement.startsWith('left')) {
-      y = width;
-      x = height;
-      rotate = '270 8 8';
+      styles.right = 0;
+      styles.top = 0;
+      styles.bottom = 0;
     }
     else if (currentPlacement.startsWith('right')) {
-      y = width;
-      x = height;
-      rotate = '90 4 4';
+      styles.left = 0;
+      styles.top = 0;
+    }
+
+    return styles;
+  }
+
+  renderArrow() {
+    const { currentPlacement } = this.state;
+    const { arrow: { color, display, length, position, spread } } = this.styles;
+    const styles = { display, position };
+
+    let points;
+    let x = spread;
+    let y = length;
+
+    if (currentPlacement.startsWith('top')) {
+      points = `0,0 ${x / 2},${y} ${x},0`;
+      styles.bottom = -y;
+    }
+    else if (currentPlacement.startsWith('bottom')) {
+      points = `${x},${y} ${x / 2},0 0,${y}`;
+      styles.top = 0;
+    }
+    else if (currentPlacement.startsWith('left')) {
+      y = spread;
+      x = length;
+      points = `0,0 ${x},${y / 2} 0,${y}`;
+      styles.right = 0;
+    }
+    else if (currentPlacement.startsWith('right')) {
+      y = spread;
+      x = length;
+      points = `${x},${y} ${x},0 0,${y / 2}`;
+      styles.left = 0;
     }
 
     return (
-      <span ref={c => (this.arrow = c)} style={{ position: 'absolute' }}>
+      <span ref={c => (this.arrow = c)} style={styles}>
         <svg
           width={x}
           height={y}
           version="1.1"
-          xmlns="http://www.w3.org/2000/svg">
-          <polygon points="0, 0 8, 8 16,0" fill={arrow.color} transform={`scale(${scale}) rotate(${rotate})`} />
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <polygon points={points} fill={color} />
         </svg>
       </span>
     );
   }
 
   renderTooltip() {
-    const { data = {} } = this.props;
+    const { content, footer, title } = this.props;
+    const output = {};
+
+    if (title) {
+      output.title = React.isValidElement(title)
+        ? title
+        : <div className="__tooltip__title" style={this.styles.title}>{title}</div>;
+    }
+
+    if (footer) {
+      output.footer = React.isValidElement(footer)
+        ? footer
+        : <div className="__tooltip__footer" style={this.styles.footer}>{footer}</div>;
+    }
 
     return (
       <div
         ref={c => (this.tooltip = c)}
         className="__tooltip"
-        style={this.tooltipLayout}>
+        style={this.tooltipStyle}
+      >
         <div className="__tooltip__content" style={this.styles.content}>
-          {data.content}
+          {output.title}
+          {content}
+          {output.footer}
         </div>
         <div
-
           className="__tooltip__arrow"
-          style={this.arrowLayout}>
-          {this.arrowIcon}
+          style={this.arrowStyle}
+        >
+          {this.renderArrow()}
         </div>
       </div>
     );
@@ -228,7 +356,11 @@ export default class ReactTooltips extends React.Component {
       <span
         ref={c => (this.target = c)}
         className="react__tooltips"
-        style={{ position: 'relative' }}>
+        style={this.styles.wrapper}
+        onClick={this.handleClick}
+        onMouseEnter={this.handleMouseEnter}
+        onMouseLeave={this.handleMouseLeave}
+      >
         {children}
         {
           ReactDOM.createPortal(

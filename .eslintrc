@@ -98,7 +98,7 @@
     "jsx-quotes": 1,
     "react/default-props-match-prop-types": 0,
     "react/forbid-prop-types": 0,
-    "react/jsx-closing-bracket-location": [1, "after-props"],
+    "react/jsx-closing-bracket-location": [1, "line-aligned"],
     "react/jsx-filename-extension": 0,
     "react/jsx-first-prop-new-line": [1, "multiline"],
     "react/jsx-indent": [1, 2],
