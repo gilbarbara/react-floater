@@ -204,7 +204,13 @@ export default class ReactTooltips extends React.Component {
   get tooltipStyle() {
     const { currentPlacement, status } = this.state;
     const { animate } = this.props;
-    const { length } = this.styles.arrow;
+    const {
+      arrow: { length },
+      tooltip,
+      tooltipOpening,
+      tooltipClosing,
+      tooltipWithAnimation,
+    } = this.styles;
     let styles = {};
 
     if (currentPlacement.startsWith('top')) {
@@ -221,19 +227,19 @@ export default class ReactTooltips extends React.Component {
     }
 
     if ([STATUS.OPENING, STATUS.OPEN].includes(status)) {
-      styles = { ...styles, ...this.styles.tooltipOpening };
+      styles = { ...styles, ...tooltipOpening };
     }
 
     if (status === STATUS.CLOSING) {
-      styles = { ...styles, ...this.styles.tooltipClosing };
+      styles = { ...styles, ...tooltipClosing };
     }
 
     if (status === STATUS.OPEN && animate && !isFixed(this.target)) {
-      styles = { ...styles, ...this.styles.tooltipAnimate };
+      styles = { ...styles, ...tooltipWithAnimation };
     }
 
     return {
-      ...this.styles.tooltip,
+      ...tooltip,
       ...styles,
     };
   }
@@ -314,7 +320,11 @@ export default class ReactTooltips extends React.Component {
 
   renderTooltip() {
     const { content, footer, title } = this.props;
-    const output = {};
+    const output = {
+      content: React.isValidElement(content)
+        ? content
+        : <div className="__tooltip__content" style={this.styles.content}>{content}</div>
+    };
 
     if (title) {
       output.title = React.isValidElement(title)
@@ -334,9 +344,9 @@ export default class ReactTooltips extends React.Component {
         className="__tooltip"
         style={this.tooltipStyle}
       >
-        <div className="__tooltip__content" style={this.styles.content}>
+        <div className="__tooltip__container" style={this.styles.container}>
           {output.title}
-          {content}
+          {output.content}
           {output.footer}
         </div>
         <div
