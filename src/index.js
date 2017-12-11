@@ -54,6 +54,7 @@ export default class ReactTooltips extends React.Component {
       'right', 'right-start', 'right-end',
       'auto'
     ]),
+    showCloseButton: PropTypes.bool,
     styles: PropTypes.object,
     title: PropTypes.node,
   };
@@ -67,7 +68,7 @@ export default class ReactTooltips extends React.Component {
     offset: 15,
     open: false,
     placement: 'auto',
-    showOverlay: false,
+    showCloseButton: false,
     styles: {},
   };
 
@@ -325,7 +326,7 @@ export default class ReactTooltips extends React.Component {
   }
 
   renderTooltip() {
-    const { content, footer, title } = this.props;
+    const { content, footer, showCloseButton, title } = this.props;
     const output = {
       content: React.isValidElement(content)
         ? content
@@ -344,6 +345,10 @@ export default class ReactTooltips extends React.Component {
         : <div className="__tooltip__footer" style={this.styles.footer}>{footer}</div>;
     }
 
+    if (showCloseButton && this.eventType === 'click') {
+      output.close = (<button style={this.styles.close} onClick={this.handleClick}>×︎️</button>);
+    }
+
     return (
       <div
         ref={c => (this.tooltip = c)}
@@ -351,6 +356,7 @@ export default class ReactTooltips extends React.Component {
         style={this.tooltipStyle}
       >
         <div className="__tooltip__container" style={this.styles.container}>
+          {output.close}
           {output.title}
           {output.content}
           {output.footer}

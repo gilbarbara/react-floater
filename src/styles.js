@@ -45,6 +45,22 @@ export default {
   content: {
     fontSize: 15,
   },
+  close: {
+    backgroundColor: 'transparent',
+    border: 0,
+    borderRadius: 0,
+    color: '#555',
+    fontSize: 20,
+    height: 20,
+    lineHeight: '20px',
+    outline: 'none',
+    padding: 0,
+    position: 'absolute',
+    right: 0,
+    textAlign: 'center',
+    top: 0,
+    webkitAppearance: 'none',
+    width: 20,
   },
   footer: {
     borderTop: '1px solid #ccc',
