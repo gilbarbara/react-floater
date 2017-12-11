@@ -163,17 +163,17 @@ export default class ReactTooltips extends React.Component {
   };
 
   handleClick = () => {
-    const { event, open } = this.props;
+    const { open } = this.props;
 
-    if (event === 'click' && !open) {
+    if (this.eventType === 'click' && !open) {
       this.toggle();
     }
   };
 
   handleMouseEnter = () => {
-    const { event, open } = this.props;
+    const { open } = this.props;
 
-    if (event === 'hover' && !open) {
+    if (this.eventType === 'hover' && !open) {
       clearTimeout(this.eventDelayTimeout);
       this.toggle();
     }
@@ -181,9 +181,9 @@ export default class ReactTooltips extends React.Component {
 
   handleMouseLeave = () => {
     const { status } = this.state;
-    const { event, eventDelay, open } = this.props;
+    const { eventDelay, open } = this.props;
 
-    if (event === 'hover' && !open && [STATUS.OPENING, STATUS.OPEN].includes(status)) {
+    if (this.eventType === 'hover' && !open && [STATUS.OPENING, STATUS.OPEN].includes(status)) {
       if (!eventDelay) {
         this.toggle();
       }
@@ -194,6 +194,12 @@ export default class ReactTooltips extends React.Component {
       }
     }
   };
+
+  get eventType() {
+    const { event } = this.props;
+
+    return event;
+  }
 
   get styles() {
     const { styles } = this.props;
