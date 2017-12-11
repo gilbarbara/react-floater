@@ -46,6 +46,7 @@ export default {
     fontSize: 15,
   },
   close: {
+    WebkitAppearance: 'none',
     backgroundColor: 'transparent',
     border: 0,
     borderRadius: 0,
@@ -59,7 +60,6 @@ export default {
     right: 0,
     textAlign: 'center',
     top: 0,
-    webkitAppearance: 'none',
     width: 20,
   },
   footer: {
