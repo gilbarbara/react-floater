@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Popper from 'popper.js';
 import deepmerge from 'deepmerge';
 
-import { isFixed, once, randomID } from './utils';
+import { isFixed, isNode, once, randomID } from './utils';
 
 import stylesDefault from './styles';
 
@@ -36,7 +36,7 @@ export default class ReactTooltips extends React.Component {
     animate: PropTypes.bool,
     autoOpen: PropTypes.bool,
     callback: PropTypes.func,
-    children: PropTypes.node.isRequired,
+    children: PropTypes.node,
     content: PropTypes.node.isRequired,
     event: PropTypes.oneOf(['hover', 'click']),
     eventDelay: PropTypes.number,
@@ -56,6 +56,10 @@ export default class ReactTooltips extends React.Component {
     ]),
     showCloseButton: PropTypes.bool,
     styles: PropTypes.object,
+    target: PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.string,
+    ]),
     title: PropTypes.node,
   };
 
@@ -67,9 +71,10 @@ export default class ReactTooltips extends React.Component {
     eventDelay: 0.4,
     offset: 15,
     open: false,
-    placement: 'auto',
+    placement: 'bottom',
     showCloseButton: false,
     styles: {},
+    target: null,
   };
 
   componentDidMount() {
@@ -108,11 +113,11 @@ export default class ReactTooltips extends React.Component {
     document.body.removeChild(this.portal);
   }
 
-  init() {
+  init(target = this.target) {
     const { offset, placement } = this.props;
     const behavior = ['top', 'bottom'].includes(placement) ? 'flip' : ['right', 'bottom-end', 'left', 'top-start'];
 
-    this.popper = new Popper(this.target, this.tooltip, {
+    this.popper = new Popper(target, this.tooltip, {
       placement,
       modifiers: {
         arrow: {
@@ -135,8 +140,10 @@ export default class ReactTooltips extends React.Component {
           status: STATUS.READY,
         });
 
-        if (data.placement !== data.originalPlacement) {
-          data.instance.update();
+        if (placement !== data.placement) {
+          setTimeout(() => {
+            data.instance.update();
+          }, 1);
         }
       },
       onUpdate: (data) => {
@@ -200,6 +207,22 @@ export default class ReactTooltips extends React.Component {
     const { event } = this.props;
 
     return event;
+  }
+
+  get target() {
+    const { target } = this.props;
+    let element = this.wrapper;
+
+    if (target) {
+      if (isNode(target)) {
+        element = target;
+      }
+      else {
+        element = document.querySelector(target);
+      }
+    }
+
+    return element;
   }
 
   get styles() {
@@ -371,26 +394,32 @@ export default class ReactTooltips extends React.Component {
     );
   }
 
-  render() {
-    const { children } = this.props;
+  renderPortal() {
+    return ReactDOM.createPortal(
+      this.renderTooltip(),
+      this.portal,
+    );
+  }
 
-    return (
+  render() {
+    const { children, target } = this.props;
+
+    if (target && !children) {
+      return this.renderPortal();
+    }
+
+    return ([
       <span
-        ref={c => (this.target = c)}
-        className="react__tooltips"
+        key="wrapper"
+        ref={c => (this.wrapper = c)}
         style={this.styles.wrapper}
         onClick={this.handleClick}
         onMouseEnter={this.handleMouseEnter}
         onMouseLeave={this.handleMouseLeave}
       >
         {children}
-        {
-          ReactDOM.createPortal(
-            this.renderTooltip(),
-            this.portal,
-          )
-        }
-      </span>
-    );
+      </span>,
+      this.renderPortal()
+    ]);
   }
 }

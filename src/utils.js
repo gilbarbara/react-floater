@@ -9,6 +9,16 @@ export function randomID() {
   return text;
 }
 
+export function isNode(el) {
+  if (!el || typeof el !== 'object') {
+    return false;
+  }
+
+  return (window && typeof window.Node === 'object')
+    ? (el instanceof window.Node)
+    : (typeof el.nodeType === 'number' && typeof el.nodeName === 'string');
+}
+
 export function isFixed(element) {
   const { nodeName } = element;
 
