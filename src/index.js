@@ -280,6 +280,10 @@ export default class ReactTooltips extends React.Component {
   get eventType() {
     const { event } = this.props;
 
+    if (event === 'hover' && isMobile()) {
+      return 'click';
+    }
+
     return event;
   }
 
