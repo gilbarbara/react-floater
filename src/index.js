@@ -55,7 +55,7 @@ export default class ReactTooltips extends React.Component {
       'bottom', 'bottom-start', 'bottom-end',
       'left', 'left-start', 'left-end',
       'right', 'right-start', 'right-end',
-      'auto'
+      'auto', 'center',
     ]),
     showCloseButton: PropTypes.bool,
     styles: PropTypes.object,
@@ -139,6 +139,10 @@ export default class ReactTooltips extends React.Component {
     const { offset, placement, wrapperOptions } = this.props;
     const behavior = ['top', 'bottom'].includes(placement) ? 'flip' : ['right', 'bottom-end', 'left', 'top-start'];
 
+    if (placement === 'center') {
+      this.setState({ status: STATUS.READY });
+    }
+    else if (target && this.tooltip) {
       new Popper(target, this.tooltip, {
         placement,
         modifiers: {
@@ -208,6 +212,7 @@ export default class ReactTooltips extends React.Component {
         }
       });
     }
+  }
 
   changeWrapperPositioning({ target, wrapperOptions }) {
     this.setState({
@@ -355,6 +360,10 @@ export default class ReactTooltips extends React.Component {
 
     if (status === STATUS.OPEN && animate && !isFixed(this.target)) {
       styles = { ...styles, ...tooltipWithAnimation };
+    }
+
+    if (currentPlacement === 'center') {
+      styles = { ...styles, ...tooltipCentered };
     }
 
     return {
