@@ -1,10 +1,10 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import Popper from 'popper.js';
 import deepmerge from 'deepmerge';
+import { canUseDOM, isFixed, isMobile, isNode, once } from './utils';
 
-import { isFixed, isNode, once, randomID } from './utils';
+import Portal from './Portal';
 
 import stylesDefault from './styles';
 
@@ -21,10 +21,6 @@ export default class ReactTooltips extends React.Component {
   constructor(props) {
     super(props);
 
-    this.id = props.id || randomID();
-
-    this.portal = document.createElement('div');
-    this.portal.id = `tooltip__${this.id}`;
 
     this.state = {
       status: STATUS.IDLE,
@@ -78,7 +74,6 @@ export default class ReactTooltips extends React.Component {
   };
 
   componentDidMount() {
-    document.body.appendChild(this.portal);
     this.init();
   }
 
@@ -110,7 +105,6 @@ export default class ReactTooltips extends React.Component {
 
   componentWillUnmount() {
     this.popper.destroy();
-    document.body.removeChild(this.portal);
   }
 
   init(target = this.target) {
@@ -158,6 +152,10 @@ export default class ReactTooltips extends React.Component {
     this.setState({
       status: this.state.status === STATUS.OPEN ? STATUS.CLOSING : STATUS.OPENING
     }, cb);
+  }
+
+  setRef(ref) {
+    this.tooltip = ref;
   }
 
   handleTransitionEnd = () => {
@@ -394,32 +392,32 @@ export default class ReactTooltips extends React.Component {
     );
   }
 
-  renderPortal() {
-    return ReactDOM.createPortal(
-      this.renderTooltip(),
-      this.portal,
-    );
-  }
+  renderWrapper() {
+    const { children } = this.props;
+    const { wrapper } = this.styles;
 
-  render() {
-    const { children, target } = this.props;
-
-    if (target && !children) {
-      return this.renderPortal();
-    }
-
-    return ([
+    return (
       <span
         key="wrapper"
         ref={c => (this.wrapper = c)}
-        style={this.styles.wrapper}
+        style={wrapper}
         onClick={this.handleClick}
         onMouseEnter={this.handleMouseEnter}
         onMouseLeave={this.handleMouseLeave}
       >
         {children}
-      </span>,
-      this.renderPortal()
-    ]);
+      </span>
+    );
+  }
+
+  render() {
+    return (
+      <Portal
+        {...this.props}
+        setRef={this.setRef}
+        status={this.state.status}
+        tooltip={this.renderTooltip()}
+        wrapper={this.renderWrapper()}
+      />);
   }
 }
