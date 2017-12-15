@@ -1,3 +1,7 @@
+import ExecutionEnvironment from 'exenv';
+
+export const { canUseDOM } = ExecutionEnvironment;
+
 export function randomID() {
   const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   let text = '';
@@ -7,6 +11,10 @@ export function randomID() {
   }
 
   return text;
+}
+
+export function isMobile() {
+  return ('ontouchstart' in window) && /Mobi/.test(navigator.userAgent);
 }
 
 export function isNode(el) {
@@ -20,6 +28,10 @@ export function isNode(el) {
 }
 
 export function isFixed(element) {
+  if (!element) {
+    return false;
+  }
+
   const { nodeName } = element;
 
   if (nodeName === 'BODY' || nodeName === 'HTML') {
