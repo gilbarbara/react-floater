@@ -1,7 +1,14 @@
 export default {
   wrapper: {
     cursor: 'help',
-    display: 'inline-block',
+    display: 'inline-flex',
+    flexDirection: 'column',
+  },
+  wrapperPositioning: {
+    left: -1000,
+    position: 'absolute',
+    top: -1000,
+    visibility: 'hidden',
   },
   tooltip: {
     display: 'inline-block',
@@ -18,13 +25,19 @@ export default {
     visibility: 'visible',
   },
   tooltipWithAnimation: {
-    transition: 'opacity 3s, transform 0.2s',
     opacity: 1,
+    transition: 'opacity 3s, transform 0.2s',
     visibility: 'visible',
   },
   tooltipClosing: {
     opacity: 0,
     visibility: 'visible',
+  },
+  tooltipCentered: {
+    left: '50%',
+    position: 'fixed',
+    top: '50%',
+    transform: 'translate(-50%, -50%)',
   },
   container: {
     backgroundColor: '#fff',
@@ -46,7 +59,6 @@ export default {
     fontSize: 15,
   },
   close: {
-    WebkitAppearance: 'none',
     backgroundColor: 'transparent',
     border: 0,
     borderRadius: 0,
@@ -60,6 +72,7 @@ export default {
     right: 0,
     textAlign: 'center',
     top: 0,
+    WebkitAppearance: 'none',
     width: 25,
   },
   footer: {
@@ -70,8 +83,8 @@ export default {
   arrow: {
     color: '#fff',
     display: 'inline-flex',
-    position: 'absolute',
     length: 16,
+    position: 'absolute',
     spread: 32,
   },
 };
