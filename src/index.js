@@ -21,10 +21,17 @@ export default class ReactTooltips extends React.Component {
   constructor(props) {
     super(props);
 
+    if (process.env.NODE_ENV !== 'production') {
+      if (props.wrapperOptions.positioning && !props.target) {
+        console.warn('Missing props! You need to set a `target` to use `wrapperOptions.positioning`'); //eslint-disable-line no-console
+      }
+    }
 
     this.state = {
-      status: STATUS.IDLE,
       currentPlacement: props.placement,
+      status: STATUS.IDLE,
+      wrapperPositioning: props.wrapperOptions.positioning && !!props.target,
+      wrapperStatus: STATUS.IDLE,
     };
   }
 
@@ -57,6 +64,10 @@ export default class ReactTooltips extends React.Component {
       PropTypes.string,
     ]),
     title: PropTypes.node,
+    wrapperOptions: PropTypes.shape({
+      positioning: PropTypes.bool,
+      offset: PropTypes.number,
+    })
   };
 
   static defaultProps = {
@@ -71,17 +82,28 @@ export default class ReactTooltips extends React.Component {
     showCloseButton: false,
     styles: {},
     target: null,
+    wrapperOptions: {
+      positioning: false,
+    }
   };
 
   componentDidMount() {
-    this.init();
+    if (!canUseDOM) {
+      return;
+    }
+
+    this.initPopper();
   }
 
   componentWillReceiveProps(nextProps) {
-    const { open } = this.props;
+    const { open, target, wrapperOptions } = this.props;
 
     if (open !== nextProps.open) {
       this.toggle();
+    }
+
+    if (wrapperOptions.positioning !== nextProps.wrapperOptions.positioning || target !== nextProps.target) {
+      this.changeWrapperPositioning(nextProps);
     }
   }
 
@@ -96,55 +118,100 @@ export default class ReactTooltips extends React.Component {
     }
 
     if (
-      (prevState.status !== STATUS.OPENING && status === STATUS.OPENING)
-      || (prevState.status !== STATUS.CLOSING && status === STATUS.CLOSING)
+      this.tooltip
+      && ((prevState.status !== STATUS.OPENING && status === STATUS.OPENING)
+        || (prevState.status !== STATUS.CLOSING && status === STATUS.CLOSING))
     ) {
       once(this.tooltip, 'transitionend', this.handleTransitionEnd);
     }
   }
 
   componentWillUnmount() {
-    this.popper.destroy();
+    this.popper.instance.destroy();
+
+    if (this.wrapperPopper) {
+      this.wrapperPopper.instance.destroy();
+    }
   }
 
-  init(target = this.target) {
-    const { offset, placement } = this.props;
+  initPopper(target = this.target) {
+    const { wrapperPositioning } = this.state;
+    const { offset, placement, wrapperOptions } = this.props;
     const behavior = ['top', 'bottom'].includes(placement) ? 'flip' : ['right', 'bottom-end', 'left', 'top-start'];
 
-    this.popper = new Popper(target, this.tooltip, {
-      placement,
-      modifiers: {
-        arrow: {
-          element: this.arrow,
+      new Popper(target, this.tooltip, {
+        placement,
+        modifiers: {
+          arrow: {
+            element: this.arrow,
+          },
+          offset: {
+            offset: `0, ${offset}px`,
+          },
+          preventOverflow: {
+            padding: 10,
+          },
+          flip: {
+            behavior,
+            padding: 20,
+          }
         },
-        offset: {
-          offset: `0, ${offset}px`,
-        },
-        preventOverflow: {
-          padding: 10,
-        },
-        flip: {
-          behavior,
-          padding: 20,
-        }
-      },
-      onCreate: (data) => {
-        this.setState({
-          currentPlacement: data.placement,
-          status: STATUS.READY,
-        });
+        onCreate: (data) => {
+          this.popper = data;
 
-        if (placement !== data.placement) {
-          setTimeout(() => {
-            data.instance.update();
-          }, 1);
+          this.setState({
+            currentPlacement: data.placement,
+            status: STATUS.READY,
+          });
+
+          if (placement !== data.placement) {
+            setTimeout(() => {
+              data.instance.update();
+            }, 1);
+          }
+        },
+        onUpdate: (data) => {
+          this.popper = data;
+
+          if (data.placement !== this.state.currentPlacement) {
+            this.setState({ currentPlacement: data.placement });
+          }
         }
-      },
-      onUpdate: (data) => {
-        if (data.placement !== this.state.currentPlacement) {
-          this.setState({ currentPlacement: data.placement });
+      });
+    }
+
+    if (wrapperPositioning) {
+      const wrapperOffset = typeof wrapperOptions.offset !== 'undefined' ? wrapperOptions.offset : 0;
+
+      new Popper(this.target, this.wrapper, {
+        placement,
+        modifiers: {
+          arrow: {
+            enabled: false,
+          },
+          offset: {
+            offset: `0, ${wrapperOffset}px`,
+          },
+          flip: {
+            enabled: false,
+          }
+        },
+        onCreate: (data) => {
+          this.wrapperPopper = data;
+          this.setState({ wrapperStatus: STATUS.READY });
+
+          if (placement !== data.placement) {
+            setTimeout(() => {
+              data.instance.update();
+            }, 1);
+          }
         }
-      }
+      });
+    }
+
+  changeWrapperPositioning({ target, wrapperOptions }) {
+    this.setState({
+      wrapperPositioning: wrapperOptions.positioning && !!target
     });
   }
 
@@ -160,6 +227,10 @@ export default class ReactTooltips extends React.Component {
 
   handleTransitionEnd = () => {
     const { callback } = this.props;
+
+    if (this.wrapperPopper) {
+      this.wrapperPopper.instance.update();
+    }
 
     this.setState({
       status: this.state.status === STATUS.OPENING ? STATUS.OPEN : STATUS.READY
@@ -224,9 +295,28 @@ export default class ReactTooltips extends React.Component {
   }
 
   get styles() {
+    const { status, wrapperPositioning, wrapperStatus } = this.state;
     const { styles } = this.props;
 
-    return deepmerge(stylesDefault, styles);
+    const combinedStyles = deepmerge(stylesDefault, styles);
+
+    if (wrapperPositioning) {
+      let wrapperStyle = {};
+
+      if (![STATUS.READY].includes(status) || ![STATUS.READY].includes(wrapperStatus)) {
+        wrapperStyle = combinedStyles.wrapperPositioning;
+      }
+      else {
+        wrapperStyle = this.wrapperPopper.styles;
+      }
+
+      combinedStyles.wrapper = {
+        ...combinedStyles.wrapper,
+        ...wrapperStyle
+      };
+    }
+
+    return combinedStyles;
   }
 
   get tooltipStyle() {
@@ -235,8 +325,9 @@ export default class ReactTooltips extends React.Component {
     const {
       arrow: { length },
       tooltip,
-      tooltipOpening,
+      tooltipCentered,
       tooltipClosing,
+      tooltipOpening,
       tooltipWithAnimation,
     } = this.styles;
     let styles = {};
@@ -347,27 +438,31 @@ export default class ReactTooltips extends React.Component {
   }
 
   renderTooltip() {
-    const { content, footer, showCloseButton, title } = this.props;
+    const { wrapperPositioning } = this.state;
+    const { content, footer, open, showCloseButton, title } = this.props;
+
+    const { styles } = this;
+
     const output = {
       content: React.isValidElement(content)
         ? content
-        : <div className="__tooltip__content" style={this.styles.content}>{content}</div>
+        : <div className="__tooltip__content" style={styles.content}>{content}</div>
     };
 
     if (title) {
       output.title = React.isValidElement(title)
         ? title
-        : <div className="__tooltip__title" style={this.styles.title}>{title}</div>;
+        : <div className="__tooltip__title" style={styles.title}>{title}</div>;
     }
 
     if (footer) {
       output.footer = React.isValidElement(footer)
         ? footer
-        : <div className="__tooltip__footer" style={this.styles.footer}>{footer}</div>;
+        : <div className="__tooltip__footer" style={styles.footer}>{footer}</div>;
     }
 
-    if (showCloseButton && this.eventType === 'click') {
-      output.close = (<button style={this.styles.close} onClick={this.handleClick}>×︎️</button>);
+    if ((showCloseButton || wrapperPositioning) && !open && this.eventType === 'click') {
+      output.close = (<button style={styles.close} onClick={this.handleClick}>×︎️</button>);
     }
 
     return (
@@ -376,7 +471,7 @@ export default class ReactTooltips extends React.Component {
         className="__tooltip"
         style={this.tooltipStyle}
       >
-        <div className="__tooltip__container" style={this.styles.container}>
+        <div className="__tooltip__container" style={styles.container}>
           {output.close}
           {output.title}
           {output.content}
