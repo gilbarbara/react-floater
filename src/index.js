@@ -77,7 +77,6 @@ export default class ReactTooltips extends React.Component {
     event: 'click',
     eventDelay: 0.4,
     offset: 15,
-    open: false,
     placement: 'bottom',
     showCloseButton: false,
     styles: {},
@@ -127,7 +126,9 @@ export default class ReactTooltips extends React.Component {
   }
 
   componentWillUnmount() {
-    this.popper.instance.destroy();
+    if (this.popper) {
+      this.popper.instance.destroy();
+    }
 
     if (this.wrapperPopper) {
       this.wrapperPopper.instance.destroy();
@@ -247,7 +248,7 @@ export default class ReactTooltips extends React.Component {
   handleClick = () => {
     const { open } = this.props;
 
-    if (this.eventType === 'click' && !open) {
+    if (this.eventType === 'click' && typeof open === 'undefined') {
       this.toggle();
     }
   };
@@ -255,7 +256,7 @@ export default class ReactTooltips extends React.Component {
   handleMouseEnter = () => {
     const { open } = this.props;
 
-    if (this.eventType === 'hover' && !open) {
+    if (this.eventType === 'hover' && typeof open === 'undefined') {
       clearTimeout(this.eventDelayTimeout);
       this.toggle();
     }
@@ -265,7 +266,7 @@ export default class ReactTooltips extends React.Component {
     const { status } = this.state;
     const { eventDelay, open } = this.props;
 
-    if (this.eventType === 'hover' && !open && [STATUS.OPENING, STATUS.OPEN].includes(status)) {
+    if (this.eventType === 'hover' && typeof open === 'undefined' && [STATUS.OPENING, STATUS.OPEN].includes(status)) {
       if (!eventDelay) {
         this.toggle();
       }
@@ -474,7 +475,11 @@ export default class ReactTooltips extends React.Component {
         : <div className="__tooltip__footer" style={styles.footer}>{footer}</div>;
     }
 
-    if ((showCloseButton || wrapperPositioning) && !open && this.eventType === 'click') {
+    if (
+      (showCloseButton || wrapperPositioning)
+      && typeof open === 'undefined'
+      && this.eventType === 'click'
+    ) {
       output.close = (<button style={styles.close} onClick={this.handleClick}>×︎️</button>);
     }
 
