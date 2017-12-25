@@ -121,7 +121,7 @@ export default class ReactTooltips extends React.Component {
 
     if (prevState.status === STATUS.IDLE && status === STATUS.READY) {
       if (autoOpen || open) {
-        this.toggle();
+        this.toggle(STATUS.OPEN);
       }
     }
 
@@ -238,10 +238,14 @@ export default class ReactTooltips extends React.Component {
     });
   }
 
-  toggle(cb = () => {}) {
-    this.setState({
-      status: this.state.status === STATUS.OPEN ? STATUS.CLOSING : STATUS.OPENING
-    }, cb);
+  toggle(forceState) {
+    let status = this.state.status === STATUS.OPEN ? STATUS.CLOSING : STATUS.OPENING;
+
+    if (typeof forceState !== 'undefined') {
+      status = forceState;
+    }
+
+    this.setState({ status });
   }
 
   setRef(ref) {
@@ -263,27 +267,38 @@ export default class ReactTooltips extends React.Component {
   };
 
   handleClick = () => {
-    const { open } = this.props;
+    if (typeof this.props.open !== 'undefined') return;
 
-    if (this.eventType === 'click' && typeof open === 'undefined') {
+    const { wrapperPosition } = this.state;
+
+    if (
+      this.eventType === 'click'
+      || (wrapperPosition && this.eventType === 'hover')
+    ) {
       this.toggle();
     }
   };
 
   handleMouseEnter = () => {
-    const { open } = this.props;
+    if (typeof this.props.open !== 'undefined') return;
 
-    if (this.eventType === 'hover' && typeof open === 'undefined') {
+    if (this.eventType === 'hover') {
       clearTimeout(this.eventDelayTimeout);
       this.toggle();
     }
   };
 
   handleMouseLeave = () => {
-    const { status } = this.state;
+    const { status, wrapperPosition } = this.state;
     const { eventDelay, open } = this.props;
 
-    if (this.eventType === 'hover' && typeof open === 'undefined' && [STATUS.OPENING, STATUS.OPEN].includes(status)) {
+    if (typeof open !== 'undefined') return;
+
+    if (
+      this.eventType === 'hover'
+      && [STATUS.OPENING, STATUS.OPEN].includes(status)
+      && !wrapperPosition
+    ) {
       if (!eventDelay) {
         this.toggle();
       }
