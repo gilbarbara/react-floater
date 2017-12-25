@@ -73,8 +73,8 @@
   },
   "scripts": {
     "build": "npm run clean && npm run build:commonjs && npm run build:es",
-    "build:commonjs": "cross-env BABEL_ENV=commonjs babel src -d lib",
-    "build:es": "cross-env NODE_ENV=production babel src -d es",
+    "build:commonjs": "BABEL_ENV=commonjs babel src -d lib",
+    "build:es": "NODE_ENV=production babel src -d es",
     "watch": "npm run build && watch-run -p 'src/**/*.js' npm run build:es",
     "clean": "rimraf es && rimraf lib",
     "lint": "eslint --ext .js --ext .jsx src test",
