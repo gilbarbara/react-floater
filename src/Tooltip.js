@@ -5,7 +5,7 @@ import { canUseDOM } from './utils';
 
 const isReact16 = ReactDOM.createPortal !== undefined;
 
-export default class Portal extends React.Component {
+export default class Tooltip extends React.Component {
   constructor(props) {
     super(props);
 

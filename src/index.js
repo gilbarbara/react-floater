@@ -4,7 +4,7 @@ import Popper from 'popper.js';
 import deepmerge from 'deepmerge';
 import { canUseDOM, isFixed, isMobile, isNode, once } from './utils';
 
-import Portal from './Portal';
+import Tooltip from './Tooltip';
 
 import stylesDefault from './styles';
 
@@ -525,7 +525,7 @@ export default class ReactTooltips extends React.Component {
 
   render() {
     return (
-      <Portal
+      <Tooltip
         {...this.props}
         setRef={this.setRef}
         status={this.state.status}
