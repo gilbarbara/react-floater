@@ -29,9 +29,9 @@ export default class ReactTooltips extends React.Component {
 
     this.state = {
       currentPlacement: props.placement,
+      positionWrapper: props.wrapperOptions.position && !!props.target,
       status: STATUS.IDLE,
-      wrapperPosition: props.wrapperOptions.position && !!props.target,
-      wrapperStatus: STATUS.IDLE,
+      statusWrapper: STATUS.IDLE,
     };
   }
 
@@ -149,7 +149,7 @@ export default class ReactTooltips extends React.Component {
   }
 
   initPopper(target = this.target) {
-    const { wrapperPosition } = this.state;
+    const { positionWrapper } = this.state;
     const { flip, offset, placement, wrapperOptions } = this.props;
     const flipBehavior = placement === 'top' || placement === 'bottom' ? 'flip' : [
       'right',
@@ -206,7 +206,7 @@ export default class ReactTooltips extends React.Component {
       });
     }
 
-    if (wrapperPosition) {
+    if (positionWrapper) {
       const wrapperOffset = typeof wrapperOptions.offset !== 'undefined' ? wrapperOptions.offset : 0;
 
       new Popper(this.target, this.wrapper, {
@@ -224,7 +224,7 @@ export default class ReactTooltips extends React.Component {
         },
         onCreate: (data) => {
           this.wrapperPopper = data;
-          this.setState({ wrapperStatus: STATUS.READY });
+          this.setState({ statusWrapper: STATUS.READY });
 
           if (placement !== data.placement) {
             setTimeout(() => {
@@ -238,7 +238,7 @@ export default class ReactTooltips extends React.Component {
 
   changeWrapperPosition({ target, wrapperOptions }) {
     this.setState({
-      wrapperPosition: wrapperOptions.position && !!target
+      positionWrapper: wrapperOptions.position && !!target
     });
   }
 
@@ -273,11 +273,11 @@ export default class ReactTooltips extends React.Component {
   handleClick = () => {
     if (typeof this.props.open !== 'undefined') return;
 
-    const { wrapperPosition } = this.state;
+    const { positionWrapper } = this.state;
 
     if (
       this.eventType === 'click'
-      || (wrapperPosition && this.eventType === 'hover')
+      || (positionWrapper && this.eventType === 'hover')
     ) {
       this.toggle();
     }
@@ -293,7 +293,7 @@ export default class ReactTooltips extends React.Component {
   };
 
   handleMouseLeave = () => {
-    const { status, wrapperPosition } = this.state;
+    const { status, positionWrapper } = this.state;
     const { eventDelay, open } = this.props;
 
     if (typeof open !== 'undefined') return;
@@ -301,7 +301,7 @@ export default class ReactTooltips extends React.Component {
     if (
       this.eventType === 'hover'
       && [STATUS.OPENING, STATUS.OPEN].includes(status)
-      && !wrapperPosition
+      && !positionWrapper
     ) {
       if (!eventDelay) {
         this.toggle();
@@ -341,15 +341,15 @@ export default class ReactTooltips extends React.Component {
   }
 
   get styles() {
-    const { status, wrapperPosition, wrapperStatus } = this.state;
+    const { status, positionWrapper, statusWrapper } = this.state;
     const { styles } = this.props;
 
     const combinedStyles = deepmerge(stylesDefault, styles);
 
-    if (wrapperPosition) {
+    if (positionWrapper) {
       let wrapperStyle = {};
 
-      if (![STATUS.READY].includes(status) || ![STATUS.READY].includes(wrapperStatus)) {
+      if (![STATUS.READY].includes(status) || ![STATUS.READY].includes(statusWrapper)) {
         wrapperStyle = combinedStyles.wrapperPosition;
       }
       else {
@@ -488,7 +488,7 @@ export default class ReactTooltips extends React.Component {
   }
 
   renderTooltip() {
-    const { currentPlacement, wrapperPosition } = this.state;
+    const { currentPlacement, positionWrapper } = this.state;
     const { content, footer, open, showCloseButton, title } = this.props;
 
     const { styles } = this;
@@ -512,7 +512,7 @@ export default class ReactTooltips extends React.Component {
     }
 
     if (
-      (showCloseButton || wrapperPosition)
+      (showCloseButton || positionWrapper)
       && typeof open === 'undefined'
     ) {
       output.close = (<button style={styles.close} onClick={this.handleClick}>×︎️</button>);
