@@ -15,15 +15,18 @@ module.exports = {
     '<rootDir>/test/__setup__/shim.js',
     '<rootDir>/test/__setup__/index.js',
   ],
+  setupTestFrameworkScriptFile: 'jest-enzyme/lib/index.js',
+  testEnvironmentOptions: { pretendToBeVisual: true },
   testRegex: '/test/.*?\\.(test|spec)\\.js$',
+  testURL: 'http://localhost:3000',
   collectCoverage: false,
   collectCoverageFrom: [
-    'src/scripts/**/*.js',
+    'src/**/*.js',
   ],
   coverageThreshold: {
     global: {
-      branches: 65,
-      functions: 65,
+      branches: 55,
+      functions: 75,
       lines: 65,
       statements: 65
     },
