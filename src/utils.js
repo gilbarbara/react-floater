@@ -62,12 +62,3 @@ export function once(element, event, cb, capture = false) {
 
   on(element, event, nextCB, capture);
 }
-
-export const STATUS = {
-  IDLE: 'idle',
-  READY: 'ready',
-  OPENING: 'opening',
-  OPEN: 'open',
-  CLOSING: 'closing',
-  ERROR: 'error',
-};

@@ -4,7 +4,7 @@ export default {
     display: 'inline-flex',
     flexDirection: 'column',
   },
-  wrapperPositioning: {
+  wrapperPosition: {
     left: -1000,
     position: 'absolute',
     top: -1000,
@@ -26,7 +26,7 @@ export default {
   },
   tooltipWithAnimation: {
     opacity: 1,
-    transition: 'opacity 3s, transform 0.2s',
+    transition: 'opacity 0.3s, transform 0.2s',
     visibility: 'visible',
   },
   tooltipClosing: {
@@ -77,6 +77,7 @@ export default {
   },
   footer: {
     borderTop: '1px solid #ccc',
+    fontSize: 13,
     marginTop: 10,
     paddingTop: 5,
   },

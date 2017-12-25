@@ -22,15 +22,15 @@ export default class ReactTooltips extends React.Component {
     super(props);
 
     if (process.env.NODE_ENV !== 'production') {
-      if (props.wrapperOptions.positioning && !props.target) {
-        console.warn('Missing props! You need to set a `target` to use `wrapperOptions.positioning`'); //eslint-disable-line no-console
+      if (props.wrapperOptions.position && !props.target) {
+        console.warn('Missing props! You need to set a `target` to use `wrapperOptions.position`'); //eslint-disable-line no-console
       }
     }
 
     this.state = {
       currentPlacement: props.placement,
       status: STATUS.IDLE,
-      wrapperPositioning: props.wrapperOptions.positioning && !!props.target,
+      wrapperPosition: props.wrapperOptions.position && !!props.target,
       wrapperStatus: STATUS.IDLE,
     };
   }
@@ -65,7 +65,14 @@ export default class ReactTooltips extends React.Component {
     ]),
     title: PropTypes.node,
     wrapperOptions: PropTypes.shape({
-      positioning: PropTypes.bool,
+      placement: PropTypes.oneOf([
+        'top', 'top-start', 'top-end',
+        'bottom', 'bottom-start', 'bottom-end',
+        'left', 'left-start', 'left-end',
+        'right', 'right-start', 'right-end',
+        'auto',
+      ]),
+      position: PropTypes.bool,
       offset: PropTypes.number,
     })
   };
@@ -82,7 +89,7 @@ export default class ReactTooltips extends React.Component {
     styles: {},
     target: null,
     wrapperOptions: {
-      positioning: false,
+      position: false,
     }
   };
 
@@ -101,8 +108,8 @@ export default class ReactTooltips extends React.Component {
       this.toggle();
     }
 
-    if (wrapperOptions.positioning !== nextProps.wrapperOptions.positioning || target !== nextProps.target) {
-      this.changeWrapperPositioning(nextProps);
+    if (wrapperOptions.position !== nextProps.wrapperOptions.position || target !== nextProps.target) {
+      this.changeWrapperPosition(nextProps);
     }
   }
 
@@ -136,9 +143,9 @@ export default class ReactTooltips extends React.Component {
   }
 
   initPopper(target = this.target) {
-    const { wrapperPositioning } = this.state;
     const { offset, placement, wrapperOptions } = this.props;
     const behavior = ['top', 'bottom'].includes(placement) ? 'flip' : ['right', 'bottom-end', 'left', 'top-start'];
+    const { wrapperPosition } = this.state;
 
     if (placement === 'center') {
       this.setState({ status: STATUS.READY });
@@ -185,11 +192,11 @@ export default class ReactTooltips extends React.Component {
       });
     }
 
-    if (wrapperPositioning) {
+    if (wrapperPosition) {
       const wrapperOffset = typeof wrapperOptions.offset !== 'undefined' ? wrapperOptions.offset : 0;
 
       new Popper(this.target, this.wrapper, {
-        placement,
+        placement: wrapperOptions.placement || placement,
         modifiers: {
           arrow: {
             enabled: false,
@@ -215,9 +222,9 @@ export default class ReactTooltips extends React.Component {
     }
   }
 
-  changeWrapperPositioning({ target, wrapperOptions }) {
+  changeWrapperPosition({ target, wrapperOptions }) {
     this.setState({
-      wrapperPositioning: wrapperOptions.positioning && !!target
+      wrapperPosition: wrapperOptions.position && !!target
     });
   }
 
@@ -305,16 +312,16 @@ export default class ReactTooltips extends React.Component {
   }
 
   get styles() {
-    const { status, wrapperPositioning, wrapperStatus } = this.state;
+    const { status, wrapperPosition, wrapperStatus } = this.state;
     const { styles } = this.props;
 
     const combinedStyles = deepmerge(stylesDefault, styles);
 
-    if (wrapperPositioning) {
+    if (wrapperPosition) {
       let wrapperStyle = {};
 
       if (![STATUS.READY].includes(status) || ![STATUS.READY].includes(wrapperStatus)) {
-        wrapperStyle = combinedStyles.wrapperPositioning;
+        wrapperStyle = combinedStyles.wrapperPosition;
       }
       else {
         wrapperStyle = this.wrapperPopper.styles;
@@ -452,7 +459,7 @@ export default class ReactTooltips extends React.Component {
   }
 
   renderTooltip() {
-    const { wrapperPositioning } = this.state;
+    const { currentPlacement, wrapperPosition } = this.state;
     const { content, footer, open, showCloseButton, title } = this.props;
 
     const { styles } = this;
@@ -476,11 +483,21 @@ export default class ReactTooltips extends React.Component {
     }
 
     if (
-      (showCloseButton || wrapperPositioning)
+      (showCloseButton || wrapperPosition)
       && typeof open === 'undefined'
-      && this.eventType === 'click'
     ) {
       output.close = (<button style={styles.close} onClick={this.handleClick}>×︎️</button>);
+    }
+
+    if (currentPlacement !== 'center') {
+      output.arrow = (
+        <div
+          className="__tooltip__arrow"
+          style={this.arrowStyle}
+        >
+          {this.renderArrow()}
+        </div>
+      );
     }
 
     return (
@@ -495,12 +512,7 @@ export default class ReactTooltips extends React.Component {
           {output.content}
           {output.footer}
         </div>
-        <div
-          className="__tooltip__arrow"
-          style={this.arrowStyle}
-        >
-          {this.renderArrow()}
-        </div>
+        {output.arrow}
       </div>
     );
   }
