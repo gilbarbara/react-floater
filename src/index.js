@@ -43,6 +43,7 @@ export default class ReactTooltips extends React.Component {
     content: PropTypes.node.isRequired,
     event: PropTypes.oneOf(['hover', 'click']),
     eventDelay: PropTypes.number,
+    flip: PropTypes.bool,
     footer: PropTypes.node,
     id: PropTypes.oneOfType([
       PropTypes.string,
@@ -83,6 +84,7 @@ export default class ReactTooltips extends React.Component {
     callback: () => {},
     event: 'click',
     eventDelay: 0.4,
+    flip: true,
     offset: 15,
     placement: 'bottom',
     showCloseButton: false,
@@ -143,9 +145,16 @@ export default class ReactTooltips extends React.Component {
   }
 
   initPopper(target = this.target) {
-    const { offset, placement, wrapperOptions } = this.props;
-    const behavior = ['top', 'bottom'].includes(placement) ? 'flip' : ['right', 'bottom-end', 'left', 'top-start'];
     const { wrapperPosition } = this.state;
+    const { flip, offset, placement, wrapperOptions } = this.props;
+    const flipBehavior = placement === 'top' || placement === 'bottom' ? 'flip' : [
+      'right',
+      'bottom-end',
+      'top-end',
+      'left',
+      'top-start',
+      'bottom-start',
+    ];
 
     if (placement === 'center') {
       this.setState({ status: STATUS.READY });
@@ -164,7 +173,8 @@ export default class ReactTooltips extends React.Component {
             padding: 10,
           },
           flip: {
-            behavior,
+            enabled: flip,
+            behavior: flipBehavior,
             padding: 20,
           }
         },
