@@ -1,17 +1,9 @@
 import ExecutionEnvironment from 'exenv';
+import ReactDOM from 'react-dom';
 
 export const { canUseDOM } = ExecutionEnvironment;
 
-export function randomID() {
-  const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let text = '';
-
-  for (let i = 0; i < 6; i++) {
-    text += possible.charAt(Math.floor(Math.random() * possible.length));
-  }
-
-  return text;
-}
+export const isReact16 = ReactDOM.createPortal !== undefined;
 
 export function isMobile() {
   return ('ontouchstart' in window) && /Mobi/.test(navigator.userAgent);

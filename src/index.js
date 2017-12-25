@@ -96,14 +96,14 @@ export default class ReactTooltips extends React.Component {
   };
 
   componentDidMount() {
-    if (!canUseDOM) {
-      return;
-    }
+    if (!canUseDOM) return;
 
     this.initPopper();
   }
 
   componentWillReceiveProps(nextProps) {
+    if (!canUseDOM) return;
+
     const { open, target, wrapperOptions } = this.props;
 
     if (open !== nextProps.open) {
@@ -116,6 +116,8 @@ export default class ReactTooltips extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    if (!canUseDOM) return;
+
     const { status } = this.state;
     const { autoOpen, open } = this.props;
 
@@ -135,6 +137,8 @@ export default class ReactTooltips extends React.Component {
   }
 
   componentWillUnmount() {
+    if (!canUseDOM) return;
+
     if (this.popper) {
       this.popper.instance.destroy();
     }

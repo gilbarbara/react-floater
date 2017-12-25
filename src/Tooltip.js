@@ -1,17 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-import { canUseDOM } from './utils';
-
-const isReact16 = ReactDOM.createPortal !== undefined;
+import { canUseDOM, isReact16 } from './utils';
 
 export default class Tooltip extends React.Component {
   constructor(props) {
     super(props);
 
-    if (!canUseDOM) {
-      return;
-    }
+    if (!canUseDOM) return;
 
     this.node = document.createElement('div');
     if (props.id) {
@@ -39,9 +35,7 @@ export default class Tooltip extends React.Component {
   };
 
   componentDidMount() {
-    if (!canUseDOM) {
-      return;
-    }
+    if (!canUseDOM) return;
 
     if (!isReact16) {
       this.renderPortal();
@@ -72,6 +66,8 @@ export default class Tooltip extends React.Component {
   }
 
   renderPortal() {
+    if (!canUseDOM) return null;
+
     const { tooltip, setRef } = this.props;
 
     if (isReact16) {
