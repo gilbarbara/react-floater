@@ -1,9 +1,10 @@
 React Tooltips
 ===
 
-[![NPM version](https://badge.fury.io/js/react-tooltips.svg)](https://www.npmjs.com/package/react-tooltips)
-[![build status](https://travis-ci.org/gilbarbara/react-tooltips.svg)](https://travis-ci.org/gilbarbara/react-tooltips)
-[![Maintainability](https://api.codeclimate.com/v1/badges/930e69ac58dc225e5389/maintainability)](https://codeclimate.com/github/gilbarbara/react-tooltips/maintainability)
+[![NPM version](https://badge.fury.io/js/react-tooltips.svg)](https://www.npmjs.com/package/react-tooltips) 
+[![build status](https://travis-ci.org/gilbarbara/react-tooltips.svg)](https://travis-ci.org/gilbarbara/react-tooltips) 
+[![dependencies Status](https://david-dm.org/gilbarbara/react-tooltips/status.svg)](https://david-dm.org/gilbarbara/react-tooltips) 
+[![Maintainability](https://api.codeclimate.com/v1/badges/930e69ac58dc225e5389/maintainability)](https://codeclimate.com/github/gilbarbara/react-tooltips/maintainability) 
 [![Test Coverage](https://api.codeclimate.com/v1/badges/930e69ac58dc225e5389/test_coverage)](https://codeclimate.com/github/gilbarbara/react-tooltips/test_coverage)
 
 View the [demo](https://84vn36m178.codesandbox.io/)
@@ -38,10 +39,10 @@ Check it [styles.js](./src/styles.js) for the syntax.
 
 ## Props
 
-**animate** `bool` ➡ `true`  
+**animate** `bool` ▶︎ `true`  
 Animate the tooltip on scroll/resize.
  
-**autoOpen** `bool` ➡ `false`  
+**autoOpen** `bool` ▶︎ `false`  
 Open the tooltip automatically.  
 
 **callback** `func`  
@@ -57,15 +58,15 @@ An element to trigger the tooltip.
 The tooltip content. It can be anything that can be rendered.  
 It's the only required prop.
 
-**event** `string` ➡ `click`  
+**event** `string` ▶︎ `click`  
 The event that will trigger the tooltip. It can be `hover | click`.  
 *These won't work in controlled mode.*
 
-**eventDelay** `number` ➡ `0.4`  
+**eventDelay** `number` ▶︎ `0.4`  
 The amount of time (in seconds) that hover tooltips should wait after a `mouseLeave` event before hiding.  
 Only valid for event type `hover`.
 
-**flip** `bool` ➡ `true`
+**flip** `bool` ▶︎ `true`
 Change the tooltip position on scroll/resize.
 
 **footer** `node`  
@@ -74,14 +75,14 @@ It can be anything that can be rendered.
 **id** `string|number`  
 In case that you need to identify the portal.
 
-**offset** `number` ➡ `15`  
+**offset** `number` ▶︎ `15`  
 The distance between the tooltip and its target in pixels.
 
-**open** `bool` ➡ `false`  
+**open** `bool` ▶︎ `false`  
 The switch between normal and controlled modes.  
 *Setting this prop will disabled the normal behavior.*
 
-**placement** `string` ➡ `bottom`  
+**placement** `string` ▶︎ `bottom`  
 The placement of the tooltip. It will flip position if there's no space available.
 It can be:  
 top (top-start, top-end),  
@@ -91,11 +92,11 @@ right (right-start, right-end,
 auto,  
 center
 
-**showCloseButton** `bool` ➡ `false`  
+**showCloseButton** `bool` ▶︎ `false`  
 It will show a ⨉ button to close the tooltip.  
 This will be `true` when you change `wrapperOptions` position.
 
-**styles** `object` ➡ `defaultStyles`  
+**styles** `object` ▶︎ `defaultStyles`  
 You can customize the UI using this prop.
 
 **target** `object|string`  
