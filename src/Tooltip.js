@@ -42,7 +42,7 @@ export default class Tooltip extends React.Component {
     }
   }
 
-  componentWillReceiveProps(prevProps) {
+  componentDidUpdate(prevProps) {
     if (!canUseDOM) return;
 
     const { placement, status } = this.props;

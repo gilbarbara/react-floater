@@ -1,8 +1,7 @@
-import ExecutionEnvironment from 'exenv';
 import ReactDOM from 'react-dom';
+import ExecutionEnvironment from 'exenv';
 
 export const { canUseDOM } = ExecutionEnvironment;
-
 export const isReact16 = ReactDOM.createPortal !== undefined;
 
 export function isMobile() {
