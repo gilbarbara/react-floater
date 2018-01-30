@@ -568,6 +568,7 @@ export default class ReactTooltips extends React.Component {
     return (
       <Tooltip
         {...this.props}
+        placement={this.state.currentPlacement}
         setRef={this.setRef}
         status={this.state.status}
         tooltip={this.renderTooltip()}
