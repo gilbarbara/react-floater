@@ -252,9 +252,9 @@ export default class ReactTooltips extends React.Component {
     this.setState({ status });
   }
 
-  setRef(ref) {
+  setRef = (ref) => {
     this.tooltip = ref;
-  }
+  };
 
   handleTransitionEnd = () => {
     const { callback } = this.props;
