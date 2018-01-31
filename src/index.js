@@ -75,7 +75,14 @@ export default class ReactTooltips extends React.Component {
       ]),
       position: PropTypes.bool,
       offset: PropTypes.number,
-    })
+    }),
+    classNames: PropTypes.shape({
+      wrapper: PropTypes.string,
+      container: PropTypes.string,
+      content: PropTypes.string,
+      title: PropTypes.string,
+      footer: PropTypes.string,
+      arrow: PropTypes.string,
   };
 
   static defaultProps = {
@@ -92,7 +99,15 @@ export default class ReactTooltips extends React.Component {
     target: null,
     wrapperOptions: {
       position: false,
-    }
+    },
+    classNames: {
+      wrapper: '__tooltip',
+      container: '__tooltip__container',
+      content: '__tooltip__content',
+      title: '__tooltip__title',
+      footer: '__tooltip__footer',
+      arrow: '__tooltip__arrow',
+    },
   };
 
   componentDidMount() {
@@ -489,26 +504,26 @@ export default class ReactTooltips extends React.Component {
 
   renderTooltip() {
     const { currentPlacement, positionWrapper } = this.state;
-    const { content, footer, open, showCloseButton, title } = this.props;
+    const { content, footer, open, showCloseButton, title, classNames } = this.props;
 
     const { styles } = this;
 
     const output = {
       content: React.isValidElement(content)
         ? content
-        : <div className="__tooltip__content" style={styles.content}>{content}</div>
+        : <div className={classNames.content} style={styles.content}>{content}</div>
     };
 
     if (title) {
       output.title = React.isValidElement(title)
         ? title
-        : <div className="__tooltip__title" style={styles.title}>{title}</div>;
+        : <div className={classNames.title} style={styles.title}>{title}</div>;
     }
 
     if (footer) {
       output.footer = React.isValidElement(footer)
         ? footer
-        : <div className="__tooltip__footer" style={styles.footer}>{footer}</div>;
+        : <div className={classNames.footer} style={styles.footer}>{footer}</div>;
     }
 
     if (
@@ -521,7 +536,7 @@ export default class ReactTooltips extends React.Component {
     if (currentPlacement !== 'center') {
       output.arrow = (
         <div
-          className="__tooltip__arrow"
+          className={classNames.arrow}
           style={this.arrowStyle}
         >
           {this.renderArrow()}
@@ -532,10 +547,10 @@ export default class ReactTooltips extends React.Component {
     return (
       <div
         ref={c => (this.tooltip = c)}
-        className="__tooltip"
+        className={classNames.wrapper}
         style={this.tooltipStyle}
       >
-        <div className="__tooltip__container" style={styles.container}>
+        <div className={classNames.container} style={styles.container}>
           {output.close}
           {output.title}
           {output.content}
