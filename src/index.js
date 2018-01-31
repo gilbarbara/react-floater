@@ -83,6 +83,7 @@ export default class ReactTooltips extends React.Component {
       title: PropTypes.string,
       footer: PropTypes.string,
       arrow: PropTypes.string,
+    }),
   };
 
   static defaultProps = {
