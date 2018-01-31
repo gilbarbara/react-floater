@@ -90,6 +90,14 @@ export default class ReactTooltips extends React.Component {
     animate: true,
     autoOpen: false,
     callback: () => {},
+    classNames: {
+      wrapper: '__tooltip',
+      container: '__tooltip__container',
+      content: '__tooltip__content',
+      title: '__tooltip__title',
+      footer: '__tooltip__footer',
+      arrow: '__tooltip__arrow',
+    },
     event: 'click',
     eventDelay: 0.4,
     flip: true,
@@ -100,14 +108,6 @@ export default class ReactTooltips extends React.Component {
     target: null,
     wrapperOptions: {
       position: false,
-    },
-    classNames: {
-      wrapper: '__tooltip',
-      container: '__tooltip__container',
-      content: '__tooltip__content',
-      title: '__tooltip__title',
-      footer: '__tooltip__footer',
-      arrow: '__tooltip__arrow',
     },
   };
 

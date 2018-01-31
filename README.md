@@ -54,6 +54,19 @@ It will be called when the tooltip change state with 2 parameters:
 **children** `node`  
 An element to trigger the tooltip. 
 
+**classNames** `object`: `defaultClassNames`  
+Object of class names for custom styles. Example from sass.
+```js
+classNames: {
+  wrapper: '__tooltip',
+  container: '__tooltip__container',
+  content: '__tooltip__content',
+  title: '__tooltip__title',
+  footer: '__tooltip__footer',
+  arrow: '__tooltip__arrow',
+}
+```
+
 **content** `node`  
 The tooltip content. It can be anything that can be rendered.  
 It's the only required prop.
