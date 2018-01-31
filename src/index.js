@@ -40,6 +40,14 @@ export default class ReactTooltips extends React.Component {
     autoOpen: PropTypes.bool,
     callback: PropTypes.func,
     children: PropTypes.node,
+    classNames: PropTypes.shape({
+      arrow: PropTypes.string,
+      container: PropTypes.string,
+      content: PropTypes.string,
+      footer: PropTypes.string,
+      title: PropTypes.string,
+      wrapper: PropTypes.string,
+    }),
     content: PropTypes.node.isRequired,
     event: PropTypes.oneOf(['hover', 'click']),
     eventDelay: PropTypes.number,
@@ -75,14 +83,6 @@ export default class ReactTooltips extends React.Component {
       ]),
       position: PropTypes.bool,
       offset: PropTypes.number,
-    }),
-    classNames: PropTypes.shape({
-      arrow: PropTypes.string,
-      container: PropTypes.string,
-      content: PropTypes.string,
-      footer: PropTypes.string,
-      title: PropTypes.string,
-      wrapper: PropTypes.string,
     }),
   };
 
