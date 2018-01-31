@@ -77,12 +77,12 @@ export default class ReactTooltips extends React.Component {
       offset: PropTypes.number,
     }),
     classNames: PropTypes.shape({
-      wrapper: PropTypes.string,
+      arrow: PropTypes.string,
       container: PropTypes.string,
       content: PropTypes.string,
-      title: PropTypes.string,
       footer: PropTypes.string,
-      arrow: PropTypes.string,
+      title: PropTypes.string,
+      wrapper: PropTypes.string,
     }),
   };
 
