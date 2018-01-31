@@ -14,12 +14,16 @@ engines:
         enabled: false
       import/no-named-as-default-member:
         enabled: false
-      similar-code:
-        config:
-          threshold: 75
 ratings:
   paths:
   - "**.js"
+checks:
+  identical-code:
+    config:
+      threshold: 50
+  similar-code:
+    config:
+      threshold: 75
 exclude_paths:
   - coverage/**/*
   - es/**/*
