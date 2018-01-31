@@ -164,10 +164,6 @@ export default class ReactTooltips extends React.Component {
     }
   }
 
-  static isValidElement(element) {
-    return React.isValidElement(element);
-  }
-
   initPopper(target = this.target) {
     const { positionWrapper } = this.state;
     const { flip, offset, placement, wrapperOptions } = this.props;
@@ -514,19 +510,19 @@ export default class ReactTooltips extends React.Component {
     const { styles } = this;
 
     const output = {
-      content: ReactTooltips.isValidElement(content)
+      content: React.isValidElement(content)
         ? content
         : <div className={classNames.content} style={styles.content}>{content}</div>
     };
 
     if (title) {
-      output.title = ReactTooltips.isValidElement(title)
+      output.title = React.isValidElement(title)
         ? title
         : <div className={classNames.title} style={styles.title}>{title}</div>;
     }
 
     if (footer) {
-      output.footer = ReactTooltips.isValidElement(footer)
+      output.footer = React.isValidElement(footer)
         ? footer
         : <div className={classNames.footer} style={styles.footer}>{footer}</div>;
     }
