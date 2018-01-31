@@ -17,6 +17,13 @@ engines:
 ratings:
   paths:
   - "**.js"
+checks:
+  identical-code:
+    config:
+      threshold: 50
+  similar-code:
+    config:
+      threshold: 75
 exclude_paths:
   - coverage/**/*
   - es/**/*
