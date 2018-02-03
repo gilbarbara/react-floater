@@ -59,6 +59,7 @@ export default class ReactTooltips extends React.Component {
       'auto', 'center',
     ]),
     showCloseButton: PropTypes.bool,
+    style: PropTypes.object,
     styles: PropTypes.object,
     target: PropTypes.oneOfType([
       PropTypes.object,
@@ -543,14 +544,14 @@ export default class ReactTooltips extends React.Component {
   }
 
   renderWrapper() {
-    const { children } = this.props;
+    const { children, style } = this.props;
     const { wrapper } = this.styles;
 
     return (
       <span
         key="wrapper"
         ref={c => (this.wrapper = c)}
-        style={wrapper}
+        style={{ ...wrapper, ...style }}
         onClick={this.handleClick}
         onMouseEnter={this.handleMouseEnter}
         onMouseLeave={this.handleMouseLeave}
