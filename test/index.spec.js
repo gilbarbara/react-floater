@@ -66,7 +66,7 @@ describe('ReactTooltips', () => {
     it('should have rendered the Tooltip initially hidden', () => {
       const tooltip = portal.find('.__tooltip');
 
-      expect(wrapper.state('status')).toBe('ready');
+      expect(wrapper.state('status')).toBe('idle');
       expect(tooltip.find('.__tooltip__container')).toHaveText('Hello! This is my content!');
       expect(tooltip).toHaveStyle('opacity', 0);
       expect(tooltip).toHaveStyle('visibility', 'hidden');
@@ -85,7 +85,7 @@ describe('ReactTooltips', () => {
       updateTooltip();
       const tooltip = portal.find('.__tooltip');
 
-      expect(wrapper.state('status')).toBe('ready');
+      expect(wrapper.state('status')).toBe('idle');
       expect(tooltip).toHaveStyle('opacity', 0);
       expect(tooltip).toHaveStyle('visibility', 'hidden');
     });
@@ -127,7 +127,7 @@ describe('ReactTooltips', () => {
       updateTooltip();
       const tooltip = portal.find('.__tooltip');
 
-      expect(wrapper.state('status')).toBe('ready');
+      expect(wrapper.state('status')).toBe('idle');
       expect(tooltip).toHaveStyle('opacity', 0);
       expect(tooltip).toHaveStyle('visibility', 'hidden');
     });
@@ -181,7 +181,7 @@ describe('ReactTooltips', () => {
 
     it('should call the callback function on close', () => {
       updateTooltip();
-      expect(wrapper.state('status')).toBe('ready');
+      expect(wrapper.state('status')).toBe('idle');
 
       expect(mockCallback).toHaveBeenCalledWith('close', {
         animate: true,
@@ -236,7 +236,7 @@ describe('ReactTooltips', () => {
       expect(wrapper.state('status')).toBe('closing');
 
       jest.advanceTimersByTime(400); // trigger the fake transitionend event
-      expect(wrapper.state('status')).toBe('ready');
+      expect(wrapper.state('status')).toBe('idle');
     });
   });
 
@@ -265,11 +265,11 @@ describe('ReactTooltips', () => {
     it('should have close itself immediately', () => {
       updateTooltip('mouseLeave');
 
-      expect(wrapper.state('status')).toBe('closing');
+      expect(wrapper.state('status')).toBe('idle');
 
       jest.advanceTimersByTime(0); // trigger the fake transitionend event
 
-      expect(wrapper.state('status')).toBe('ready');
+      expect(wrapper.state('status')).toBe('idle');
     });
   });
 
@@ -346,14 +346,14 @@ describe('ReactTooltips', () => {
     it('should not be able to show the tooltip with click', () => {
       updateTooltip('click');
 
-      expect(wrapper.state('status')).toBe('ready');
+      expect(wrapper.state('status')).toBe('idle');
     });
 
     it('should not be able to show the tooltip with hover', () => {
       wrapper.setProps({ event: 'hover' });
       updateTooltip('mouseEnter');
 
-      expect(wrapper.state('status')).toBe('ready');
+      expect(wrapper.state('status')).toBe('idle');
     });
 
     it('should show the tooltip when `open` is true', () => {
@@ -369,7 +369,7 @@ describe('ReactTooltips', () => {
       expect(wrapper.state('status')).toBe('closing');
 
       wrapper.instance().handleTransitionEnd();
-      expect(wrapper.state('status')).toBe('ready');
+      expect(wrapper.state('status')).toBe('idle');
     });
   });
 
