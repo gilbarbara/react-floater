@@ -9,8 +9,8 @@ import Tooltip from './Tooltip';
 import stylesDefault from './styles';
 
 const STATUS = {
+  INIT: 'init',
   IDLE: 'idle',
-  READY: 'ready',
   OPENING: 'opening',
   OPEN: 'open',
   CLOSING: 'closing',
@@ -30,8 +30,8 @@ export default class ReactTooltips extends React.Component {
     this.state = {
       currentPlacement: props.placement,
       positionWrapper: props.wrapperOptions.position && !!props.target,
-      status: STATUS.IDLE,
-      statusWrapper: STATUS.IDLE,
+      status: STATUS.INIT,
+      statusWrapper: STATUS.INIT,
     };
   }
 
@@ -121,7 +121,7 @@ export default class ReactTooltips extends React.Component {
     const { status } = this.state;
     const { autoOpen, open } = this.props;
 
-    if (prevState.status === STATUS.IDLE && status === STATUS.READY) {
+    if (prevState.status === STATUS.INIT && status === STATUS.IDLE) {
       if (autoOpen || open) {
         this.toggle(STATUS.OPEN);
       }
@@ -161,7 +161,7 @@ export default class ReactTooltips extends React.Component {
     ];
 
     if (placement === 'center') {
-      this.setState({ status: STATUS.READY });
+      this.setState({ status: STATUS.IDLE });
     }
     else if (target && this.tooltip) {
       new Popper(target, this.tooltip, {
@@ -187,7 +187,7 @@ export default class ReactTooltips extends React.Component {
 
           this.setState({
             currentPlacement: data.placement,
-            status: STATUS.READY,
+            status: STATUS.IDLE,
           });
 
           if (placement !== data.placement) {
@@ -224,7 +224,7 @@ export default class ReactTooltips extends React.Component {
         },
         onCreate: (data) => {
           this.wrapperPopper = data;
-          this.setState({ statusWrapper: STATUS.READY });
+          this.setState({ statusWrapper: STATUS.IDLE });
 
           if (placement !== data.placement) {
             setTimeout(() => {
@@ -264,7 +264,7 @@ export default class ReactTooltips extends React.Component {
     }
 
     this.setState({
-      status: this.state.status === STATUS.OPENING ? STATUS.OPEN : STATUS.READY
+      status: this.state.status === STATUS.OPENING ? STATUS.OPEN : STATUS.IDLE
     }, () => {
       callback(this.state.status === STATUS.OPEN ? 'open' : 'close', this.props);
     });
@@ -349,8 +349,8 @@ export default class ReactTooltips extends React.Component {
     if (positionWrapper) {
       let wrapperStyle = {};
 
-      if (![STATUS.READY].includes(status) || ![STATUS.READY].includes(statusWrapper)) {
         wrapperStyle = combinedStyles.wrapperPosition;
+      if (![STATUS.IDLE].includes(status) || ![STATUS.IDLE].includes(statusWrapper)) {
       }
       else {
         wrapperStyle = this.wrapperPopper.styles;
