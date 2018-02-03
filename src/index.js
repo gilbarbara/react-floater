@@ -242,11 +242,11 @@ export default class ReactTooltips extends React.Component {
     });
   }
 
-  toggle(forceState) {
+  toggle(forceStatus) {
     let status = this.state.status === STATUS.OPEN ? STATUS.CLOSING : STATUS.OPENING;
 
-    if (typeof forceState !== 'undefined') {
-      status = forceState;
+    if (typeof forceStatus !== 'undefined') {
+      status = forceStatus;
     }
 
     this.setState({ status });
@@ -298,15 +298,11 @@ export default class ReactTooltips extends React.Component {
 
     if (typeof open !== 'undefined') return;
 
-    if (
-      this.eventType === 'hover'
-      && [STATUS.OPENING, STATUS.OPEN].includes(status)
-      && !positionWrapper
-    ) {
+    if (this.eventType === 'hover') {
       if (!eventDelay) {
-        this.toggle();
+        this.toggle(STATUS.IDLE);
       }
-      else {
+      else if ([STATUS.OPENING, STATUS.OPEN].includes(status) && !positionWrapper) {
         this.eventDelayTimeout = setTimeout(() => {
           this.toggle();
         }, eventDelay * 1000);
