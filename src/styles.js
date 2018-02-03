@@ -63,7 +63,7 @@ export default {
     border: 0,
     borderRadius: 0,
     color: '#555',
-    fontSize: 25,
+    fontSize: 18,
     height: 25,
     lineHeight: '25px',
     outline: 'none',

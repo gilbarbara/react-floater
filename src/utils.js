@@ -28,6 +28,7 @@ export function isFixed(element) {
   if (nodeName === 'BODY' || nodeName === 'HTML') {
     return false;
   }
+
   if (getComputedStyle(element).position === 'fixed') {
     return true;
   }

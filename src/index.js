@@ -512,7 +512,7 @@ export default class ReactTooltips extends React.Component {
       (showCloseButton || positionWrapper)
       && typeof open === 'undefined'
     ) {
-      output.close = (<button style={styles.close} onClick={this.handleClick}>×︎️</button>);
+      output.close = (<button style={styles.close} onClick={this.handleClick}>⨉</button>);
     }
 
     if (currentPlacement !== 'center') {
