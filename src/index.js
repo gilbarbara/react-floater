@@ -23,6 +23,7 @@ export default class ReactTooltips extends React.Component {
   constructor(props) {
     super(props);
 
+    /* istanbul ignore else */
     if (process.env.NODE_ENV !== 'production') {
       if (props.wrapperOptions.position && !props.target) {
         console.warn('Missing props! You need to set a `target` to use `wrapperOptions.position`'); //eslint-disable-line no-console
@@ -163,6 +164,7 @@ export default class ReactTooltips extends React.Component {
       'bottom-start',
     ];
 
+    /* istanbul ignore else */
     if (placement === 'center') {
       this.setState({ status: STATUS.IDLE });
     }
@@ -262,6 +264,7 @@ export default class ReactTooltips extends React.Component {
   handleTransitionEnd = () => {
     const { callback } = this.props;
 
+    /* istanbul ignore else */
     if (this.wrapperPopper) {
       this.wrapperPopper.instance.update();
     }
@@ -278,10 +281,8 @@ export default class ReactTooltips extends React.Component {
 
     const { positionWrapper } = this.state;
 
-    if (
-      this.eventType === 'click'
-      || (positionWrapper && this.eventType === 'hover')
-    ) {
+    /* istanbul ignore else */
+    if (this.eventType === 'click' || (positionWrapper && this.eventType === 'hover')) {
       this.toggle();
     }
   };
@@ -289,6 +290,7 @@ export default class ReactTooltips extends React.Component {
   handleMouseEnter = () => {
     if (typeof this.props.open !== 'undefined') return;
 
+    /* istanbul ignore else */
     if (this.eventType === 'hover') {
       clearTimeout(this.eventDelayTimeout);
       this.toggle();
@@ -301,6 +303,7 @@ export default class ReactTooltips extends React.Component {
 
     if (typeof open !== 'undefined') return;
 
+    /* istanbul ignore else */
     if (this.eventType === 'hover') {
       if (!eventDelay) {
         this.toggle(STATUS.IDLE);
@@ -359,9 +362,11 @@ export default class ReactTooltips extends React.Component {
       };
     }
 
+    /* istanbul ignore else */
     if (this.target) {
       const wrapperComputedStyles = window.getComputedStyle(this.target);
 
+      /* istanbul ignore else */
       if (!this.wrapperStyles) {
         nextStyles.wrapper = {
           ...nextStyles.wrapper,
@@ -448,6 +453,7 @@ export default class ReactTooltips extends React.Component {
       position: 'absolute',
     };
 
+    /* istanbul ignore else */
     if (currentPlacement.startsWith('top')) {
       styles.bottom = length;
       styles.left = 0;
@@ -480,6 +486,7 @@ export default class ReactTooltips extends React.Component {
     let x = spread;
     let y = length;
 
+    /* istanbul ignore else */
     if (currentPlacement.startsWith('top')) {
       points = `0,0 ${x / 2},${y} ${x},0`;
       styles.bottom = -y;
@@ -579,6 +586,7 @@ export default class ReactTooltips extends React.Component {
     const { wrapper } = this.styles;
     let element;
 
+    /* istanbul ignore else */
     if (children) {
       if (React.Children.count(children) === 1) {
         if (!React.isValidElement(children)) {

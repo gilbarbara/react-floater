@@ -70,6 +70,7 @@ export default class Tooltip extends React.Component {
 
     const { tooltip, setRef } = this.props;
 
+    /* istanbul ignore else */
     if (isReact16) {
       return ReactDOM.createPortal(
         tooltip,
