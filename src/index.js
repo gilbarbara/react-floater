@@ -17,6 +17,8 @@ const STATUS = {
   ERROR: 'error',
 };
 
+const positioningProps = ['position', 'top', 'right', 'bottom', 'left'];
+
 export default class ReactTooltips extends React.Component {
   constructor(props) {
     super(props);
@@ -323,43 +325,72 @@ export default class ReactTooltips extends React.Component {
 
   get target() {
     const { target } = this.props;
-    let element = this.wrapper;
 
     if (target) {
       if (isNode(target)) {
-        element = target;
+        return target;
       }
-      else {
-        element = document.querySelector(target);
-      }
+
+      return document.querySelector(target);
     }
 
-    return element;
+    return this.child || this.wrapper;
   }
 
   get styles() {
     const { status, positionWrapper, statusWrapper } = this.state;
     const { styles } = this.props;
 
-    const combinedStyles = deepmerge(stylesDefault, styles);
+    const nextStyles = deepmerge(stylesDefault, styles);
 
     if (positionWrapper) {
-      let wrapperStyle = {};
+      let wrapperStyles;
 
-        wrapperStyle = combinedStyles.wrapperPosition;
       if (![STATUS.IDLE].includes(status) || ![STATUS.IDLE].includes(statusWrapper)) {
+        wrapperStyles = nextStyles.wrapperPosition;
       }
       else {
-        wrapperStyle = this.wrapperPopper.styles;
+        wrapperStyles = this.wrapperPopper.styles;
       }
 
-      combinedStyles.wrapper = {
-        ...combinedStyles.wrapper,
-        ...wrapperStyle
+      nextStyles.wrapper = {
+        ...nextStyles.wrapper,
+        ...wrapperStyles
       };
     }
 
-    return combinedStyles;
+    if (this.target) {
+      const wrapperComputedStyles = window.getComputedStyle(this.target);
+
+      if (!this.wrapperStyles) {
+        nextStyles.wrapper = {
+          ...nextStyles.wrapper,
+          ...this.wrapperStyles
+        };
+      }
+      else if (!['relative', 'static'].includes(wrapperComputedStyles.position)) {
+        this.wrapperStyles = {};
+
+        positioningProps.forEach(d => {
+          this.wrapperStyles[d] = wrapperComputedStyles[d];
+        });
+
+        if (!this.wrapperStyles) {
+          nextStyles.wrapper = {
+            ...nextStyles.wrapper,
+            ...this.wrapperStyles
+          };
+        }
+
+        this.target.style.position = 'relative';
+        this.target.style.top = 'auto';
+        this.target.style.right = 'auto';
+        this.target.style.bottom = 'auto';
+        this.target.style.left = 'auto';
+      }
+    }
+
+    return nextStyles;
   }
 
   get tooltipStyle() {
@@ -546,6 +577,23 @@ export default class ReactTooltips extends React.Component {
   renderWrapper() {
     const { children, style } = this.props;
     const { wrapper } = this.styles;
+    let element;
+
+    if (children) {
+      if (React.Children.count(children) === 1) {
+        if (!React.isValidElement(children)) {
+          element = <span>{children}</span>;
+        }
+        else {
+          element = React.cloneElement(React.Children.only(children), {
+            ref: c => (this.child = c)
+          });
+        }
+      }
+      else {
+        element = children;
+      }
+    }
 
     return (
       <span
@@ -556,7 +604,7 @@ export default class ReactTooltips extends React.Component {
         onMouseEnter={this.handleMouseEnter}
         onMouseLeave={this.handleMouseLeave}
       >
-        {children}
+        {element}
       </span>
     );
   }
