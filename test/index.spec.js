@@ -10,10 +10,10 @@ const props = {
   content: 'Hello! This is my content!',
 };
 
-function setup(ownProps = props) {
+function setup(ownProps = props, children = 'Places') {
   return mount(
     <ReactTooltips {...ownProps}>
-      Places
+      {children}
     </ReactTooltips>,
     { attachTo: document.getElementById('react') }
   );
@@ -96,6 +96,29 @@ describe('ReactTooltips', () => {
 
       portal.unmount();
       expect(portal.find('Tooltip')).not.toBePresent();
+    });
+  });
+
+  describe('with multiple children', () => {
+    beforeAll(() => {
+      wrapper = setup(props, [
+        <div key={0}>Hello</div>,
+        <div key={1}>World</div>
+      ]);
+      portal = mount(wrapper.find('Tooltip').get(0));
+    });
+
+    afterAll(() => {
+      wrapper.detach();
+    });
+
+    it('should render properly', () => {
+      const content = wrapper.find('Tooltip').childAt(0).find('div');
+
+      expect(wrapper.find('ReactTooltips')).toBePresent();
+      expect(wrapper.find('Tooltip')).toBePresent();
+      expect(content.at(0)).toHaveText('Hello');
+      expect(content.at(1)).toHaveText('World');
     });
   });
 
