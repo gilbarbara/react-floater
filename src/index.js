@@ -11,15 +11,6 @@ import Wrapper from './Wrapper';
 
 import stylesDefault from './styles';
 
-const STATUS = {
-  INIT: 'init',
-  IDLE: 'idle',
-  OPENING: 'opening',
-  OPEN: 'open',
-  CLOSING: 'closing',
-  ERROR: 'error',
-};
-
 const positioningProps = ['position', 'top', 'right', 'bottom', 'left'];
 
 export default class ReactTooltips extends React.Component {
