@@ -2,9 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Popper from 'popper.js';
 import deepmerge from 'deepmerge';
-import { canUseDOM, isFixed, isMobile, isNode, once } from './utils';
+import STATUS from './status';
+import { canUseDOM, isMobile, isNode, once } from './utils';
 
+import Portal from './Portal';
 import Tooltip from './Tooltip';
+import Wrapper from './Wrapper';
 
 import stylesDefault from './styles';
 
@@ -257,8 +260,20 @@ export default class ReactTooltips extends React.Component {
     this.setState({ status });
   }
 
-  setRef = (ref) => {
+  setArrowRef = (ref) => {
+    this.arrow = ref;
+  };
+
+  setChildRef = (ref) => {
+    this.child = ref;
+  };
+
+  setTooltipRef = (ref) => {
     this.tooltip = ref;
+  };
+
+  setWrapperRef = (ref) => {
+    this.wrapper = ref;
   };
 
   handleTransitionEnd = () => {
@@ -398,234 +413,48 @@ export default class ReactTooltips extends React.Component {
     return nextStyles;
   }
 
-  get tooltipStyle() {
-    const { currentPlacement, status } = this.state;
-    const { animate } = this.props;
-    const {
-      arrow: { length },
-      tooltip,
-      tooltipCentered,
-      tooltipClosing,
-      tooltipOpening,
-      tooltipWithAnimation,
-    } = this.styles;
-    let styles = {};
-
-    if (currentPlacement.startsWith('top')) {
-      styles.padding = `0 10px ${length}px`;
-    }
-    else if (currentPlacement.startsWith('bottom')) {
-      styles.padding = `${length}px 10px 0`;
-    }
-    else if (currentPlacement.startsWith('left')) {
-      styles.padding = `0 ${length}px 0 0`;
-    }
-    else if (currentPlacement.startsWith('right')) {
-      styles.padding = `0 0 0 ${length}px`;
-    }
-
-    if ([STATUS.OPENING, STATUS.OPEN].includes(status)) {
-      styles = { ...styles, ...tooltipOpening };
-    }
-
-    if (status === STATUS.CLOSING) {
-      styles = { ...styles, ...tooltipClosing };
-    }
-
-    if (status === STATUS.OPEN && animate && !isFixed(this.target)) {
-      styles = { ...styles, ...tooltipWithAnimation };
-    }
-
-    if (currentPlacement === 'center') {
-      styles = { ...styles, ...tooltipCentered };
-    }
-
-    return {
-      ...tooltip,
-      ...styles,
-    };
-  }
-
-  get arrowStyle() {
-    const { currentPlacement } = this.state;
-    const { length } = this.styles.arrow;
-    const styles = {
-      position: 'absolute',
-    };
-
-    /* istanbul ignore else */
-    if (currentPlacement.startsWith('top')) {
-      styles.bottom = length;
-      styles.left = 0;
-      styles.right = 0;
-    }
-    else if (currentPlacement.startsWith('bottom')) {
-      styles.top = 0;
-      styles.left = 0;
-      styles.right = 0;
-    }
-    else if (currentPlacement.startsWith('left')) {
-      styles.right = 0;
-      styles.top = 0;
-      styles.bottom = 0;
-    }
-    else if (currentPlacement.startsWith('right')) {
-      styles.left = 0;
-      styles.top = 0;
-    }
-
-    return styles;
-  }
-
-  renderArrow() {
-    const { currentPlacement } = this.state;
-    const { arrow: { color, display, length, position, spread } } = this.styles;
-    const styles = { display, position };
-
-    let points;
-    let x = spread;
-    let y = length;
-
-    /* istanbul ignore else */
-    if (currentPlacement.startsWith('top')) {
-      points = `0,0 ${x / 2},${y} ${x},0`;
-      styles.bottom = -y;
-    }
-    else if (currentPlacement.startsWith('bottom')) {
-      points = `${x},${y} ${x / 2},0 0,${y}`;
-      styles.top = 0;
-    }
-    else if (currentPlacement.startsWith('left')) {
-      y = spread;
-      x = length;
-      points = `0,0 ${x},${y / 2} 0,${y}`;
-      styles.right = 0;
-    }
-    else if (currentPlacement.startsWith('right')) {
-      y = spread;
-      x = length;
-      points = `${x},${y} ${x},0 0,${y / 2}`;
-      styles.left = 0;
-    }
-
-    return (
-      <span ref={c => (this.arrow = c)} style={styles}>
-        <svg
-          width={x}
-          height={y}
-          version="1.1"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <polygon points={points} fill={color} />
-        </svg>
-      </span>
-    );
-  }
-
-  renderTooltip() {
-    const { currentPlacement, positionWrapper } = this.state;
-    const { content, footer, open, showCloseButton, title } = this.props;
-
-    const { styles } = this;
-
-    const output = {
-      content: React.isValidElement(content)
-        ? content
-        : <div className="__tooltip__content" style={styles.content}>{content}</div>
-    };
-
-    if (title) {
-      output.title = React.isValidElement(title)
-        ? title
-        : <div className="__tooltip__title" style={styles.title}>{title}</div>;
-    }
-
-    if (footer) {
-      output.footer = React.isValidElement(footer)
-        ? footer
-        : <div className="__tooltip__footer" style={styles.footer}>{footer}</div>;
-    }
-
-    if (
-      (showCloseButton || positionWrapper)
-      && typeof open === 'undefined'
-    ) {
-      output.close = (<button style={styles.close} onClick={this.handleClick}>⨉</button>);
-    }
-
-    if (currentPlacement !== 'center') {
-      output.arrow = (
-        <div
-          className="__tooltip__arrow"
-          style={this.arrowStyle}
-        >
-          {this.renderArrow()}
-        </div>
-      );
-    }
-
-    return (
-      <div
-        ref={c => (this.tooltip = c)}
-        className="__tooltip"
-        style={this.tooltipStyle}
-      >
-        <div className="__tooltip__container" style={styles.container}>
-          {output.close}
-          {output.title}
-          {output.content}
-          {output.footer}
-        </div>
-        {output.arrow}
-      </div>
-    );
-  }
-
-  renderWrapper() {
-    const { children, style } = this.props;
-    const { wrapper } = this.styles;
-    let element;
-
-    /* istanbul ignore else */
-    if (children) {
-      if (React.Children.count(children) === 1) {
-        if (!React.isValidElement(children)) {
-          element = <span>{children}</span>;
-        }
-        else {
-          element = React.cloneElement(React.Children.only(children), {
-            ref: c => (this.child = c)
-          });
-        }
-      }
-      else {
-        element = children;
-      }
-    }
-
-    return (
-      <span
-        key="wrapper"
-        ref={c => (this.wrapper = c)}
-        style={{ ...wrapper, ...style }}
-        onClick={this.handleClick}
-        onMouseEnter={this.handleMouseEnter}
-        onMouseLeave={this.handleMouseLeave}
-      >
-        {element}
-      </span>
-    );
-  }
-
   render() {
-    return (
-      <Tooltip
+    const { currentPlacement, positionWrapper, status } = this.state;
+    const { animate, children, content, footer, open, showCloseButton, style, title } = this.props;
+
+    return [
+      <Portal
+        key="portal"
         {...this.props}
-        placement={this.state.currentPlacement}
-        setRef={this.setRef}
-        status={this.state.status}
-        tooltip={this.renderTooltip()}
-        wrapper={this.renderWrapper()}
-      />);
+        hasChildren={!!children}
+        placement={currentPlacement}
+        setRef={this.setTooltipRef}
+        status={status}
+      >
+        <Tooltip
+          animate={animate}
+          content={content}
+          currentPlacement={currentPlacement}
+          footer={footer}
+          handleClick={this.handleClick}
+          open={open}
+          positionWrapper={positionWrapper}
+          setArrowRef={this.setArrowRef}
+          setTooltipRef={this.setTooltipRef}
+          showCloseButton={showCloseButton}
+          status={status}
+          styles={this.styles}
+          target={this.target}
+          title={title}
+        />
+      </Portal>,
+      <Wrapper
+        key="wrapper"
+        handleClick={this.handleClick}
+        handleMouseEnter={this.handleMouseEnter}
+        handleMouseLeave={this.handleMouseLeave}
+        setChildRef={this.setChildRef}
+        setWrapperRef={this.setWrapperRef}
+        style={style}
+        styles={this.styles.wrapper}
+      >
+        {children}
+      </Wrapper>
+    ];
   }
 }
