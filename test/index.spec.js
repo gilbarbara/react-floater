@@ -25,7 +25,7 @@ describe('ReactTooltips', () => {
 
   const updateTooltip = (event = 'click') => {
     if (event) {
-      wrapper.find('Tooltip').childAt(0).simulate(event);
+      wrapper.find('Wrapper').childAt(0).simulate(event);
 
       if (['click', 'mouseEnter'].includes(event)) {
         wrapper.instance().handleTransitionEnd(); // mock transitionend
@@ -38,13 +38,13 @@ describe('ReactTooltips', () => {
     }
 
     wrapper.update();
-    portal = mount(wrapper.find('Tooltip').get(0));
+    portal = mount(wrapper.find('Portal').get(0));
   };
 
   describe('basic usage', () => {
     beforeAll(() => {
       wrapper = setup();
-      portal = mount(wrapper.find('Tooltip').get(0));
+      portal = mount(wrapper.find('Portal').get(0));
     });
 
     afterAll(() => {
@@ -53,8 +53,8 @@ describe('ReactTooltips', () => {
 
     it('should render properly', () => {
       expect(wrapper.find('ReactTooltips')).toBePresent();
-      expect(wrapper.find('Tooltip')).toBePresent();
-      expect(wrapper.find('span').at(0)).toHaveText('Places');
+      expect(wrapper.find('Portal')).toBePresent();
+      expect(wrapper.find('Wrapper span').at(0)).toHaveText('Places');
     });
 
     it('should have created a Portal', () => {
@@ -95,7 +95,7 @@ describe('ReactTooltips', () => {
       expect(wrapper.find('ReactTooltips')).not.toBePresent();
 
       portal.unmount();
-      expect(portal.find('Tooltip')).not.toBePresent();
+      expect(portal.find('Portal')).not.toBePresent();
     });
   });
 
@@ -105,7 +105,7 @@ describe('ReactTooltips', () => {
         <div key={0}>Hello</div>,
         <div key={1}>World</div>
       ]);
-      portal = mount(wrapper.find('Tooltip').get(0));
+      portal = mount(wrapper.find('Portal').get(0));
     });
 
     afterAll(() => {
@@ -113,10 +113,10 @@ describe('ReactTooltips', () => {
     });
 
     it('should render properly', () => {
-      const content = wrapper.find('Tooltip').childAt(0).find('div');
+      const content = wrapper.find('Wrapper').childAt(0).find('div');
 
       expect(wrapper.find('ReactTooltips')).toBePresent();
-      expect(wrapper.find('Tooltip')).toBePresent();
+      expect(wrapper.find('Portal')).toBePresent();
       expect(content.at(0)).toHaveText('Hello');
       expect(content.at(1)).toHaveText('World');
     });
@@ -193,6 +193,7 @@ describe('ReactTooltips', () => {
         event: 'click',
         eventDelay: 0.4,
         flip: true,
+        hideArrow: false,
         offset: 15,
         placement: 'bottom',
         showCloseButton: false,
@@ -215,6 +216,7 @@ describe('ReactTooltips', () => {
         event: 'click',
         eventDelay: 0.4,
         flip: true,
+        hideArrow: false,
         offset: 15,
         placement: 'bottom',
         showCloseButton: false,
@@ -293,6 +295,34 @@ describe('ReactTooltips', () => {
       jest.advanceTimersByTime(0); // trigger the fake transitionend event
 
       expect(wrapper.state('status')).toBe('idle');
+    });
+  });
+
+  describe('with `title`', () => {
+    beforeAll(() => {
+      const Title = () => (<h3>My Title</h3>);
+      wrapper = setup({
+        ...props,
+        title: (<Title />),
+      });
+    });
+
+    afterAll(() => {
+      wrapper.unmount();
+      wrapper.detach();
+
+      portal.unmount();
+    });
+
+    it('should have rendered the title', () => {
+      expect(wrapper.find('Title')).toBePresent();
+
+      wrapper.setProps({
+        title: (<div className="__title">Other Title</div>)
+      });
+
+      expect(wrapper.find('Title')).not.toBePresent();
+      expect(wrapper.find('.__title')).toBePresent();
     });
   });
 
@@ -456,10 +486,6 @@ describe('ReactTooltips', () => {
   });
 
   describe('with target', () => {
-
-  });
-
-  describe('with title', () => {
 
   });
 
