@@ -9,6 +9,10 @@ import Container from './Container';
 export default class Tooltip extends React.Component {
   static propTypes = {
     animate: PropTypes.bool.isRequired,
+    component: PropTypes.oneOfType([
+      PropTypes.func,
+      PropTypes.element,
+    ]),
     content: PropTypes.node,
     footer: PropTypes.node,
     handleClick: PropTypes.func.isRequired,
@@ -69,6 +73,10 @@ export default class Tooltip extends React.Component {
       element = { ...element, ...tooltipCentered };
     }
 
+    if (component) {
+      element = { ...element, ...tooltipWithComponent };
+    }
+
     return {
       ...tooltip,
       ...element,
@@ -77,6 +85,7 @@ export default class Tooltip extends React.Component {
 
   render() {
     const {
+      component,
       handleClick,
       hideArrow,
       setTooltipRef,
@@ -84,7 +93,17 @@ export default class Tooltip extends React.Component {
 
     const output = {};
 
+    if (component) {
+      if (React.isValidElement(component)) {
+        output.content = React.cloneElement(component, { handleClick });
+      }
+      else {
+        output.content = component({ handleClick });
+      }
+    }
+    else {
       output.content = <Container {...this.props} />;
+    }
 
     if (!hideArrow) {
       output.arrow = <Arrow {...this.props} />;

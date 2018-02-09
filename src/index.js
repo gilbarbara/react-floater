@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Popper from 'popper.js';
 import deepmerge from 'deepmerge';
+import isRequiredIf from 'react-proptype-conditional-require';
+
 import STATUS from './status';
 import { canUseDOM, isMobile, isNode, once } from './utils';
 
@@ -37,7 +39,11 @@ export default class ReactTooltips extends React.Component {
     autoOpen: PropTypes.bool,
     callback: PropTypes.func,
     children: PropTypes.node,
-    content: PropTypes.node.isRequired,
+    component: isRequiredIf(PropTypes.oneOfType([
+      PropTypes.func,
+      PropTypes.element,
+    ]), props => !props.content),
+    content: isRequiredIf(PropTypes.node, props => !props.component),
     event: PropTypes.oneOf(['hover', 'click']),
     eventDelay: PropTypes.number,
     flip: PropTypes.bool,
