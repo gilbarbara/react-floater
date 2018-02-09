@@ -1,5 +1,13 @@
 ---
-engines:
+version: "2"
+checks:
+  method-complexity:
+    config:
+      threshold: 10
+  method-lines:
+    config:
+      threshold: 50
+plugins:
   eslint:
     enabled: true
     channel: "eslint-4"
@@ -14,12 +22,10 @@ engines:
         enabled: false
       import/no-named-as-default-member:
         enabled: false
-ratings:
-  paths:
-  - "**.js"
-exclude_paths:
+exclude_patterns:
   - coverage/**/*
   - es/**/*
   - lib/**/*
   - node_modules/**/*
   - test/**/*
+
