@@ -33,18 +33,19 @@
   "dependencies": {
     "deepmerge": "^2.0.1",
     "exenv": "^1.2.2",
-    "popper.js": "^1.13.0"
+    "popper.js": "^1.13.0",
+    "react-proptype-conditional-require": "^1.0.4"
   },
   "devDependencies": {
     "autoprefixer": "^7.2.5",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.2.1",
-    "babel-jest": "^22.1.0",
+    "babel-jest": "^22.2.0",
     "babel-plugin-array-includes": "^2.0.3",
     "babel-plugin-istanbul": "^4.1.5",
     "babel-plugin-transform-flow-strip-types": "^6.22.0",
-    "babel-plugin-transform-react-remove-prop-types": "^0.4.12",
+    "babel-plugin-transform-react-remove-prop-types": "^0.4.13",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-1": "^6.24.1",
@@ -60,23 +61,23 @@
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.6.1",
-    "flow-bin": "^0.64.0",
+    "flow-bin": "^0.65.0",
     "husky": "^0.14.3",
-    "jest": "^22.1.4",
-    "jest-enzyme": "^4.1.1",
+    "jest": "^22.2.1",
+    "jest-enzyme": "^4.2.0",
     "prop-types": "^15.6.0",
     "react": "^16.2.0",
-    "react-addons-test-utils": "^15.6.2",
     "react-dom": "^16.2.0",
     "react-test-renderer": "^16.2.0",
     "rimraf": "^2.6.2",
+    "styled-components": "^3.1.6",
     "watch-run": "^1.2.5"
   },
   "scripts": {
     "build": "npm run clean && npm run build:commonjs && npm run build:es",
     "build:commonjs": "cross-env BABEL_ENV=commonjs babel src -d lib",
     "build:es": "cross-env NODE_ENV=production babel src -d es",
-    "watch": "npm run build && watch-run -p 'src/**/*.js' npm run build:es",
+    "watch": "npm run build:es && watch-run -p 'src/**/*.js' npm run build:es",
     "clean": "rimraf es && rimraf lib",
     "lint": "eslint --ext .js --ext .jsx src test",
     "test": "jest --coverage",
@@ -93,10 +94,6 @@
     {
       "path": "./es/styles.js",
       "maxSize": "1 kB"
-    },
-    {
-      "path": "./es/Tooltip.js",
-      "maxSize": "2 kB"
     },
     {
       "path": "./es/utils.js",
