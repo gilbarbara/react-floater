@@ -29,6 +29,9 @@ export default {
     transition: 'opacity 0.3s, transform 0.2s',
     visibility: 'visible',
   },
+  tooltipWithComponent: {
+    maxWidth: '100%',
+  },
   tooltipClosing: {
     opacity: 0,
     visibility: 'visible',
