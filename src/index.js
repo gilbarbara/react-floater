@@ -42,6 +42,7 @@ export default class ReactTooltips extends React.Component {
     eventDelay: PropTypes.number,
     flip: PropTypes.bool,
     footer: PropTypes.node,
+    hideArrow: PropTypes.bool,
     id: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.number,
@@ -83,6 +84,7 @@ export default class ReactTooltips extends React.Component {
     event: 'click',
     eventDelay: 0.4,
     flip: true,
+    hideArrow: false,
     offset: 15,
     placement: 'bottom',
     showCloseButton: false,
@@ -148,7 +150,7 @@ export default class ReactTooltips extends React.Component {
 
   initPopper(target = this.target) {
     const { positionWrapper } = this.state;
-    const { flip, offset, placement, wrapperOptions } = this.props;
+    const { flip, hideArrow, offset, placement, wrapperOptions } = this.props;
     const flipBehavior = placement === 'top' || placement === 'bottom' ? 'flip' : [
       'right',
       'bottom-end',
@@ -167,6 +169,7 @@ export default class ReactTooltips extends React.Component {
         placement,
         modifiers: {
           arrow: {
+            enabled: !hideArrow,
             element: this.arrow,
           },
           offset: {
@@ -260,7 +263,9 @@ export default class ReactTooltips extends React.Component {
   };
 
   setTooltipRef = (ref) => {
-    this.tooltip = ref;
+    if (!this.tooltip) {
+      this.tooltip = ref;
+    }
   };
 
   setWrapperRef = (ref) => {
@@ -406,46 +411,59 @@ export default class ReactTooltips extends React.Component {
 
   render() {
     const { currentPlacement, positionWrapper, status } = this.state;
-    const { animate, children, content, footer, open, showCloseButton, style, title } = this.props;
+    const {
+      animate,
+      children,
+      content,
+      footer,
+      hideArrow,
+      open,
+      component,
+      showCloseButton,
+      style,
+      title
+    } = this.props;
 
-    return [
-      <Portal
-        key="portal"
-        {...this.props}
-        hasChildren={!!children}
-        placement={currentPlacement}
-        setRef={this.setTooltipRef}
-        status={status}
-      >
-        <Tooltip
-          animate={animate}
-          content={content}
-          currentPlacement={currentPlacement}
-          footer={footer}
-          handleClick={this.handleClick}
-          open={open}
-          positionWrapper={positionWrapper}
-          setArrowRef={this.setArrowRef}
-          setTooltipRef={this.setTooltipRef}
-          showCloseButton={showCloseButton}
+    return (
+      <div style={{ lineHeight: 0 }}>
+        <Portal
+          {...this.props}
+          hasChildren={!!children}
+          placement={currentPlacement}
+          setRef={this.setTooltipRef}
           status={status}
-          styles={this.styles}
-          target={this.target}
-          title={title}
-        />
-      </Portal>,
-      <Wrapper
-        key="wrapper"
-        handleClick={this.handleClick}
-        handleMouseEnter={this.handleMouseEnter}
-        handleMouseLeave={this.handleMouseLeave}
-        setChildRef={this.setChildRef}
-        setWrapperRef={this.setWrapperRef}
-        style={style}
-        styles={this.styles.wrapper}
-      >
-        {children}
-      </Wrapper>
-    ];
+        >
+          <Tooltip
+            animate={animate}
+            component={component}
+            content={content}
+            footer={footer}
+            handleClick={this.handleClick}
+            hideArrow={hideArrow || currentPlacement === 'center'}
+            open={open}
+            placement={currentPlacement}
+            positionWrapper={positionWrapper}
+            setArrowRef={this.setArrowRef}
+            setTooltipRef={this.setTooltipRef}
+            showCloseButton={showCloseButton}
+            status={status}
+            styles={this.styles}
+            target={this.target}
+            title={title}
+          />
+        </Portal>
+        <Wrapper
+          handleClick={this.handleClick}
+          handleMouseEnter={this.handleMouseEnter}
+          handleMouseLeave={this.handleMouseLeave}
+          setChildRef={this.setChildRef}
+          setWrapperRef={this.setWrapperRef}
+          style={style}
+          styles={this.styles.wrapper}
+        >
+          {children}
+        </Wrapper>
+      </div>
+    );
   }
 }
