@@ -86,7 +86,7 @@ export default class Tooltip extends React.Component {
   render() {
     const {
       component,
-      handleClick,
+      handleClick: closeTooltip,
       hideArrow,
       setTooltipRef,
     } = this.props;
@@ -95,10 +95,10 @@ export default class Tooltip extends React.Component {
 
     if (component) {
       if (React.isValidElement(component)) {
-        output.content = React.cloneElement(component, { handleClick });
+        output.content = React.cloneElement(component, { closeTooltip });
       }
       else {
-        output.content = component({ handleClick });
+        output.content = component({ closeTooltip });
       }
     }
     else {
