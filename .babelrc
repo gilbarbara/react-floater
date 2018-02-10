@@ -15,13 +15,9 @@
   "env": {
     "production": {
       "plugins": [
-        "transform-flow-strip-types",
-        "array-includes"
-      ]
-    },
-    "commonjs": {
-      "plugins": [
-        ["transform-es2015-modules-commonjs", { "loose": true }]
+        "array-includes",
+        "external-helpers",
+        "transform-flow-strip-types"
       ]
     },
     "test": {
