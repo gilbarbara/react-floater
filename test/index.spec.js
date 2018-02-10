@@ -3,6 +3,8 @@ import { mount } from 'enzyme';
 
 import ReactTooltips from '../src';
 
+import Styled from './__fixtures__/Styled';
+
 jest.useFakeTimers();
 
 const mockCallback = jest.fn();
@@ -21,40 +23,36 @@ function setup(ownProps = props, children = 'Places') {
 
 describe('ReactTooltips', () => {
   let portal;
-  let wrapper;
+  let tooltip;
 
   const updateTooltip = (event = 'click') => {
     if (event) {
-      wrapper.find('Wrapper').childAt(0).simulate(event);
+      tooltip.find('Wrapper').childAt(0).simulate(event);
 
       if (['click', 'mouseEnter'].includes(event)) {
-        wrapper.instance().handleTransitionEnd(); // mock transitionend
+        tooltip.instance().handleTransitionEnd(); // mock transitionend
       }
       else {
         setTimeout(() => {
-          wrapper.instance().handleTransitionEnd();
-        }, wrapper.prop('eventDelay') * 1100);
+          tooltip.instance().handleTransitionEnd();
+        }, tooltip.prop('eventDelay') * 1100);
       }
     }
 
-    wrapper.update();
-    portal = mount(wrapper.find('Portal').get(0));
+    tooltip.update();
+    portal = mount(tooltip.find('Portal').get(0));
   };
 
   describe('basic usage', () => {
     beforeAll(() => {
-      wrapper = setup();
-      portal = mount(wrapper.find('Portal').get(0));
-    });
-
-    afterAll(() => {
-      wrapper.detach();
+      tooltip = setup();
+      portal = mount(tooltip.find('Portal').get(0));
     });
 
     it('should render properly', () => {
-      expect(wrapper.find('ReactTooltips')).toBePresent();
-      expect(wrapper.find('Portal')).toBePresent();
-      expect(wrapper.find('Wrapper span').at(0)).toHaveText('Places');
+      expect(tooltip.find('ReactTooltips')).toBePresent();
+      expect(tooltip.find('Portal')).toBePresent();
+      expect(tooltip.find('Wrapper span').at(0)).toHaveText('Places');
     });
 
     it('should have created a Portal', () => {
@@ -64,35 +62,35 @@ describe('ReactTooltips', () => {
     });
 
     it('should have rendered the Tooltip initially hidden', () => {
-      const tooltip = portal.find('.__tooltip');
+      const tooltipEl = portal.find('.__tooltip');
 
-      expect(wrapper.state('status')).toBe('idle');
+      expect(tooltip.state('status')).toBe('idle');
       expect(tooltip.find('.__tooltip__container')).toHaveText('Hello! This is my content!');
-      expect(tooltip).toHaveStyle('opacity', 0);
-      expect(tooltip).toHaveStyle('visibility', 'hidden');
+      expect(tooltipEl).toHaveStyle('opacity', 0);
+      expect(tooltipEl).toHaveStyle('visibility', 'hidden');
     });
 
     it('should be able to show the tooltip', () => {
       updateTooltip();
-      const tooltip = portal.find('.__tooltip');
+      const tooltipEl = portal.find('.__tooltip');
 
-      expect(wrapper.state('status')).toBe('open');
-      expect(tooltip).toHaveStyle('opacity', 1);
-      expect(tooltip).toHaveStyle('visibility', 'visible');
+      expect(tooltip.state('status')).toBe('open');
+      expect(tooltipEl).toHaveStyle('opacity', 1);
+      expect(tooltipEl).toHaveStyle('visibility', 'visible');
     });
 
     it('should be able to hide the tooltip', () => {
       updateTooltip();
-      const tooltip = portal.find('.__tooltip');
+      const tooltipEl = portal.find('.__tooltip');
 
-      expect(wrapper.state('status')).toBe('idle');
-      expect(tooltip).toHaveStyle('opacity', 0);
-      expect(tooltip).toHaveStyle('visibility', 'hidden');
+      expect(tooltip.state('status')).toBe('idle');
+      expect(tooltipEl).toHaveStyle('opacity', 0);
+      expect(tooltipEl).toHaveStyle('visibility', 'hidden');
     });
 
     it('should unmount properly', () => {
-      wrapper.unmount();
-      expect(wrapper.find('ReactTooltips')).not.toBePresent();
+      tooltip.unmount();
+      expect(tooltip.find('ReactTooltips')).not.toBePresent();
 
       portal.unmount();
       expect(portal.find('Portal')).not.toBePresent();
@@ -101,22 +99,18 @@ describe('ReactTooltips', () => {
 
   describe('with multiple children', () => {
     beforeAll(() => {
-      wrapper = setup(props, [
+      tooltip = setup(props, [
         <div key={0}>Hello</div>,
         <div key={1}>World</div>
       ]);
-      portal = mount(wrapper.find('Portal').get(0));
-    });
-
-    afterAll(() => {
-      wrapper.detach();
+      portal = mount(tooltip.find('Portal').get(0));
     });
 
     it('should render properly', () => {
-      const content = wrapper.find('Wrapper').childAt(0).find('div');
+      const content = tooltip.find('Wrapper').childAt(0).find('div');
 
-      expect(wrapper.find('ReactTooltips')).toBePresent();
-      expect(wrapper.find('Portal')).toBePresent();
+      expect(tooltip.find('ReactTooltips')).toBePresent();
+      expect(tooltip.find('Portal')).toBePresent();
       expect(content.at(0)).toHaveText('Hello');
       expect(content.at(1)).toHaveText('World');
     });
@@ -124,66 +118,52 @@ describe('ReactTooltips', () => {
 
   describe('with `autoOpen`', () => {
     beforeAll(() => {
-      wrapper = setup({
+      tooltip = setup({
         ...props,
         autoOpen: true,
       });
     });
 
-    afterAll(() => {
-      wrapper.unmount();
-      wrapper.detach();
-
-      portal.unmount();
-    });
-
     it('should have rendered the Tooltip initially open', () => {
       updateTooltip(false);
-      const tooltip = portal.find('.__tooltip');
+      const tooltipEl = portal.find('.__tooltip');
 
-      expect(wrapper.state('status')).toBe('open');
-      expect(tooltip).toHaveStyle('opacity', 1);
-      expect(tooltip).toHaveStyle('visibility', 'visible');
+      expect(tooltip.state('status')).toBe('open');
+      expect(tooltipEl).toHaveStyle('opacity', 1);
+      expect(tooltipEl).toHaveStyle('visibility', 'visible');
     });
 
     it('should be able to hide the tooltip', () => {
       updateTooltip();
-      const tooltip = portal.find('.__tooltip');
+      const tooltipEl = portal.find('.__tooltip');
 
-      expect(wrapper.state('status')).toBe('idle');
-      expect(tooltip).toHaveStyle('opacity', 0);
-      expect(tooltip).toHaveStyle('visibility', 'hidden');
+      expect(tooltip.state('status')).toBe('idle');
+      expect(tooltipEl).toHaveStyle('opacity', 0);
+      expect(tooltipEl).toHaveStyle('visibility', 'hidden');
     });
 
     it('should be able to show the tooltip again', () => {
       updateTooltip();
-      const tooltip = portal.find('.__tooltip');
+      const tooltipEl = portal.find('.__tooltip');
 
-      expect(wrapper.state('status')).toBe('open');
-      expect(tooltip).toHaveStyle('opacity', 1);
-      expect(tooltip).toHaveStyle('visibility', 'visible');
+      expect(tooltip.state('status')).toBe('open');
+      expect(tooltipEl).toHaveStyle('opacity', 1);
+      expect(tooltipEl).toHaveStyle('visibility', 'visible');
     });
   });
 
   describe('with `callback`', () => {
     beforeAll(() => {
-      wrapper = setup({
+      tooltip = setup({
         ...props,
         callback: mockCallback,
       });
     });
 
-    afterAll(() => {
-      wrapper.unmount();
-      wrapper.detach();
-
-      portal.unmount();
-    });
-
     it('should call the callback function on open', () => {
       updateTooltip();
 
-      expect(wrapper.state('status')).toBe('open');
+      expect(tooltip.state('status')).toBe('open');
       expect(mockCallback).toHaveBeenCalledWith('open', {
         animate: true,
         autoOpen: false,
@@ -205,7 +185,7 @@ describe('ReactTooltips', () => {
 
     it('should call the callback function on close', () => {
       updateTooltip();
-      expect(wrapper.state('status')).toBe('idle');
+      expect(tooltip.state('status')).toBe('idle');
 
       expect(mockCallback).toHaveBeenCalledWith('close', {
         animate: true,
@@ -229,100 +209,79 @@ describe('ReactTooltips', () => {
 
   describe('with `event` hover', () => {
     beforeAll(() => {
-      wrapper = setup({
+      tooltip = setup({
         ...props,
         event: 'hover',
       });
     });
 
-    afterAll(() => {
-      wrapper.unmount();
-      wrapper.detach();
-
-      portal.unmount();
-    });
-
     it('should be able to show the tooltip', () => {
       updateTooltip('mouseEnter');
 
-      expect(wrapper.state('status')).toBe('open');
+      expect(tooltip.state('status')).toBe('open');
     });
 
     it('should still be open while the cursor is over it', () => {
       updateTooltip(false);
 
-      expect(wrapper.state('status')).toBe('open');
+      expect(tooltip.state('status')).toBe('open');
     });
 
     it('should have close itself after `eventDelay`', () => {
       updateTooltip('mouseLeave');
 
-      jest.advanceTimersByTime(wrapper.prop('eventDelay') * 1000); // trigger the close animation
-      expect(wrapper.state('status')).toBe('closing');
+      jest.advanceTimersByTime(tooltip.prop('eventDelay') * 1000); // trigger the close animation
+      expect(tooltip.state('status')).toBe('closing');
 
       jest.advanceTimersByTime(400); // trigger the fake transitionend event
-      expect(wrapper.state('status')).toBe('idle');
+      expect(tooltip.state('status')).toBe('idle');
     });
   });
 
   describe('with `event` hover and `eventDelay` set to 0', () => {
     beforeAll(() => {
-      wrapper = setup({
+      tooltip = setup({
         ...props,
         event: 'hover',
         eventDelay: 0,
       });
     });
 
-    afterAll(() => {
-      wrapper.unmount();
-      wrapper.detach();
-
-      portal.unmount();
-    });
-
     it('should be able to show the tooltip', () => {
       updateTooltip('mouseEnter');
 
-      expect(wrapper.state('status')).toBe('open');
+      expect(tooltip.state('status')).toBe('open');
     });
 
     it('should have close itself immediately', () => {
       updateTooltip('mouseLeave');
 
-      expect(wrapper.state('status')).toBe('idle');
+      expect(tooltip.state('status')).toBe('idle');
 
       jest.advanceTimersByTime(0); // trigger the fake transitionend event
 
-      expect(wrapper.state('status')).toBe('idle');
+      expect(tooltip.state('status')).toBe('idle');
     });
   });
 
   describe('with `title`', () => {
     beforeAll(() => {
       const Title = () => (<h3>My Title</h3>);
-      wrapper = setup({
+      tooltip = setup({
         ...props,
         title: (<Title />),
       });
     });
 
-    afterAll(() => {
-      wrapper.unmount();
-      wrapper.detach();
-
-      portal.unmount();
-    });
-
     it('should have rendered the title', () => {
-      expect(wrapper.find('Title')).toBePresent();
+      expect(tooltip.find('Title')).toBePresent();
 
-      wrapper.setProps({
+      tooltip.setProps({
         title: (<div className="__title">Other Title</div>)
       });
 
-      expect(wrapper.find('Title')).not.toBePresent();
-      expect(wrapper.find('.__title')).toBePresent();
+      expect(tooltip.find('Title')).not.toBePresent();
+      expect(tooltip.find('.__title')).toBePresent();
     });
   });
 
@@ -333,47 +292,33 @@ describe('ReactTooltips', () => {
           <button>NEXT</button>
         </footer>
       );
-      wrapper = setup({
+      tooltip = setup({
         ...props,
         footer: (<Footer />),
       });
     });
 
-    afterAll(() => {
-      wrapper.unmount();
-      wrapper.detach();
-
-      portal.unmount();
-    });
-
     it('should have rendered the footer', () => {
-      expect(wrapper.find('Footer')).toBePresent();
+      expect(tooltip.find('Footer')).toBePresent();
 
-      wrapper.setProps({
+      tooltip.setProps({
         footer: (<div className="__footer">Hello</div>)
       });
 
-      expect(wrapper.find('Footer')).not.toBePresent();
-      expect(wrapper.find('.__footer')).toBePresent();
+      expect(tooltip.find('Footer')).not.toBePresent();
+      expect(tooltip.find('.__footer')).toBePresent();
     });
   });
 
   describe('with `id`', () => {
     beforeAll(() => {
-      wrapper = setup({
+      tooltip = setup({
         ...props,
         id: 'hello-world',
       });
     });
 
-    afterAll(() => {
-      wrapper.unmount();
-      wrapper.detach();
-
-      portal.unmount();
-    });
-
-    it('should have added the id to the portal wrapper', () => {
+    it('should have added the id to the portal tooltip', () => {
       const namedPortal = document.getElementById('hello-world');
 
       expect(namedPortal).toBeInstanceOf(HTMLDivElement);
@@ -383,113 +328,161 @@ describe('ReactTooltips', () => {
 
   describe('with `open`', () => {
     beforeAll(() => {
-      wrapper = setup({
+      tooltip = setup({
         ...props,
         open: false,
       });
     });
 
-    afterAll(() => {
-      wrapper.unmount();
-      wrapper.detach();
-
-      portal.unmount();
-    });
-
     it('should not be able to show the tooltip with click', () => {
       updateTooltip('click');
 
-      expect(wrapper.state('status')).toBe('idle');
+      expect(tooltip.state('status')).toBe('idle');
     });
 
     it('should not be able to show the tooltip with hover', () => {
-      wrapper.setProps({ event: 'hover' });
+      tooltip.setProps({ event: 'hover' });
       updateTooltip('mouseEnter');
 
-      expect(wrapper.state('status')).toBe('idle');
+      expect(tooltip.state('status')).toBe('idle');
     });
 
     it('should show the tooltip when `open` is true', () => {
-      wrapper.setProps({ open: true });
-      expect(wrapper.state('status')).toBe('opening');
+      tooltip.setProps({ open: true });
+      expect(tooltip.state('status')).toBe('opening');
 
-      wrapper.instance().handleTransitionEnd();
-      expect(wrapper.state('status')).toBe('open');
+      tooltip.instance().handleTransitionEnd();
+      expect(tooltip.state('status')).toBe('open');
     });
 
     it('should close the tooltip when `open` is false', () => {
-      wrapper.setProps({ open: false });
-      expect(wrapper.state('status')).toBe('closing');
+      tooltip.setProps({ open: false });
+      expect(tooltip.state('status')).toBe('closing');
 
-      wrapper.instance().handleTransitionEnd();
-      expect(wrapper.state('status')).toBe('idle');
+      tooltip.instance().handleTransitionEnd();
+      expect(tooltip.state('status')).toBe('idle');
     });
   });
 
   describe('with `placement` top', () => {
     beforeAll(() => {
-      wrapper = setup({
+      tooltip = setup({
         ...props,
         placement: 'top',
       });
     });
 
-    afterAll(() => {
-      wrapper.unmount();
-      wrapper.detach();
-
-      portal.unmount();
-    });
-
     it('should use `placement` top', () => {
-      expect(wrapper.instance().popper.originalPlacement).toBe('top');
-      expect(wrapper.state('currentPlacement')).toBe('top');
+      expect(tooltip.instance().popper.originalPlacement).toBe('top');
+      expect(tooltip.state('currentPlacement')).toBe('top');
     });
   });
 
   describe('with `placement` center', () => {
     beforeAll(() => {
-      wrapper = setup({
+      tooltip = setup({
         ...props,
         placement: 'center',
       });
     });
 
-    afterAll(() => {
-      wrapper.unmount();
-      wrapper.detach();
-
-      portal.unmount();
-    });
-
     it('should use `placement` center', () => {
-      expect(wrapper.instance().popper).not.toBeDefined();
-      expect(wrapper.state('currentPlacement')).toBe('center');
+      expect(tooltip.instance().popper).not.toBeDefined();
+      expect(tooltip.state('currentPlacement')).toBe('center');
     });
 
     it('should have skipped the arrow', () => {
       updateTooltip();
 
-      const tooltip = portal.find('.__tooltip');
+      const tooltipEl = portal.find('.__tooltip');
 
-      expect(wrapper.state('status')).toBe('open');
-      expect(tooltip.find('.__tooltip__arrow')).not.toBePresent();
+      expect(tooltip.state('status')).toBe('open');
+      expect(tooltipEl.find('.__tooltip__arrow')).not.toBePresent();
     });
   });
 
-  describe('with showCloseButton', () => {
+  describe('with `component` as function', () => {
+    beforeAll(() => {
+      tooltip = setup({
+        component: Styled,
+      });
+    });
+
+    it('should show the tooltip with click', () => {
+      updateTooltip('click');
+
+      expect(tooltip.state('status')).toBe('open');
+    });
+
+    it('should have a StyledComponent', () => {
+      expect(tooltip.find('StyledComponent')).toBePresent();
+    });
+
+    it('should be able to close the tooltip with `closeTooltip` prop', () => {
+      tooltip.find('StyledComponent').find('button').simulate('click');
+
+      expect(tooltip.state('status')).toBe('closing');
+    });
+  });
+
+  describe('with `component` as element', () => {
+    beforeAll(() => {
+      tooltip = setup({
+        component: <Styled />,
+      });
+    });
+
+    it('should show the tooltip with click', () => {
+      updateTooltip('click');
+
+      expect(tooltip.state('status')).toBe('open');
+    });
+
+    it('should have a StyledComponent', () => {
+      expect(tooltip.find('StyledComponent')).toBePresent();
+    });
+
+    it('should be able to close the tooltip with `closeTooltip` prop', () => {
+      tooltip.find('StyledComponent').find('button').simulate('click');
+
+      expect(tooltip.state('status')).toBe('closing');
+    });
+  });
+
+  describe('with `showCloseButton`', () => {
+    beforeAll(() => {
+      tooltip = setup({
+        ...props,
+        showCloseButton: true,
+      });
+    });
+
+    it('should show the tooltip with click', () => {
+      updateTooltip('click');
+
+      expect(tooltip.state('status')).toBe('open');
+    });
+
+    it('should have a close button', () => {
+      expect(tooltip.find('CloseBtn')).toBePresent();
+    });
+
+    it('should be able to close the tooltip clicking the close button', () => {
+      tooltip.find('CloseBtn').simulate('click');
+
+      expect(tooltip.state('status')).toBe('closing');
+    });
+  });
+
+  describe('with `styles`', () => {
 
   });
 
-  describe('with styles', () => {
+  describe('with `target`', () => {
 
   });
 
-  describe('with target', () => {
-
-  });
-
-  describe('with wrapperOptions', () => {
+  describe('with `wrapperOptions`', () => {
 
   });
 });
