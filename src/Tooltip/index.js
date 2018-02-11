@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import STATUS from '../status';
-import { isFixed } from '../utils';
 
 import Arrow from './Arrow';
 import Container from './Container';
@@ -17,6 +16,7 @@ export default class Tooltip extends React.Component {
     footer: PropTypes.node,
     handleClick: PropTypes.func.isRequired,
     hideArrow: PropTypes.bool.isRequired,
+    isPositioned: PropTypes.bool,
     open: PropTypes.bool,
     placement: PropTypes.string.isRequired,
     positionWrapper: PropTypes.bool.isRequired,
@@ -25,12 +25,11 @@ export default class Tooltip extends React.Component {
     showCloseButton: PropTypes.bool,
     status: PropTypes.string.isRequired,
     styles: PropTypes.object.isRequired,
-    target: PropTypes.object,
     title: PropTypes.node,
   };
 
   get tooltipStyle() {
-    const { animate, component, placement, hideArrow, status, styles, target } = this.props;
+    const { animate, component, placement, hideArrow, isPositioned, status, styles } = this.props;
     const {
       arrow: { length },
       tooltip,
@@ -65,7 +64,7 @@ export default class Tooltip extends React.Component {
       element = { ...element, ...tooltipClosing };
     }
 
-    if (status === STATUS.OPEN && animate && !isFixed(target)) {
+    if (status === STATUS.OPEN && animate && !isPositioned) {
       element = { ...element, ...tooltipWithAnimation };
     }
 
