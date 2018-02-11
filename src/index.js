@@ -306,9 +306,10 @@ export default class ReactTooltips extends React.Component {
 
   handleMouseEnter = () => {
     if (typeof this.props.open !== 'undefined') return;
+    const { status } = this.state;
 
     /* istanbul ignore else */
-    if (this.eventType === 'hover') {
+    if (this.eventType === 'hover' && status === STATUS.IDLE) {
       clearTimeout(this.eventDelayTimeout);
       this.toggle();
     }
@@ -325,8 +326,10 @@ export default class ReactTooltips extends React.Component {
       if (!eventDelay) {
         this.toggle(STATUS.IDLE);
       }
-      else if ([STATUS.OPENING, STATUS.OPEN].includes(status) && !positionWrapper) {
+      else if ([STATUS.OPENING, STATUS.OPEN].includes(status) && !positionWrapper && !this.eventDelayTimeout) {
         this.eventDelayTimeout = setTimeout(() => {
+          delete this.eventDelayTimeout;
+
           this.toggle();
         }, eventDelay * 1000);
       }
