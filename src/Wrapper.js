@@ -34,13 +34,17 @@ export default class Wrapper extends React.Component {
         }
         else {
           element = React.cloneElement(React.Children.only(children), {
-            ref: setChildRef
+            innerRef: setChildRef
           });
         }
       }
       else {
         element = children;
       }
+    }
+
+    if (!element) {
+      return null;
     }
 
     return (
