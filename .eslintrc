@@ -126,22 +126,25 @@
       {
         "order": [
           "constructor",
+          "version",
           "lifecycle",
           "everything-else",
           "render"
         ],
         "groups": {
           "lifecycle": [
+            "displayName",
+            "state",
             "statics",
             "contextTypes",
             "childContextTypes",
             "getChildContext",
             "propTypes",
             "defaultProps",
-            "shouldComponentUpdate",
             "componentWillMount",
             "componentDidMount",
             "componentWillReceiveProps",
+            "shouldComponentUpdate",
             "componentWillUpdate",
             "componentDidUpdate",
             "componentWillUnmount"
