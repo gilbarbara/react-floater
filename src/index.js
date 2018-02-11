@@ -431,7 +431,7 @@ export default class ReactTooltips extends React.Component {
     } = this.props;
 
     return (
-      <div style={{ lineHeight: 0 }}>
+      <span>
         <Portal
           {...this.props}
           hasChildren={!!children}
@@ -469,7 +469,7 @@ export default class ReactTooltips extends React.Component {
         >
           {children}
         </Wrapper>
-      </div>
+      </span>
     );
   }
 }
