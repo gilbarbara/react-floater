@@ -81,7 +81,7 @@
     "build": "npm run clean && npm run build:commonjs && npm run build:es",
     "build:commonjs": "cross-env NODE_ENV=production rollup -c -f cjs -o lib/index.js",
     "build:es": "cross-env NODE_ENV=production rollup -c",
-    "watch": "build:es && rollup -cw",
+    "watch": "rollup -cw",
     "clean": "rimraf es && rimraf lib",
     "lint": "eslint --ext .js --ext .jsx src test",
     "test": "jest --coverage",
