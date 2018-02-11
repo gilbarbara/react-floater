@@ -3,11 +3,11 @@ React Tooltips
 
 [![NPM version](https://badge.fury.io/js/react-tooltips.svg)](https://www.npmjs.com/package/react-tooltips) 
 [![build status](https://travis-ci.org/gilbarbara/react-tooltips.svg)](https://travis-ci.org/gilbarbara/react-tooltips) 
-[![dependencies Status](https://david-dm.org/gilbarbara/react-tooltips/status.svg)](https://david-dm.org/gilbarbara/react-tooltips) 
 [![Maintainability](https://api.codeclimate.com/v1/badges/930e69ac58dc225e5389/maintainability)](https://codeclimate.com/github/gilbarbara/react-tooltips/maintainability) 
 [![Test Coverage](https://api.codeclimate.com/v1/badges/930e69ac58dc225e5389/test_coverage)](https://codeclimate.com/github/gilbarbara/react-tooltips/test_coverage)
 
-View the [demo](https://84vn36m178.codesandbox.io/)
+### View the [demo](https://84vn36m178.codesandbox.io/)
+You can view and edit the code for each tooltip [here](https://codesandbox.io/s/84vn36m178) 
 
 ## Usage
 
@@ -37,6 +37,9 @@ Only set the properties you want to change and the defaultStyles will be merged.
 
 Check it [styles.js](./src/styles.js) for the syntax.
 
+Or you can use your own components passing a React element/function to `component`.  
+Check `WithStyledComponents.js` in the demo.
+
 ## Props
 
 **animate** `bool` ▶︎ `true`  
@@ -54,9 +57,13 @@ It will be called when the tooltip change state with 2 parameters:
 **children** `node`  
 An element to trigger the tooltip. 
 
+**component** `element|function`  
+A React component or function to as a custom UI for the tooltip.  
+The prop `closeTooltip` will be available in your component. 
+
 **content** `node`  
 The tooltip content. It can be anything that can be rendered.  
-It's the only required prop.
+This is the only required props, unless you pass a `component`.
 
 **event** `string` ▶︎ `click`  
 The event that will trigger the tooltip. It can be `hover | click`.  
