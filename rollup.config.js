@@ -7,6 +7,7 @@ export default {
     file: 'es/index.js',
     format: 'es',
   },
+  external: ['react', 'react-dom', 'prop-types', 'popper.js', 'deepmerge', 'exenv', 'react-proptype-conditional-require'],
   plugins: [
     babel({
       exclude: 'node_modules/**'
