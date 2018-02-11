@@ -188,7 +188,7 @@ export default class ReactTooltips extends React.Component {
             enabled: flip,
             behavior: flipBehavior,
             padding: 20,
-          }
+          },
         },
         onCreate: (data) => {
           this.popper = data;
@@ -384,7 +384,7 @@ export default class ReactTooltips extends React.Component {
       const wrapperComputedStyles = window.getComputedStyle(this.target);
 
       /* istanbul ignore else */
-      if (!this.wrapperStyles) {
+      if (this.wrapperStyles) {
         nextStyles.wrapper = {
           ...nextStyles.wrapper,
           ...this.wrapperStyles
@@ -392,6 +392,9 @@ export default class ReactTooltips extends React.Component {
       }
       else if (!['relative', 'static'].includes(wrapperComputedStyles.position)) {
         this.wrapperStyles = {};
+        if (!this.position) {
+          this.position = wrapperComputedStyles.position;
+        }
 
         positioningProps.forEach(d => {
           this.wrapperStyles[d] = wrapperComputedStyles[d];
@@ -446,6 +449,7 @@ export default class ReactTooltips extends React.Component {
             footer={footer}
             handleClick={this.handleClick}
             hideArrow={hideArrow || currentPlacement === 'center'}
+            isPositioned={!!this.position}
             open={open}
             placement={currentPlacement}
             positionWrapper={positionWrapper}
@@ -454,7 +458,6 @@ export default class ReactTooltips extends React.Component {
             showCloseButton={showCloseButton}
             status={status}
             styles={this.styles}
-            target={this.target}
             title={title}
           />
         </Portal>
