@@ -35,7 +35,6 @@ export default class ReactTooltips extends React.Component {
   }
 
   static propTypes = {
-    animate: PropTypes.bool,
     autoOpen: PropTypes.bool,
     callback: PropTypes.func,
     children: PropTypes.node,
@@ -45,6 +44,7 @@ export default class ReactTooltips extends React.Component {
     ]), props => !props.content),
     content: isRequiredIf(PropTypes.node, props => !props.component),
     debug: PropTypes.bool,
+    disableAnimation: PropTypes.bool,
     disableHoverToClick: PropTypes.bool,
     event: PropTypes.oneOf(['hover', 'click']),
     eventDelay: PropTypes.number,
@@ -86,10 +86,10 @@ export default class ReactTooltips extends React.Component {
   };
 
   static defaultProps = {
-    animate: true,
     autoOpen: false,
     callback: () => {},
     debug: false,
+    disableAnimation: false,
     disableHoverToClick: false,
     event: 'click',
     eventDelay: 0.4,
@@ -471,9 +471,9 @@ export default class ReactTooltips extends React.Component {
   render() {
     const { currentPlacement, positionWrapper, status } = this.state;
     const {
-      animate,
       children,
       content,
+      disableAnimation,
       footer,
       hideArrow,
       open,
@@ -493,9 +493,9 @@ export default class ReactTooltips extends React.Component {
           status={status}
         >
           <Tooltip
-            animate={animate}
             component={component}
             content={content}
+            disableAnimation={disableAnimation}
             footer={footer}
             handleClick={this.handleClick}
             hideArrow={hideArrow || currentPlacement === 'center'}

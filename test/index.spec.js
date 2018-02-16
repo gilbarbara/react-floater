@@ -165,11 +165,11 @@ describe('ReactTooltips', () => {
 
       expect(tooltip.state('status')).toBe('open');
       expect(mockCallback).toHaveBeenCalledWith('open', {
-        animate: true,
         autoOpen: false,
         callback: mockCallback,
         children: 'Places',
         content: 'Hello! This is my content!',
+        disableAnimation: false,
         disableHoverToClick: false,
         event: 'click',
         eventDelay: 0.4,
@@ -189,11 +189,11 @@ describe('ReactTooltips', () => {
       expect(tooltip.state('status')).toBe('idle');
 
       expect(mockCallback).toHaveBeenCalledWith('close', {
-        animate: true,
         autoOpen: false,
         callback: mockCallback,
         children: 'Places',
         content: 'Hello! This is my content!',
+        disableAnimation: false,
         disableHoverToClick: false,
         event: 'click',
         eventDelay: 0.4,
