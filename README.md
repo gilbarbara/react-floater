@@ -42,9 +42,6 @@ Check `WithStyledComponents.js` in the demo.
 
 ## Props
 
-**animate** `bool` ▶︎ `true`  
-Animate the tooltip on scroll/resize.
- 
 **autoOpen** `bool` ▶︎ `false`  
 Open the tooltip automatically.  
 
@@ -68,6 +65,9 @@ This is the only required props, unless you pass a `component`.
 **debug** `bool` ▶︎ `false`  
 Log some basic actions.  
 *You can also set a global variable* `ReactTooltipsDebug = true;`
+
+**disableAnimation** `bool` ▶︎ `false`  
+Animate the tooltip on scroll/resize.
 
 **disableHoverToClick** `bool` ▶︎ `false`  
 Don't convert *hover* event to *click* on mobile.
