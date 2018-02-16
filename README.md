@@ -69,6 +69,9 @@ This is the only required props, unless you pass a `component`.
 Log some basic actions.  
 *You can also set a global variable* `ReactTooltipsDebug = true;`
 
+**disableHoverToClick** `bool` ▶︎ `false`  
+Don't convert *hover* event to *click* on mobile.
+
 **event** `string` ▶︎ `click`  
 The event that will trigger the tooltip. It can be `hover | click`.  
 *These won't work in controlled mode.*
