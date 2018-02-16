@@ -1,13 +1,13 @@
 React Tooltips
 ===
 
-[![NPM version](https://badge.fury.io/js/react-tooltips.svg)](https://www.npmjs.com/package/react-tooltips) 
-[![build status](https://travis-ci.org/gilbarbara/react-tooltips.svg)](https://travis-ci.org/gilbarbara/react-tooltips) 
-[![Maintainability](https://api.codeclimate.com/v1/badges/930e69ac58dc225e5389/maintainability)](https://codeclimate.com/github/gilbarbara/react-tooltips/maintainability) 
+[![NPM version](https://badge.fury.io/js/react-tooltips.svg)](https://www.npmjs.com/package/react-tooltips)
+[![build status](https://travis-ci.org/gilbarbara/react-tooltips.svg)](https://travis-ci.org/gilbarbara/react-tooltips)
+[![Maintainability](https://api.codeclimate.com/v1/badges/930e69ac58dc225e5389/maintainability)](https://codeclimate.com/github/gilbarbara/react-tooltips/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/930e69ac58dc225e5389/test_coverage)](https://codeclimate.com/github/gilbarbara/react-tooltips/test_coverage)
 
 ### View the [demo](https://84vn36m178.codesandbox.io/)
-You can view and edit the code for each tooltip [here](https://codesandbox.io/s/84vn36m178) 
+You can view and edit the code for each tooltip [here](https://codesandbox.io/s/84vn36m178)
 
 ## Usage
 
@@ -32,35 +32,35 @@ And voíla!
 
 
 ## Styling
-You can customize everything with the `styles` prop.  
+You can customize everything with the `styles` prop.
 Only set the properties you want to change and the defaultStyles will be merged.
 
 Check it [styles.js](./src/styles.js) for the syntax.
 
-Or you can use your own components passing a React element/function to `component`.  
+Or you can use your own components passing a React element/function to `component`.
 Check `WithStyledComponents.js` in the demo.
 
 ## Props
 
 **autoOpen** `bool` ▶︎ `false`  
-Open the tooltip automatically.  
+Open the tooltip automatically.
 
 **callback** `func`  
-It will be called when the tooltip change state with 2 parameters:  
+It will be called when the tooltip change state with 2 parameters:
 
 - **action** `string`: `open` or `close`  
 - **props** `object` the props you passed.
 
 **children** `node`  
-An element to trigger the tooltip. 
+An element to trigger the tooltip.
 
 **component** `element|function`  
 A React component or function to as a custom UI for the tooltip.  
-The prop `closeTooltip` will be available in your component. 
+The prop `closeTooltip` will be available in your component.
 
 **content** `node`  
 The tooltip content. It can be anything that can be rendered.  
-This is the only required props, unless you pass a `component`.
+*This is the only required props, unless you pass a* `component`.
 
 **debug** `bool` ▶︎ `false`  
 Log some basic actions.  
@@ -84,7 +84,7 @@ The amount of time (in seconds) that hover tooltips should wait after a `mouseLe
 Only valid for event type `hover`.
 
 **footer** `node`  
-It can be anything that can be rendered.  
+It can be anything that can be rendered.
 
 **id** `string|number`  
 In case that you need to identify the portal.
@@ -93,21 +93,22 @@ In case that you need to identify the portal.
 The distance between the tooltip and its target in pixels.
 
 **open** `bool` ▶︎ `false`  
-The switch between normal and controlled modes.  
+The switch between normal and controlled modes.
 *Setting this prop will disabled the normal behavior.*
 
 **placement** `string` ▶︎ `bottom`  
-The placement of the tooltip. It will flip position if there's no space available.
-It can be:  
-top (top-start, top-end),  
-bottom (bottom-start, bottom-end)  
-left (left-start, left-end),  
-right (right-start, right-end,    
-auto,  
-center
+The placement of the tooltip. It will update the position if there's no space available.  
+It can be
+ 
+- top (top-start, top-end)
+- bottom (bottom-start, bottom-end)
+- left (left-start, left-end)
+- right (right-start, right-end
+- auto 
+- center
 
 **showCloseButton** `bool` ▶︎ `false`  
-It will show a ⨉ button to close the tooltip.  
+It will show a ⨉ button to close the tooltip.
 This will be `true` when you change `wrapperOptions` position.
 
 **styles** `object` ▶︎ `defaultStyles`  
@@ -117,10 +118,10 @@ You can customize the UI using this prop.
 The target used to calculate the tooltip position. If it's not set, it will use the `children` as the target.
 
 **title** `node`  
-It can be anything that can be rendered.  
+It can be anything that can be rendered.
 
 **wrapperOptions** `object`  
-Position the wrapper relative to the target.  
+Position the wrapper relative to the target.
 *You need to set a `target` for this to work.*
 
 ```js
@@ -133,7 +134,7 @@ Position the wrapper relative to the target.
 
 ## Modes
 
-**Default**  
+**Default**
 The wrapper will trigger the events and use itself as the tooltip's target.
 
 ```jsx
@@ -143,30 +144,30 @@ The wrapper will trigger the events and use itself as the tooltip's target.
 
 ```
 
-**Proxy**  
-The wrapper will trigger the events but the tooltip will use the `target` to position itself.  
+**Proxy**
+The wrapper will trigger the events but the tooltip will use the `target` to position itself.
 
 ```jsx
 <div className="App">
     <img src="some-path" />
-        
+
     <Tooltip
       content="This is the tooltip content"
       target=".App img"
     >
-        <span>click me</span> 
+        <span>click me</span>
     </Tooltip>
 </div>
 
 ```
 
-**Beacon**  
-The same as the proxy but the wrapper will be positioned relative to the `target`.
+**Beacon**
+The same as the **proxy mode** but the wrapper will be positioned relative to the `target`.
 
 ```jsx
 <div className="App">
     <img src="https://upload.wikimedia.org/wikipedia/commons/2/2d/Google-favicon-2015.png" width="100" className="my-super-image" />
-        
+
     <Tooltip
         content="This is the tooltip content"
         target=".my-super-image"
@@ -182,7 +183,7 @@ The same as the proxy but the wrapper will be positioned relative to the `target
 
 ```
 
-**Controlled**  
+**Controlled**
 When you set a boolean to the `open` prop it will enter the controlled mode and it will not respond to events.
 In this mode you don't even need to have `children`
 

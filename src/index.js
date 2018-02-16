@@ -21,8 +21,14 @@ export default class ReactTooltips extends React.Component {
 
     /* istanbul ignore else */
     if (process.env.NODE_ENV !== 'production') {
-      if (props.wrapperOptions.position && !props.target) {
+      const { children, open, target, wrapperOptions } = this.props;
+
+      if (wrapperOptions.position && !target) {
         console.warn('Missing props! You need to set a `target` to use `wrapperOptions.position`'); //eslint-disable-line no-console
+      }
+
+      if (!children && typeof open !== 'boolean') {
+        console.warn('Missing props! You need to set `children`.'); //eslint-disable-line no-console
       }
     }
 
@@ -124,6 +130,10 @@ export default class ReactTooltips extends React.Component {
     });
 
     this.initPopper();
+
+    if (!children && target && typeof open !== 'boolean') {
+      // add event listener based on event,
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -153,11 +163,11 @@ export default class ReactTooltips extends React.Component {
     }
 
     if (
-      this.tooltip
+      this.tooltipRef
       && ((prevState.status !== STATUS.OPENING && status === STATUS.OPENING)
-        || (prevState.status !== STATUS.CLOSING && status === STATUS.CLOSING))
+      || (prevState.status !== STATUS.CLOSING && status === STATUS.CLOSING))
     ) {
-      once(this.tooltip, 'transitionend', this.handleTransitionEnd);
+      once(this.tooltipRef, 'transitionend', this.handleTransitionEnd);
     }
   }
 
@@ -189,13 +199,13 @@ export default class ReactTooltips extends React.Component {
     if (placement === 'center') {
       this.setState({ status: STATUS.IDLE });
     }
-    else if (target && this.tooltip) {
-      new Popper(target, this.tooltip, {
+    else if (target && this.tooltipRef) {
+      new Popper(target, this.tooltipRef, {
         placement,
         modifiers: {
           arrow: {
             enabled: !hideArrow,
-            element: this.arrow,
+            element: this.arrowRef,
           },
           offset: {
             offset: `0, ${offset}px`,
@@ -236,7 +246,7 @@ export default class ReactTooltips extends React.Component {
     if (positionWrapper) {
       const wrapperOffset = typeof wrapperOptions.offset !== 'undefined' ? wrapperOptions.offset : 0;
 
-      new Popper(this.target, this.wrapper, {
+      new Popper(this.target, this.wrapperRef, {
         placement: wrapperOptions.placement || placement,
         modifiers: {
           arrow: {
@@ -280,21 +290,21 @@ export default class ReactTooltips extends React.Component {
   }
 
   setArrowRef = (ref) => {
-    this.arrow = ref;
+    this.arrowRef = ref;
   };
 
   setChildRef = (ref) => {
-    this.child = ref;
+    this.childRef = ref;
   };
 
   setTooltipRef = (ref) => {
-    if (!this.tooltip) {
-      this.tooltip = ref;
+    if (!this.tooltipRef) {
+      this.tooltipRef = ref;
     }
   };
 
   setWrapperRef = (ref) => {
-    this.wrapper = ref;
+    this.wrapperRef = ref;
   };
 
   handleTransitionEnd = () => {
@@ -393,20 +403,6 @@ export default class ReactTooltips extends React.Component {
     return event;
   }
 
-  get target() {
-    const { target } = this.props;
-
-    if (target) {
-      if (isNode(target)) {
-        return target;
-      }
-
-      return document.querySelector(target);
-    }
-
-    return this.child || this.wrapper;
-  }
-
   get styles() {
     const { status, positionWrapper, statusWrapper } = this.state;
     const { styles } = this.props;
@@ -466,6 +462,20 @@ export default class ReactTooltips extends React.Component {
     }
 
     return nextStyles;
+  }
+
+  get target() {
+    const { target } = this.props;
+
+    if (target) {
+      if (isNode(target)) {
+        return target;
+      }
+
+      return document.querySelector(target);
+    }
+
+    return this.childRef || this.wrapperRef;
   }
 
   render() {
