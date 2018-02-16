@@ -33,6 +33,7 @@
   "dependencies": {
     "deepmerge": "^2.0.1",
     "exenv": "^1.2.2",
+    "is-plain-obj": "^1.1.0",
     "popper.js": "^1.13.0",
     "react-proptype-conditional-require": "^1.0.4"
   },
@@ -94,11 +95,11 @@
   "bundlesize": [
     {
       "path": "./es/index.js",
-      "maxSize": "8 kB"
+      "maxSize": "10 kB"
     },
     {
       "path": "./lib/index.js",
-      "maxSize": "8 kB"
+      "maxSize": "10 kB"
     }
   ]
 }
