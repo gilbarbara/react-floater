@@ -45,6 +45,7 @@ export default class ReactTooltips extends React.Component {
     ]), props => !props.content),
     content: isRequiredIf(PropTypes.node, props => !props.component),
     debug: PropTypes.bool,
+    disableHoverToClick: PropTypes.bool,
     event: PropTypes.oneOf(['hover', 'click']),
     eventDelay: PropTypes.number,
     flip: PropTypes.bool,
@@ -89,6 +90,7 @@ export default class ReactTooltips extends React.Component {
     autoOpen: false,
     callback: () => {},
     debug: false,
+    disableHoverToClick: false,
     event: 'click',
     eventDelay: 0.4,
     flip: true,
@@ -382,9 +384,9 @@ export default class ReactTooltips extends React.Component {
   }
 
   get eventType() {
-    const { event } = this.props;
+    const { disableHoverToClick, event } = this.props;
 
-    if (event === 'hover' && isMobile()) {
+    if (event === 'hover' && isMobile() && !disableHoverToClick) {
       return 'click';
     }
 
