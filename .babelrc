@@ -17,7 +17,8 @@
       "plugins": [
         "array-includes",
         "external-helpers",
-        "transform-flow-strip-types"
+        "transform-flow-strip-types",
+        "transform-node-env-inline"
       ]
     },
     "test": {
