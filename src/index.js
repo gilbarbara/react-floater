@@ -5,7 +5,7 @@ import deepmerge from 'deepmerge';
 import isRequiredIf from 'react-proptype-conditional-require';
 
 import STATUS from './status';
-import { canUseDOM, isMobile, isNode, once } from './utils';
+import { canUseDOM, isMobile, isNode, log, once } from './utils';
 
 import Portal from './Portal';
 import Tooltip from './Tooltip';
@@ -44,6 +44,7 @@ export default class ReactTooltips extends React.Component {
       PropTypes.element,
     ]), props => !props.content),
     content: isRequiredIf(PropTypes.node, props => !props.component),
+    debug: PropTypes.bool,
     event: PropTypes.oneOf(['hover', 'click']),
     eventDelay: PropTypes.number,
     flip: PropTypes.bool,
@@ -87,6 +88,7 @@ export default class ReactTooltips extends React.Component {
     animate: true,
     autoOpen: false,
     callback: () => {},
+    debug: false,
     event: 'click',
     eventDelay: 0.4,
     flip: true,
@@ -103,6 +105,21 @@ export default class ReactTooltips extends React.Component {
 
   componentDidMount() {
     if (!canUseDOM) return;
+    const { positionWrapper } = this.state;
+    const { children, open, target } = this.props;
+
+    log({
+      title: 'RT:init',
+      data: {
+        hasChildren: !!children,
+        hasTarget: !!target,
+        isControlled: typeof open === 'boolean',
+        positionWrapper,
+        target: this.target,
+        tooltip: this.tooltipRef,
+      },
+      debug: this.debug,
+    });
 
     this.initPopper();
   }
@@ -296,33 +313,57 @@ export default class ReactTooltips extends React.Component {
   handleClick = () => {
     if (typeof this.props.open !== 'undefined') return;
 
-    const { positionWrapper } = this.state;
+    const { positionWrapper, status } = this.state;
 
     /* istanbul ignore else */
     if (this.eventType === 'click' || (positionWrapper && this.eventType === 'hover')) {
+      log({
+        title: 'RT: click',
+        data: [
+          { event: this.props.event, status: status === STATUS.OPEN ? 'closing' : 'opening' },
+        ],
+        debug: this.debug,
+      });
+
       this.toggle();
     }
   };
 
   handleMouseEnter = () => {
-    if (typeof this.props.open !== 'undefined') return;
+    if (typeof this.props.open !== 'undefined' || isMobile()) return;
     const { status } = this.state;
 
     /* istanbul ignore else */
     if (this.eventType === 'hover' && status === STATUS.IDLE) {
+      log({
+        title: 'RT:mouseEnter',
+        data: [
+          { key: 'originalEvent', value: this.props.event },
+        ],
+        debug: this.debug,
+      });
+
       clearTimeout(this.eventDelayTimeout);
       this.toggle();
     }
   };
 
   handleMouseLeave = () => {
-    const { status, positionWrapper } = this.state;
-    const { eventDelay, open } = this.props;
+    if (typeof this.props.open !== 'undefined' || isMobile()) return;
 
-    if (typeof open !== 'undefined') return;
+    const { event, eventDelay } = this.props;
+    const { status, positionWrapper } = this.state;
 
     /* istanbul ignore else */
     if (this.eventType === 'hover') {
+      log({
+        title: 'rt:mouseLeave',
+        data: [
+          { key: 'originalEvent', value: event },
+        ],
+        debug: this.debug,
+      });
+
       if (!eventDelay) {
         this.toggle(STATUS.IDLE);
       }
@@ -335,6 +376,10 @@ export default class ReactTooltips extends React.Component {
       }
     }
   };
+
+  get debug() {
+    return this.props.debug || !!global.ReactTooltipsDebug;
+  }
 
   get eventType() {
     const { event } = this.props;
