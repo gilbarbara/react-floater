@@ -69,6 +69,9 @@ Log some basic actions.
 **disableAnimation** `bool` ▶︎ `false`  
 Animate the tooltip on scroll/resize.
 
+**disableFlip** `bool` ▶︎ `false`  
+Disable changes in the tooltip position on scroll/resize.
+
 **disableHoverToClick** `bool` ▶︎ `false`  
 Don't convert *hover* event to *click* on mobile.
 
@@ -79,9 +82,6 @@ The event that will trigger the tooltip. It can be `hover | click`.
 **eventDelay** `number` ▶︎ `0.4`  
 The amount of time (in seconds) that hover tooltips should wait after a `mouseLeave` event before hiding.  
 Only valid for event type `hover`.
-
-**flip** `bool` ▶︎ `true`
-Change the tooltip position on scroll/resize.
 
 **footer** `node`  
 It can be anything that can be rendered.  
