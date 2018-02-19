@@ -42,85 +42,86 @@ Check `WithStyledComponents.js` in the demo.
 
 ## Props
 
-**autoOpen** `bool` ▶︎ `false`  
+**autoOpen** {bool} ▶︎ `false`
 Open the tooltip automatically.
 
-**callback** `func`  
+**callback** {func}
 It will be called when the tooltip change state with 2 parameters:
 
-- **action** `string`: `open` or `close`  
-- **props** `object` the props you passed.
+- **action** {string} `open` or `close`
+- **props** {object} the props you passed.
 
-**children** `node`  
+**children** {node}
 An element to trigger the tooltip.
 
-**component** `element|function`  
-A React component or function to as a custom UI for the tooltip.  
+**component** {element|function}
+A React component or function to as a custom UI for the tooltip.
 The prop `closeTooltip` will be available in your component.
 
-**content** `node`  
-The tooltip content. It can be anything that can be rendered.  
+**content** {node}
+The tooltip content. It can be anything that can be rendered.
 *This is the only required props, unless you pass a* `component`.
 
-**debug** `bool` ▶︎ `false`  
-Log some basic actions.  
+**debug** {bool} ▶︎ `false`
+Log some basic actions.
 *You can also set a global variable* `ReactTooltipsDebug = true;`
 
-**disableAnimation** `bool` ▶︎ `false`  
+**disableAnimation** {bool} ▶︎ `false`
 Animate the tooltip on scroll/resize.
 
-**disableFlip** `bool` ▶︎ `false`  
+**disableFlip** {bool} ▶︎ `false`
 Disable changes in the tooltip position on scroll/resize.
 
-**disableHoverToClick** `bool` ▶︎ `false`  
+**disableHoverToClick** {bool} ▶︎ `false`
 Don't convert *hover* event to *click* on mobile.
 
-**event** `string` ▶︎ `click`  
-The event that will trigger the tooltip. It can be `hover | click`.  
+**event** {string} ▶︎ `click`
+The event that will trigger the tooltip. It can be `hover | click`.
 *These won't work in controlled mode.*
 
-**eventDelay** `number` ▶︎ `0.4`  
-The amount of time (in seconds) that hover tooltips should wait after a `mouseLeave` event before hiding.  
+**eventDelay** {number} ▶︎ `0.4`
+The amount of time (in seconds) that hover tooltips should wait after a `mouseLeave` event before hiding.
 Only valid for event type `hover`.
 
-**footer** `node`  
+**footer** {node}
 It can be anything that can be rendered.
 
-**id** `string|number`  
+**id** {string|number}
 In case that you need to identify the portal.
 
-**offset** `number` ▶︎ `15`  
+**offset** {number} ▶︎ `15`
 The distance between the tooltip and its target in pixels.
 
-**open** `bool` ▶︎ `false`  
+**open** {bool} ▶︎ `false`
 The switch between normal and controlled modes.
 *Setting this prop will disabled the normal behavior.*
 
-**placement** `string` ▶︎ `bottom`  
-The placement of the tooltip. It will update the position if there's no space available.  
-It can be
- 
+**placement** {string} ▶︎ `bottom`
+The placement of the tooltip. It will update the position if there's no space available.
+
+It can be:
+
 - top (top-start, top-end)
 - bottom (bottom-start, bottom-end)
 - left (left-start, left-end)
 - right (right-start, right-end
-- auto 
+- auto
 - center
 
-**showCloseButton** `bool` ▶︎ `false`  
+**showCloseButton** {bool} ▶︎ `false`
 It will show a ⨉ button to close the tooltip.
 This will be `true` when you change `wrapperOptions` position.
 
-**styles** `object` ▶︎ `defaultStyles`  
+**styles** {object} ▶︎ `defaultStyles`
 You can customize the UI using this prop.
 
-**target** `object|string`  
+**target** {object|string}
 The target used to calculate the tooltip position. If it's not set, it will use the `children` as the target.
 
-**title** `node`  
+**title** {node}
 It can be anything that can be rendered.
 
-**wrapperOptions** `object`  
+**wrapperOptions** {object}
 Position the wrapper relative to the target.
 *You need to set a `target` for this to work.*
 
@@ -145,7 +146,7 @@ The wrapper will trigger the events and use itself as the tooltip's target.
 ```
 
 **Proxy**
-The wrapper will trigger the events but the tooltip will use the `target` to position itself.
+The wrapper will trigger the events but the tooltip will use the **target** prop to position itself.
 
 ```jsx
 <div className="App">
