@@ -1,5 +1,6 @@
 import babel from 'rollup-plugin-babel';
 import commonjs from 'rollup-plugin-commonjs';
+import packageJSON from './package.json';
 
 export default {
   input: 'src/index.js',
@@ -8,14 +9,8 @@ export default {
     format: 'es',
   },
   external: [
-    'deepmerge',
-    'exenv',
-    'is-plain-obj',
-    'popper.js',
-    'prop-types',
-    'react',
-    'react-dom',
-    'react-proptype-conditional-require',
+    ...Object.keys(packageJSON.peerDependencies),
+    ...Object.keys(packageJSON.dependencies),
   ],
   plugins: [
     babel({

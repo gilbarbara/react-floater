@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom';
 import ExecutionEnvironment from 'exenv';
-import isPlainObj from 'is-plain-obj';
+import is from '@sindresorhus/is';
 
 export const { canUseDOM } = ExecutionEnvironment;
 export const isReact16 = ReactDOM.createPortal !== undefined;
@@ -56,7 +56,7 @@ export function log({ title = 'react-tooltips', data, warn = false, debug = fals
     if (data) {
       if (Array.isArray(data)) {
         data.forEach(d => {
-          if (isPlainObj(d) && d.key) {
+          if (is.plainObject(d) && d.key) {
             logFn.apply(console, [d.key, d.value]);
           }
           else {
