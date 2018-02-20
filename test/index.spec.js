@@ -8,8 +8,11 @@ import Styled from './__fixtures__/Styled';
 jest.useFakeTimers();
 
 const mockCallback = jest.fn();
+const mockGetPopper = jest.fn();
+
 const props = {
   content: 'Hello! This is my content!',
+  getPopper: mockGetPopper,
 };
 
 function setup(ownProps = props, children = 'Places') {
@@ -59,6 +62,12 @@ describe('ReactTooltips', () => {
       expect(portal.find('.__tooltip')).toBePresent();
       expect(portal.find('.__tooltip__container')).toBePresent();
       expect(portal.find('.__tooltip__arrow')).toBePresent();
+    });
+
+    it('should have called getPopper', () => {
+      const popper = mockGetPopper.mock.calls[0][0];
+
+      expect(popper.instance.constructor.name).toBe('Popper');
     });
 
     it('should have rendered the Tooltip initially hidden', () => {
@@ -175,6 +184,7 @@ describe('ReactTooltips', () => {
         disableHoverToClick: false,
         event: 'click',
         eventDelay: 0.4,
+        getPopper: mockGetPopper,
         hideArrow: false,
         offset: 15,
         placement: 'bottom',
@@ -200,6 +210,7 @@ describe('ReactTooltips', () => {
         disableHoverToClick: false,
         event: 'click',
         eventDelay: 0.4,
+        getPopper: mockGetPopper,
         hideArrow: false,
         offset: 15,
         placement: 'bottom',

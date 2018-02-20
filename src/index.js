@@ -57,6 +57,7 @@ export default class ReactTooltips extends React.Component {
     event: PropTypes.oneOf(['hover', 'click']),
     eventDelay: PropTypes.number,
     footer: PropTypes.node,
+    getPopper: PropTypes.func,
     hideArrow: PropTypes.bool,
     id: PropTypes.oneOfType([
       PropTypes.string,
@@ -101,6 +102,7 @@ export default class ReactTooltips extends React.Component {
     disableHoverToClick: false,
     event: 'click',
     eventDelay: 0.4,
+    getPopper: noop,
     hideArrow: false,
     offset: 15,
     placement: 'bottom',
@@ -186,7 +188,7 @@ export default class ReactTooltips extends React.Component {
 
   initPopper(target = this.target) {
     const { positionWrapper } = this.state;
-    const { disableFlip, hideArrow, offset, placement, wrapperOptions } = this.props;
+    const { disableFlip, getPopper, hideArrow, offset, placement, wrapperOptions } = this.props;
     const flipBehavior = placement === 'top' || placement === 'bottom' ? 'flip' : [
       'right',
       'bottom-end',
@@ -222,6 +224,8 @@ export default class ReactTooltips extends React.Component {
         },
         onCreate: (data) => {
           this.popper = data;
+
+          getPopper(data, 'tooltip');
 
           this.setState({
             currentPlacement: data.placement,
@@ -263,6 +267,8 @@ export default class ReactTooltips extends React.Component {
         onCreate: (data) => {
           this.wrapperPopper = data;
           this.setState({ statusWrapper: STATUS.IDLE });
+
+          getPopper(data, 'wrapper');
 
           if (placement !== data.placement) {
             setTimeout(() => {
