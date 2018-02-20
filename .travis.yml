@@ -10,7 +10,6 @@ before_script:
   - ./cc-test-reporter before-build
 script:
   - npm test
-  - npm run build
 after_success:
   - npm run bundlesize
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
