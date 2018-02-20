@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import is from '@sindresorhus/is';
 
 import CloseBtn from './CloseBtn';
 
@@ -33,7 +34,7 @@ const TooltipContainer = ({
 
   if (
     (showCloseButton || positionWrapper)
-    && typeof open === 'undefined'
+    && !is.boolean(open)
   ) {
     output.close = (
       <CloseBtn

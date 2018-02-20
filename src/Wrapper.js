@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import is from '@sindresorhus/is';
 
 export default class Wrapper extends React.Component {
   static propTypes = {
@@ -33,7 +34,7 @@ export default class Wrapper extends React.Component {
           element = <span>{children}</span>;
         }
         else {
-          const refProp = typeof children.type === 'function' ? 'innerRef' : 'ref';
+          const refProp = is.function(children.type) ? 'innerRef' : 'ref';
           element = React.cloneElement(React.Children.only(children), {
             [refProp]: setChildRef
           });

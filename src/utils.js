@@ -9,16 +9,6 @@ export function isMobile() {
   return ('ontouchstart' in window) && /Mobi/.test(navigator.userAgent);
 }
 
-export function isNode(el) {
-  if (!el || typeof el !== 'object') {
-    return false;
-  }
-
-  const windowHasNode = window && typeof window.Node === 'object';
-
-  return windowHasNode ? (el instanceof window.Node) : (typeof el.nodeType === 'number' && typeof el.nodeName === 'string');
-}
-
 export function isFixed(element) {
   if (!element) {
     return false;
@@ -47,11 +37,12 @@ export function isFixed(element) {
  * @param {boolean}      [arg.warn]  - If true, the message will be a warning
  * @param {boolean}      [arg.debug] - Nothing will be logged unless debug is true
  */
-export function log({ title = 'react-tooltips', data, warn = false, debug = false }) {
-  const logFn = warn ? console.warn || console.error : console.log; //eslint-disable-line no-console
+export function log({ title, data, warn = false, debug = false }: Object) {
+  /* eslint-disable no-console */
+  const logFn = warn ? console.warn || console.error : console.log;
 
-  if (debug) {
-    console.log(`%c${title}`, 'color: #760bc5; font-weight: bold; font-size: 12px;'); //eslint-disable-line no-console
+  if (debug && title && data) {
+    console.groupCollapsed(`%creact-tooltips: ${title}`, 'color: #9b00ff; font-weight: bold; font-size: 12px;');
 
     if (data) {
       if (Array.isArray(data)) {
@@ -68,7 +59,10 @@ export function log({ title = 'react-tooltips', data, warn = false, debug = fals
         logFn.apply(console, [data]);
       }
     }
+
+    console.groupEnd();
   }
+  /* eslint-enable */
 }
 
 export function on(element, event, cb, capture = false) {
@@ -89,3 +83,5 @@ export function once(element, event, cb, capture = false) {
 
   on(element, event, nextCB, capture);
 }
+
+export function noop() {}
