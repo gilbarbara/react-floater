@@ -30,15 +30,39 @@ import Tooltip from 'react-tooltips';
 
 And voíla!
 
+## Customization
 
-## Styling
-You can customize everything with the `styles` prop.
-Only set the properties you want to change and the defaultStyles will be merged.
+You can use your own components to render the tooltip with the prop `component`.  
+Check `WithStyledComponents.js` in the [demo](https://84vn36m178.codesandbox.io/) for an example.
 
-Check it [styles.js](./src/styles.js) for the syntax.
+If you use your own components as `children` it will receive a `innerRef` prop that you must set in your HTMLElement:  
+*Stateless components don't accept refs...*
 
-Or you can use your own components passing a React element/function to `component`.
-Check `WithStyledComponents.js` in the demo.
+```jsx
+const Button = ({ innerRef, ...rest }) => (
+  <button ref={innerRef} {...rest} />
+);
+
+...
+<Tooltip content="This is the tooltip content">
+    <Button>click me</Button>
+</Tooltip>
+```
+
+This works transparently with styled-components (and possible other modules):  
+
+```jsx
+const Wrapper = styled.div`
+  margin: 0 auto;
+  max-width: 500px;
+  line-height: 1.5;
+`;
+
+<Tooltip content="This is the tooltip content">
+    <Wrapper>click me</Wrapper>
+</Tooltip>
+
+```
 
 ## Props
 
@@ -55,7 +79,7 @@ It will be called when the tooltip change state with 2 parameters:
 An element to trigger the tooltip.
 
 **component** {element|function}
-A React component or function to as a custom UI for the tooltip.
+A React component or function to as a custom UI for the tooltip.  
 The prop `closeTooltip` will be available in your component.
 
 **content** {node}
@@ -132,6 +156,14 @@ Position the wrapper relative to the target.
     position: bool, // Set to true to position the wrapper
 }
 ```
+
+
+## Styling
+You can customize everything with the `styles` prop.  
+Only set the properties you want to change and the default [styles](./src/styles.js) will be merged.
+
+Check it [styles.js](./src/styles.js) for the syntax.
+
 
 ## Modes
 
