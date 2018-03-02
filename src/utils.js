@@ -5,26 +5,48 @@ import is from '@sindresorhus/is';
 export const { canUseDOM } = ExecutionEnvironment;
 export const isReact16 = ReactDOM.createPortal !== undefined;
 
+export function comparator(data: Object, nextData: Object): Object {
+  return {
+    changedFrom(key: string, previous: string, actual: 'string'): boolean {
+      return data[key] === previous && nextData[key] === actual;
+    },
+    changedTo(key: string, actual: 'string'): boolean {
+      return data[key] !== actual && nextData[key] === actual;
+    },
+    changed(key: string): boolean {
+      return data[key] !== nextData[key];
+    },
+  };
+}
+
 export function isMobile() {
   return ('ontouchstart' in window) && /Mobi/.test(navigator.userAgent);
 }
 
-export function isFixed(element) {
-  if (!element) {
+export function getStyleComputedProperty(el: HTMLElement): Object {
+  if (el.nodeType !== 1) {
+    return {};
+  }
+
+  return getComputedStyle(el);
+}
+
+export function isFixed(el?: HTMLElement): boolean {
+  if (!el) {
     return false;
   }
 
-  const { nodeName } = element;
+  const { nodeName } = el;
 
   if (nodeName === 'BODY' || nodeName === 'HTML') {
     return false;
   }
 
-  if (getComputedStyle(element).position === 'fixed') {
+  if (getStyleComputedProperty(el).position === 'fixed') {
     return true;
   }
 
-  return isFixed(element.parentNode);
+  return isFixed(el.parentNode);
 }
 
 /**
@@ -44,20 +66,18 @@ export function log({ title, data, warn = false, debug = false }: Object) {
   if (debug && title && data) {
     console.groupCollapsed(`%creact-tooltips: ${title}`, 'color: #9b00ff; font-weight: bold; font-size: 12px;');
 
-    if (data) {
-      if (Array.isArray(data)) {
-        data.forEach(d => {
-          if (is.plainObject(d) && d.key) {
-            logFn.apply(console, [d.key, d.value]);
-          }
-          else {
-            logFn.apply(console, [d]);
-          }
-        });
-      }
-      else {
-        logFn.apply(console, [data]);
-      }
+    if (Array.isArray(data)) {
+      data.forEach(d => {
+        if (is.plainObject(d) && d.key) {
+          logFn.apply(console, [d.key, d.value]);
+        }
+        else {
+          logFn.apply(console, [d]);
+        }
+      });
+    }
+    else {
+      logFn.apply(console, [data]);
     }
 
     console.groupEnd();
