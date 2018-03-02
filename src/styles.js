@@ -1,8 +1,11 @@
+const zIndex = 100;
+
 export default {
   wrapper: {
     cursor: 'help',
     display: 'inline-flex',
     flexDirection: 'column',
+    zIndex,
   },
   wrapperPosition: {
     left: -1000,
@@ -18,7 +21,7 @@ export default {
     position: 'relative',
     transition: 'opacity 0.3s',
     visibility: 'hidden',
-    zIndex: 1000,
+    zIndex,
   },
   tooltipOpening: {
     opacity: 1,
