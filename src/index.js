@@ -500,6 +500,29 @@ export default class ReactTooltips extends React.Component {
       title
     } = this.props;
 
+    const wrapper = (
+      <Wrapper
+        handleClick={this.handleClick}
+        handleMouseEnter={this.handleMouseEnter}
+        handleMouseLeave={this.handleMouseLeave}
+        setChildRef={this.setChildRef}
+        setWrapperRef={this.setWrapperRef}
+        style={style}
+        styles={this.styles.wrapper}
+      >
+        {children}
+      </Wrapper>
+    );
+
+    const output = {};
+
+    if (positionWrapper) {
+      output.wrapperInPortal = wrapper;
+    }
+    else {
+      output.wrapperAsChildren = wrapper;
+    }
+
     return (
       <span>
         <Portal
@@ -527,18 +550,9 @@ export default class ReactTooltips extends React.Component {
             styles={this.styles}
             title={title}
           />
+          {output.wrapperInPortal}
         </Portal>
-        <Wrapper
-          handleClick={this.handleClick}
-          handleMouseEnter={this.handleMouseEnter}
-          handleMouseLeave={this.handleMouseLeave}
-          setChildRef={this.setChildRef}
-          setWrapperRef={this.setWrapperRef}
-          style={style}
-          styles={this.styles.wrapper}
-        >
-          {children}
-        </Wrapper>
+        {output.wrapperAsChildren}
       </span>
     );
   }
