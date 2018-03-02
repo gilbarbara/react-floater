@@ -6,7 +6,7 @@ import deepmerge from 'deepmerge';
 import is from '@sindresorhus/is';
 
 import STATUS from './status';
-import { canUseDOM, isMobile, log, noop, once } from './utils';
+import { canUseDOM, comparator, isMobile, log, noop, once } from './utils';
 
 import Portal from './Portal';
 import Tooltip from './Tooltip';
@@ -156,19 +156,20 @@ export default class ReactTooltips extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     if (!canUseDOM) return;
 
-    const { status } = this.state;
     const { autoOpen, open } = this.props;
+    const { changedFrom, changedTo } = comparator(prevState, this.state);
 
-    if (prevState.status === STATUS.INIT && status === STATUS.IDLE) {
-      if (autoOpen || open) {
-        this.toggle(STATUS.OPEN);
-      }
+    if (changedTo('status', STATUS.IDLE) && open) {
+      this.toggle(STATUS.OPEN);
+    }
+    else if (changedFrom('status', STATUS.INIT, STATUS.IDLE) && autoOpen) {
+      this.toggle(STATUS.OPEN);
     }
 
     if (
       this.tooltipRef
-      && ((prevState.status !== STATUS.OPENING && status === STATUS.OPENING)
-      || (prevState.status !== STATUS.CLOSING && status === STATUS.CLOSING))
+      && (changedTo('status', STATUS.OPENING) || changedTo('status', STATUS.CLOSING)
+      )
     ) {
       once(this.tooltipRef, 'transitionend', this.handleTransitionEnd);
     }
@@ -434,7 +435,7 @@ export default class ReactTooltips extends React.Component {
 
     /* istanbul ignore else */
     if (this.target) {
-      const wrapperComputedStyles = window.getComputedStyle(this.target);
+      const targetStyles = window.getComputedStyle(this.target);
 
       /* istanbul ignore else */
       if (this.wrapperStyles) {
@@ -443,28 +444,31 @@ export default class ReactTooltips extends React.Component {
           ...this.wrapperStyles
         };
       }
-      else if (!['relative', 'static'].includes(wrapperComputedStyles.position)) {
+      else if (!['relative', 'static'].includes(targetStyles.position)) {
         this.wrapperStyles = {};
-        if (!this.position) {
-          this.position = wrapperComputedStyles.position;
+
+        if (!positionWrapper) {
+          if (!this.position) {
+            this.position = targetStyles.position;
+          }
+
+          positioningProps.forEach(d => {
+            this.wrapperStyles[d] = targetStyles[d];
+          });
+
+          if (!this.wrapperStyles) {
+            nextStyles.wrapper = {
+              ...nextStyles.wrapper,
+              ...this.wrapperStyles
+            };
+          }
+
+          this.target.style.position = 'relative';
+          this.target.style.top = 'auto';
+          this.target.style.right = 'auto';
+          this.target.style.bottom = 'auto';
+          this.target.style.left = 'auto';
         }
-
-        positioningProps.forEach(d => {
-          this.wrapperStyles[d] = wrapperComputedStyles[d];
-        });
-
-        if (!this.wrapperStyles) {
-          nextStyles.wrapper = {
-            ...nextStyles.wrapper,
-            ...this.wrapperStyles
-          };
-        }
-
-        this.target.style.position = 'relative';
-        this.target.style.top = 'auto';
-        this.target.style.right = 'auto';
-        this.target.style.bottom = 'auto';
-        this.target.style.left = 'auto';
       }
     }
 
@@ -489,15 +493,15 @@ export default class ReactTooltips extends React.Component {
     const { currentPlacement, positionWrapper, status } = this.state;
     const {
       children,
+      component,
       content,
       disableAnimation,
       footer,
       hideArrow,
       open,
-      component,
       showCloseButton,
       style,
-      title
+      title,
     } = this.props;
 
     const wrapper = (
