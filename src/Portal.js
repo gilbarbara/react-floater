@@ -18,7 +18,10 @@ export default class Portal extends React.Component {
   }
 
   static propTypes = {
-    children: PropTypes.element,
+    children: PropTypes.oneOfType([
+      PropTypes.element,
+      PropTypes.array,
+    ]),
     hasChildren: PropTypes.bool,
     id: PropTypes.oneOfType([
       PropTypes.string,
