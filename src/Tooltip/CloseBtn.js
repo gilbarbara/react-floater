@@ -5,7 +5,7 @@ const CloseBtn = ({ handleClick, styles }) => {
   const { color, height, width, ...style } = styles;
 
   return (
-    <button style={style} onClick={handleClick}>
+    <button aria-label="close" style={style} onClick={handleClick}>
       <svg
         width={`${width}px`}
         height={`${height}px`}
