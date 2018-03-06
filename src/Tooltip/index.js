@@ -44,10 +44,10 @@ export default class Tooltip extends React.Component {
 
     if (!hideArrow) {
       if (placement.startsWith('top')) {
-        element.padding = `0 10px ${length}px`;
+        element.padding = `0 0 ${length}px`;
       }
       else if (placement.startsWith('bottom')) {
-        element.padding = `${length}px 10px 0`;
+        element.padding = `${length}px 0 0`;
       }
       else if (placement.startsWith('left')) {
         element.padding = `0 ${length}px 0 0`;
