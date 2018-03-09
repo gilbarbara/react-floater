@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import isRequiredIf from 'react-proptype-conditional-require';
 import Popper from 'popper.js';
 import deepmerge from 'deepmerge';
-import is from '@sindresorhus/is';
+import is from 'is-lite';
 
 import STATUS from './status';
 import { canUseDOM, comparator, isMobile, log, noop, once } from './utils';
@@ -28,7 +28,7 @@ export default class ReactTooltips extends React.Component {
         console.warn('Missing props! You need to set a `target` to use `wrapperOptions.position`'); //eslint-disable-line no-console
       }
 
-      if (!children && !is.boolean(open)) {
+      if (!children && !is.bool(open)) {
         console.warn('Missing props! You need to set `children`.'); //eslint-disable-line no-console
       }
     }
@@ -124,7 +124,7 @@ export default class ReactTooltips extends React.Component {
       data: {
         hasChildren: !!children,
         hasTarget: !!target,
-        isControlled: is.boolean(open),
+        isControlled: is.bool(open),
         positionWrapper,
         target: this.target,
         tooltip: this.tooltipRef,
@@ -134,7 +134,7 @@ export default class ReactTooltips extends React.Component {
 
     this.initPopper();
 
-    if (!children && target && !is.boolean(open)) {
+    if (!children && target && !is.bool(open)) {
       // add event listener based on event,
     }
   }
@@ -331,7 +331,7 @@ export default class ReactTooltips extends React.Component {
   };
 
   handleClick = () => {
-    if (is.boolean(this.props.open)) return;
+    if (is.bool(this.props.open)) return;
 
     const { status } = this.state;
 
@@ -350,7 +350,7 @@ export default class ReactTooltips extends React.Component {
   };
 
   handleMouseEnter = () => {
-    if (is.boolean(this.props.open) || isMobile()) return;
+    if (is.bool(this.props.open) || isMobile()) return;
     const { status } = this.state;
 
     /* istanbul ignore else */
@@ -369,7 +369,7 @@ export default class ReactTooltips extends React.Component {
   };
 
   handleMouseLeave = () => {
-    if (is.boolean(this.props.open) || isMobile()) return;
+    if (is.bool(this.props.open) || isMobile()) return;
 
     const { event, eventDelay } = this.props;
     const { status, positionWrapper } = this.state;

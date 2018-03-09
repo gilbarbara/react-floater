@@ -31,9 +31,9 @@
     "prop-types": "^15.0.0"
   },
   "dependencies": {
-    "@sindresorhus/is": "^0.7.0",
     "deepmerge": "^2.0.1",
     "exenv": "^1.2.2",
+    "is-lite": "^0.1.0",
     "popper.js": "^1.13.0",
     "react-proptype-conditional-require": "^1.0.4"
   },

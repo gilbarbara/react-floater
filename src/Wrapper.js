@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import is from '@sindresorhus/is';
+import is from 'is-lite';
 
 export default class Wrapper extends React.Component {
   static propTypes = {
