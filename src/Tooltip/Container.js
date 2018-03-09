@@ -34,7 +34,7 @@ const TooltipContainer = ({
 
   if (
     (showCloseButton || positionWrapper)
-    && !is.bool(open)
+    && !is.boolean(open)
   ) {
     output.close = (
       <CloseBtn

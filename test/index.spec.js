@@ -53,15 +53,15 @@ describe('ReactTooltips', () => {
     });
 
     it('should render properly', () => {
-      expect(tooltip.find('ReactTooltips')).toBePresent();
-      expect(tooltip.find('Portal')).toBePresent();
+      expect(tooltip.find('ReactTooltips')).toExist();
+      expect(tooltip.find('Portal')).toExist();
       expect(tooltip.find('Wrapper span').at(0)).toHaveText('Places');
     });
 
     it('should have created a Portal', () => {
-      expect(portal.find('.__tooltip')).toBePresent();
-      expect(portal.find('.__tooltip__container')).toBePresent();
-      expect(portal.find('.__tooltip__arrow')).toBePresent();
+      expect(portal.find('.__tooltip')).toExist();
+      expect(portal.find('.__tooltip__container')).toExist();
+      expect(portal.find('.__tooltip__arrow')).toExist();
     });
 
     it('should have called getPopper', () => {
@@ -99,10 +99,10 @@ describe('ReactTooltips', () => {
 
     it('should unmount properly', () => {
       tooltip.unmount();
-      expect(tooltip.find('ReactTooltips')).not.toBePresent();
+      expect(tooltip.find('ReactTooltips')).not.toExist();
 
       portal.unmount();
-      expect(portal.find('Portal')).not.toBePresent();
+      expect(portal.find('Portal')).not.toExist();
     });
   });
 
@@ -118,8 +118,8 @@ describe('ReactTooltips', () => {
     it('should render properly', () => {
       const content = tooltip.find('Wrapper').childAt(0).find('div');
 
-      expect(tooltip.find('ReactTooltips')).toBePresent();
-      expect(tooltip.find('Portal')).toBePresent();
+      expect(tooltip.find('ReactTooltips')).toExist();
+      expect(tooltip.find('Portal')).toExist();
       expect(content.at(0)).toHaveText('Hello');
       expect(content.at(1)).toHaveText('World');
     });
@@ -289,14 +289,14 @@ describe('ReactTooltips', () => {
     });
 
     it('should have rendered the title', () => {
-      expect(tooltip.find('Title')).toBePresent();
+      expect(tooltip.find('Title')).toExist();
 
       tooltip.setProps({
         title: (<div className="__title">Other Title</div>)
       });
 
-      expect(tooltip.find('Title')).not.toBePresent();
-      expect(tooltip.find('.__title')).toBePresent();
+      expect(tooltip.find('Title')).not.toExist();
+      expect(tooltip.find('.__title')).toExist();
     });
   });
 
@@ -314,14 +314,14 @@ describe('ReactTooltips', () => {
     });
 
     it('should have rendered the footer', () => {
-      expect(tooltip.find('Footer')).toBePresent();
+      expect(tooltip.find('Footer')).toExist();
 
       tooltip.setProps({
         footer: (<div className="__footer">Hello</div>)
       });
 
-      expect(tooltip.find('Footer')).not.toBePresent();
-      expect(tooltip.find('.__footer')).toBePresent();
+      expect(tooltip.find('Footer')).not.toExist();
+      expect(tooltip.find('.__footer')).toExist();
     });
   });
 
@@ -412,7 +412,7 @@ describe('ReactTooltips', () => {
       const tooltipEl = portal.find('.__tooltip');
 
       expect(tooltip.state('status')).toBe('open');
-      expect(tooltipEl.find('.__tooltip__arrow')).not.toBePresent();
+      expect(tooltipEl.find('.__tooltip__arrow')).not.toExist();
     });
   });
 
@@ -430,7 +430,7 @@ describe('ReactTooltips', () => {
     });
 
     it('should have a StyledComponent', () => {
-      expect(tooltip.find('StyledComponent')).toBePresent();
+      expect(tooltip.find('StyledComponent')).toExist();
     });
 
     it('should be able to close the tooltip with `closeTooltip` prop', () => {
@@ -454,7 +454,7 @@ describe('ReactTooltips', () => {
     });
 
     it('should have a StyledComponent', () => {
-      expect(tooltip.find('StyledComponent')).toBePresent();
+      expect(tooltip.find('StyledComponent')).toExist();
     });
 
     it('should be able to close the tooltip with `closeTooltip` prop', () => {
@@ -479,7 +479,7 @@ describe('ReactTooltips', () => {
     });
 
     it('should have a close button', () => {
-      expect(tooltip.find('CloseBtn')).toBePresent();
+      expect(tooltip.find('CloseBtn')).toExist();
     });
 
     it('should be able to close the tooltip clicking the close button', () => {
