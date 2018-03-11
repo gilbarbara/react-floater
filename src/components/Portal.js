@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-import { canUseDOM, isReact16 } from './utils';
+import { canUseDOM, isReact16 } from '../utils';
 
 export default class Portal extends React.Component {
   constructor(props) {

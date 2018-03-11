@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import STATUS from '../status';
+import STATUS from '../../status';
 
 import Arrow from './Arrow';
 import Container from './Container';

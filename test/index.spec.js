@@ -1,7 +1,7 @@
 import React from 'react';
 import { mount } from 'enzyme';
 
-import ReactTooltips from '../src';
+import ReactTooltips from '../src/index';
 
 import Styled from './__fixtures__/Styled';
 
