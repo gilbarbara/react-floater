@@ -13,9 +13,9 @@ import Portal from './Portal';
 import Tooltip from './Tooltip';
 import Wrapper from './Wrapper';
 
-import stylesDefault from '../styles';
+import STYLES from '../styles';
 
-const positioningProps = ['position', 'top', 'right', 'bottom', 'left'];
+const POSITIONING_PROPS = ['position', 'top', 'right', 'bottom', 'left'];
 
 export default class ReactTooltips extends React.Component {
   constructor(props) {
@@ -428,7 +428,7 @@ export default class ReactTooltips extends React.Component {
     const { status, positionWrapper, statusWrapper } = this.state;
     const { styles } = this.props;
 
-    const nextStyles = deepmerge(stylesDefault, styles);
+    const nextStyles = deepmerge(STYLES, styles);
 
     if (positionWrapper) {
       let wrapperStyles;
@@ -465,16 +465,14 @@ export default class ReactTooltips extends React.Component {
             this.position = targetStyles.position;
           }
 
-          positioningProps.forEach(d => {
+          POSITIONING_PROPS.forEach(d => {
             this.wrapperStyles[d] = targetStyles[d];
           });
 
-          if (!this.wrapperStyles) {
-            nextStyles.wrapper = {
-              ...nextStyles.wrapper,
-              ...this.wrapperStyles
-            };
-          }
+          nextStyles.wrapper = {
+            ...nextStyles.wrapper,
+            ...this.wrapperStyles
+          };
 
           this.target.style.position = 'relative';
           this.target.style.top = 'auto';
