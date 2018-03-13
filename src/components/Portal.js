@@ -83,7 +83,7 @@ export default class Portal extends React.Component {
 
     const portal = ReactDOM.unstable_renderSubtreeIntoContainer(
       this,
-      children,
+      children.length > 1 ? <div>{children}</div> : children[0],
       this.node,
     );
 
