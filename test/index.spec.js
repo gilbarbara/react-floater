@@ -433,7 +433,7 @@ describe('ReactFloater', () => {
       expect(tooltip.find('StyledComponent')).toExist();
     });
 
-    it('should be able to close the tooltip with `closeTooltip` prop', () => {
+    it('should be able to close the tooltip with `closeFn` prop', () => {
       tooltip.find('StyledComponent').find('button').simulate('click');
 
       expect(tooltip.state('status')).toBe('closing');
@@ -457,7 +457,7 @@ describe('ReactFloater', () => {
       expect(tooltip.find('StyledComponent')).toExist();
     });
 
-    it('should be able to close the tooltip with `closeTooltip` prop', () => {
+    it('should be able to close the tooltip with `closeFn` prop', () => {
       tooltip.find('StyledComponent').find('button').simulate('click');
 
       expect(tooltip.state('status')).toBe('closing');

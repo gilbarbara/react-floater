@@ -86,7 +86,7 @@ export default class Floater extends React.Component {
   render() {
     const {
       component,
-      handleClick: closeTooltip,
+      handleClick: closeFn,
       hideArrow,
       setFloaterRef,
     } = this.props;
@@ -95,10 +95,10 @@ export default class Floater extends React.Component {
 
     if (component) {
       if (React.isValidElement(component)) {
-        output.content = React.cloneElement(component, { closeTooltip });
+        output.content = React.cloneElement(component, { closeFn });
       }
       else {
-        output.content = component({ closeTooltip });
+        output.content = component({ closeFn });
       }
     }
     else {

@@ -5,10 +5,10 @@ const Wrapper = styled.div`
   background-color: #cce8ff;
 `;
 
-const Styled = ({ closeTooltip }) => (
+const Styled = ({ closeFn }) => (
   <Wrapper>
     <div>Styled</div>
-    <button onClick={closeTooltip}>close</button>
+    <button onClick={closeFn}>close</button>
   </Wrapper>
 );
 
