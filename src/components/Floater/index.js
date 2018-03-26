@@ -6,7 +6,7 @@ import STATUS from '../../status';
 import Arrow from './Arrow';
 import Container from './Container';
 
-export default class Tooltip extends React.Component {
+export default class Floater extends React.Component {
   static propTypes = {
     component: PropTypes.oneOfType([
       PropTypes.func,
@@ -22,7 +22,7 @@ export default class Tooltip extends React.Component {
     placement: PropTypes.string.isRequired,
     positionWrapper: PropTypes.bool.isRequired,
     setArrowRef: PropTypes.func.isRequired,
-    setTooltipRef: PropTypes.func.isRequired,
+    setFloaterRef: PropTypes.func.isRequired,
     showCloseButton: PropTypes.bool,
     status: PropTypes.string.isRequired,
     styles: PropTypes.object.isRequired,
@@ -88,7 +88,7 @@ export default class Tooltip extends React.Component {
       component,
       handleClick: closeTooltip,
       hideArrow,
-      setTooltipRef,
+      setFloaterRef,
     } = this.props;
 
     const output = {};
@@ -111,7 +111,7 @@ export default class Tooltip extends React.Component {
 
     return (
       <div
-        ref={setTooltipRef}
+        ref={setFloaterRef}
         className="__tooltip"
         style={this.tooltipStyle}
       >

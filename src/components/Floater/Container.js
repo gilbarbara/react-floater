@@ -4,7 +4,7 @@ import is from 'is-lite';
 
 import CloseBtn from './CloseBtn';
 
-const TooltipContainer = ({
+const FloaterContainer = ({
   content,
   footer,
   handleClick,
@@ -53,7 +53,7 @@ const TooltipContainer = ({
   );
 };
 
-TooltipContainer.propTypes = {
+FloaterContainer.propTypes = {
   content: PropTypes.node.isRequired,
   footer: PropTypes.node,
   handleClick: PropTypes.func.isRequired,
@@ -64,4 +64,4 @@ TooltipContainer.propTypes = {
   title: PropTypes.node,
 };
 
-export default TooltipContainer;
+export default FloaterContainer;

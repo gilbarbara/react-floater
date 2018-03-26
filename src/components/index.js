@@ -10,14 +10,14 @@ import STATUS from '../status';
 import { canUseDOM, comparator, isMobile, log, noop, once } from '../utils';
 
 import Portal from './Portal';
-import Tooltip from './Tooltip';
+import Floater from './Floater';
 import Wrapper from './Wrapper';
 
 import STYLES from '../styles';
 
 const POSITIONING_PROPS = ['position', 'top', 'right', 'bottom', 'left'];
 
-export default class ReactTooltips extends React.Component {
+export default class ReactFloater extends React.Component {
   constructor(props) {
     super(props);
 
@@ -312,7 +312,7 @@ export default class ReactTooltips extends React.Component {
     this.childRef = ref;
   };
 
-  setTooltipRef = (ref) => {
+  setFloaterRef = (ref) => {
     if (!this.tooltipRef) {
       this.tooltipRef = ref;
     }
@@ -405,7 +405,7 @@ export default class ReactTooltips extends React.Component {
   };
 
   get debug() {
-    return this.props.debug || !!global.ReactTooltipsDebug;
+    return this.props.debug || !!global.ReactFloaterDebug;
   }
 
   get event() {
@@ -544,10 +544,10 @@ export default class ReactTooltips extends React.Component {
           {...this.props}
           hasChildren={!!children}
           placement={currentPlacement}
-          setRef={this.setTooltipRef}
+          setRef={this.setFloaterRef}
           status={status}
         >
-          <Tooltip
+          <Floater
             component={component}
             content={content}
             disableAnimation={disableAnimation}
@@ -559,7 +559,7 @@ export default class ReactTooltips extends React.Component {
             placement={currentPlacement}
             positionWrapper={positionWrapper}
             setArrowRef={this.setArrowRef}
-            setTooltipRef={this.setTooltipRef}
+            setFloaterRef={this.setFloaterRef}
             showCloseButton={showCloseButton}
             status={status}
             styles={this.styles}

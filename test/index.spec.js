@@ -1,7 +1,7 @@
 import React from 'react';
 import { mount } from 'enzyme';
 
-import ReactTooltips from '../src/index';
+import ReactFloater from '../src/index';
 
 import Styled from './__fixtures__/Styled';
 
@@ -17,14 +17,14 @@ const props = {
 
 function setup(ownProps = props, children = 'Places') {
   return mount(
-    <ReactTooltips {...ownProps}>
+    <ReactFloater {...ownProps}>
       {children}
-    </ReactTooltips>,
+    </ReactFloater>,
     { attachTo: document.getElementById('react') }
   );
 }
 
-describe('ReactTooltips', () => {
+describe('ReactFloater', () => {
   let portal;
   let tooltip;
 
@@ -53,7 +53,7 @@ describe('ReactTooltips', () => {
     });
 
     it('should render properly', () => {
-      expect(tooltip.find('ReactTooltips')).toExist();
+      expect(tooltip.find('ReactFloater')).toExist();
       expect(tooltip.find('Portal')).toExist();
       expect(tooltip.find('Wrapper span').at(0)).toHaveText('Places');
     });
@@ -70,7 +70,7 @@ describe('ReactTooltips', () => {
       expect(popper.instance.constructor.name).toBe('Popper');
     });
 
-    it('should have rendered the Tooltip initially hidden', () => {
+    it('should have rendered the Floater initially hidden', () => {
       const tooltipEl = portal.find('.__tooltip');
 
       expect(tooltip.state('status')).toBe('idle');
@@ -99,7 +99,7 @@ describe('ReactTooltips', () => {
 
     it('should unmount properly', () => {
       tooltip.unmount();
-      expect(tooltip.find('ReactTooltips')).not.toExist();
+      expect(tooltip.find('ReactFloater')).not.toExist();
 
       portal.unmount();
       expect(portal.find('Portal')).not.toExist();
@@ -118,7 +118,7 @@ describe('ReactTooltips', () => {
     it('should render properly', () => {
       const content = tooltip.find('Wrapper').childAt(0).find('div');
 
-      expect(tooltip.find('ReactTooltips')).toExist();
+      expect(tooltip.find('ReactFloater')).toExist();
       expect(tooltip.find('Portal')).toExist();
       expect(content.at(0)).toHaveText('Hello');
       expect(content.at(1)).toHaveText('World');
@@ -133,7 +133,7 @@ describe('ReactTooltips', () => {
       });
     });
 
-    it('should have rendered the Tooltip initially open', () => {
+    it('should have rendered the Floater initially open', () => {
       updateTooltip(false);
       const tooltipEl = portal.find('.__tooltip');
 

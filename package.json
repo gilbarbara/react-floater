@@ -1,16 +1,16 @@
 {
-  "name": "react-tooltips",
+  "name": "react-floater",
   "version": "0.4.6",
-  "description": "Tooltips everywhere!",
+  "description": "Floaters everywhere!",
   "author": "Gil Barbara <gilbarbara@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gilbarbara/react-tooltips.git"
+    "url": "git+https://github.com/gilbarbara/react-floater.git"
   },
   "bugs": {
-    "url": "https://github.com/gilbarbara/react-tooltips/issues"
+    "url": "https://github.com/gilbarbara/react-floater/issues"
   },
-  "homepage": "https://github.com/gilbarbara/react-tooltips#readme",
+  "homepage": "https://github.com/gilbarbara/react-floater#readme",
   "main": "lib/index.js",
   "module": "es/index.js",
   "files": [
@@ -22,7 +22,11 @@
     "react",
     "react-component",
     "component",
-    "tooltip"
+    "tooltip",
+    "modal",
+    "popup",
+    "alert",
+    "notification"
   ],
   "license": "MIT",
   "peerDependencies": {

@@ -64,7 +64,7 @@ export function log({ title, data, warn = false, debug = false }: Object) {
   const logFn = warn ? console.warn || console.error : console.log;
 
   if (debug && title && data) {
-    console.groupCollapsed(`%creact-tooltips: ${title}`, 'color: #9b00ff; font-weight: bold; font-size: 12px;');
+    console.groupCollapsed(`%creact-floater: ${title}`, 'color: #9b00ff; font-weight: bold; font-size: 12px;');
 
     if (Array.isArray(data)) {
       data.forEach(d => {

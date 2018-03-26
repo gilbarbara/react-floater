@@ -1,3 +1,3 @@
-import Tooltips from './components';
+import Floater from './components';
 
-export default Tooltips;
+export default Floater;
