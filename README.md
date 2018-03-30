@@ -3,8 +3,8 @@ React Floater
 
 [![NPM version](https://badge.fury.io/js/react-floater.svg)](https://www.npmjs.com/package/react-floater)
 [![build status](https://travis-ci.org/gilbarbara/react-floater.svg)](https://travis-ci.org/gilbarbara/react-floater)
-[![Maintainability](https://api.codeclimate.com/v1/badges/930e69ac58dc225e5389/maintainability)](https://codeclimate.com/github/gilbarbara/react-floater/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/930e69ac58dc225e5389/test_coverage)](https://codeclimate.com/github/gilbarbara/react-floater/test_coverage)
+[![Maintainability](https://api.codeclimate.com/v1/badges/a3457f536c0915c0935b/maintainability)](https://codeclimate.com/github/gilbarbara/react-floater/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/a3457f536c0915c0935b/test_coverage)](https://codeclimate.com/github/gilbarbara/react-floater/test_coverage)
 
 ### View the [demo](https://84vn36m178.codesandbox.io/)
 You can view and edit the code for each Floater [here](https://codesandbox.io/s/84vn36m178)
