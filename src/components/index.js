@@ -64,6 +64,7 @@ export default class ReactFloater extends React.Component {
       PropTypes.string,
       PropTypes.number,
     ]),
+    isPositioned: PropTypes.bool,
     offset: PropTypes.number,
     open: PropTypes.bool,
     options: PropTypes.object,
@@ -461,10 +462,6 @@ export default class ReactFloater extends React.Component {
         this.wrapperStyles = {};
 
         if (!positionWrapper) {
-          if (!this.position) {
-            this.position = targetStyles.position;
-          }
-
           POSITIONING_PROPS.forEach(d => {
             this.wrapperStyles[d] = targetStyles[d];
           });
@@ -509,6 +506,7 @@ export default class ReactFloater extends React.Component {
       disableAnimation,
       footer,
       hideArrow,
+      isPositioned,
       open,
       showCloseButton,
       style,
@@ -554,7 +552,7 @@ export default class ReactFloater extends React.Component {
             footer={footer}
             handleClick={this.handleClick}
             hideArrow={hideArrow || currentPlacement === 'center'}
-            isPositioned={!!this.position}
+            isPositioned={isPositioned}
             open={open}
             placement={currentPlacement}
             positionWrapper={positionWrapper}
