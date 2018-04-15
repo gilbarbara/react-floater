@@ -130,7 +130,7 @@ export default class ReactFloater extends React.Component {
         isControlled: is.boolean(open),
         positionWrapper,
         target: this.target,
-        tooltip: this.tooltipRef,
+        floater: this.floaterRef,
       },
       debug: this.debug,
     });
@@ -170,11 +170,11 @@ export default class ReactFloater extends React.Component {
     }
 
     if (
-      this.tooltipRef
+      this.floaterRef
       && (changedTo('status', STATUS.OPENING) || changedTo('status', STATUS.CLOSING)
       )
     ) {
-      once(this.tooltipRef, 'transitionend', this.handleTransitionEnd);
+      once(this.floaterRef, 'transitionend', this.handleTransitionEnd);
     }
   }
 
@@ -206,8 +206,8 @@ export default class ReactFloater extends React.Component {
     if (placement === 'center') {
       this.setState({ status: STATUS.IDLE });
     }
-    else if (target && this.tooltipRef) {
-      new Popper(target, this.tooltipRef, {
+    else if (target && this.floaterRef) {
+      new Popper(target, this.floaterRef, {
         placement,
         modifiers: {
           arrow: {
@@ -234,7 +234,7 @@ export default class ReactFloater extends React.Component {
         onCreate: (data) => {
           this.popper = data;
 
-          getPopper(data, 'tooltip');
+          getPopper(data, 'floater');
 
           this.setState({
             currentPlacement: data.placement,
@@ -314,8 +314,8 @@ export default class ReactFloater extends React.Component {
   };
 
   setFloaterRef = (ref) => {
-    if (!this.tooltipRef) {
-      this.tooltipRef = ref;
+    if (!this.floaterRef) {
+      this.floaterRef = ref;
     }
   };
 

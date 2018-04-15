@@ -13,7 +13,7 @@ export default {
     top: -1000,
     visibility: 'hidden',
   },
-  tooltip: {
+  floater: {
     display: 'inline-block',
     filter: 'drop-shadow(0 0 3px rgba(0, 0, 0, 0.3))',
     maxWidth: 300,
@@ -23,23 +23,23 @@ export default {
     visibility: 'hidden',
     zIndex,
   },
-  tooltipOpening: {
+  floaterOpening: {
     opacity: 1,
     visibility: 'visible',
   },
-  tooltipWithAnimation: {
+  floaterWithAnimation: {
     opacity: 1,
     transition: 'opacity 0.3s, transform 0.2s',
     visibility: 'visible',
   },
-  tooltipWithComponent: {
+  floaterWithComponent: {
     maxWidth: '100%',
   },
-  tooltipClosing: {
+  floaterClosing: {
     opacity: 0,
     visibility: 'visible',
   },
-  tooltipCentered: {
+  floaterCentered: {
     left: '50%',
     position: 'fixed',
     top: '50%',

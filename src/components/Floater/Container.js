@@ -17,19 +17,19 @@ const FloaterContainer = ({
   const output = {
     content: React.isValidElement(content)
       ? content
-      : <div className="__tooltip__content" style={styles.content}>{content}</div>
+      : <div className="__floater__content" style={styles.content}>{content}</div>
   };
 
   if (title) {
     output.title = React.isValidElement(title)
       ? title
-      : <div className="__tooltip__title" style={styles.title}>{title}</div>;
+      : <div className="__floater__title" style={styles.title}>{title}</div>;
   }
 
   if (footer) {
     output.footer = React.isValidElement(footer)
       ? footer
-      : <div className="__tooltip__footer" style={styles.footer}>{footer}</div>;
+      : <div className="__floater__footer" style={styles.footer}>{footer}</div>;
   }
 
   if (
@@ -44,7 +44,7 @@ const FloaterContainer = ({
     );
   }
   return (
-    <div className="__tooltip__container" style={styles.container}>
+    <div className="__floater__container" style={styles.container}>
       {output.close}
       {output.title}
       {output.content}

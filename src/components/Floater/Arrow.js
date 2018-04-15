@@ -72,7 +72,7 @@ export default class Arrow extends React.Component {
 
     return (
       <div
-        className="__tooltip__arrow"
+        className="__floater__arrow"
         style={this.arrowStyle}
       >
         <span ref={setArrowRef} style={arrowStyles}>

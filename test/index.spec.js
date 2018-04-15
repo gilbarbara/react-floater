@@ -26,42 +26,42 @@ function setup(ownProps = props, children = 'Places') {
 
 describe('ReactFloater', () => {
   let portal;
-  let tooltip;
+  let floater;
 
   const updateTooltip = (event = 'click') => {
     if (event) {
-      tooltip.find('Wrapper').childAt(0).simulate(event);
+      floater.find('Wrapper').childAt(0).simulate(event);
 
       if (['click', 'mouseEnter'].includes(event)) {
-        tooltip.instance().handleTransitionEnd(); // mock transitionend
+        floater.instance().handleTransitionEnd(); // mock transitionend
       }
       else {
         setTimeout(() => {
-          tooltip.instance().handleTransitionEnd();
-        }, tooltip.prop('eventDelay') * 1100);
+          floater.instance().handleTransitionEnd();
+        }, floater.prop('eventDelay') * 1100);
       }
     }
 
-    tooltip.update();
-    portal = mount(tooltip.find('Portal').get(0));
+    floater.update();
+    portal = mount(floater.find('Portal').get(0));
   };
 
   describe('basic usage', () => {
     beforeAll(() => {
-      tooltip = setup();
-      portal = mount(tooltip.find('Portal').get(0));
+      floater = setup();
+      portal = mount(floater.find('Portal').get(0));
     });
 
     it('should render properly', () => {
-      expect(tooltip.find('ReactFloater')).toExist();
-      expect(tooltip.find('Portal')).toExist();
-      expect(tooltip.find('Wrapper span').at(0)).toHaveText('Places');
+      expect(floater.find('ReactFloater')).toExist();
+      expect(floater.find('Portal')).toExist();
+      expect(floater.find('Wrapper span').at(0)).toHaveText('Places');
     });
 
     it('should have created a Portal', () => {
-      expect(portal.find('.__tooltip')).toExist();
-      expect(portal.find('.__tooltip__container')).toExist();
-      expect(portal.find('.__tooltip__arrow')).toExist();
+      expect(portal.find('.__floater')).toExist();
+      expect(portal.find('.__floater__container')).toExist();
+      expect(portal.find('.__floater__arrow')).toExist();
     });
 
     it('should have called getPopper', () => {
@@ -71,35 +71,35 @@ describe('ReactFloater', () => {
     });
 
     it('should have rendered the Floater initially hidden', () => {
-      const tooltipEl = portal.find('.__tooltip');
+      const floaterEl = portal.find('.__floater');
 
-      expect(tooltip.state('status')).toBe('idle');
-      expect(tooltip.find('.__tooltip__container')).toHaveText('Hello! This is my content!');
-      expect(tooltipEl).toHaveStyle('opacity', 0);
-      expect(tooltipEl).toHaveStyle('visibility', 'hidden');
+      expect(floater.state('status')).toBe('idle');
+      expect(floater.find('.__floater__container')).toHaveText('Hello! This is my content!');
+      expect(floaterEl).toHaveStyle('opacity', 0);
+      expect(floaterEl).toHaveStyle('visibility', 'hidden');
     });
 
-    it('should be able to show the tooltip', () => {
+    it('should be able to show the floater', () => {
       updateTooltip();
-      const tooltipEl = portal.find('.__tooltip');
+      const floaterEl = portal.find('.__floater');
 
-      expect(tooltip.state('status')).toBe('open');
-      expect(tooltipEl).toHaveStyle('opacity', 1);
-      expect(tooltipEl).toHaveStyle('visibility', 'visible');
+      expect(floater.state('status')).toBe('open');
+      expect(floaterEl).toHaveStyle('opacity', 1);
+      expect(floaterEl).toHaveStyle('visibility', 'visible');
     });
 
-    it('should be able to hide the tooltip', () => {
+    it('should be able to hide the floater', () => {
       updateTooltip();
-      const tooltipEl = portal.find('.__tooltip');
+      const floaterEl = portal.find('.__floater');
 
-      expect(tooltip.state('status')).toBe('idle');
-      expect(tooltipEl).toHaveStyle('opacity', 0);
-      expect(tooltipEl).toHaveStyle('visibility', 'hidden');
+      expect(floater.state('status')).toBe('idle');
+      expect(floaterEl).toHaveStyle('opacity', 0);
+      expect(floaterEl).toHaveStyle('visibility', 'hidden');
     });
 
     it('should unmount properly', () => {
-      tooltip.unmount();
-      expect(tooltip.find('ReactFloater')).not.toExist();
+      floater.unmount();
+      expect(floater.find('ReactFloater')).not.toExist();
 
       portal.unmount();
       expect(portal.find('Portal')).not.toExist();
@@ -108,18 +108,18 @@ describe('ReactFloater', () => {
 
   describe('with multiple children', () => {
     beforeAll(() => {
-      tooltip = setup(props, [
+      floater = setup(props, [
         <div key={0}>Hello</div>,
         <div key={1}>World</div>
       ]);
-      portal = mount(tooltip.find('Portal').get(0));
+      portal = mount(floater.find('Portal').get(0));
     });
 
     it('should render properly', () => {
-      const content = tooltip.find('Wrapper').childAt(0).find('div');
+      const content = floater.find('Wrapper').childAt(0).find('div');
 
-      expect(tooltip.find('ReactFloater')).toExist();
-      expect(tooltip.find('Portal')).toExist();
+      expect(floater.find('ReactFloater')).toExist();
+      expect(floater.find('Portal')).toExist();
       expect(content.at(0)).toHaveText('Hello');
       expect(content.at(1)).toHaveText('World');
     });
@@ -127,7 +127,7 @@ describe('ReactFloater', () => {
 
   describe('with `autoOpen`', () => {
     beforeAll(() => {
-      tooltip = setup({
+      floater = setup({
         ...props,
         autoOpen: true,
       });
@@ -135,35 +135,35 @@ describe('ReactFloater', () => {
 
     it('should have rendered the Floater initially open', () => {
       updateTooltip(false);
-      const tooltipEl = portal.find('.__tooltip');
+      const floaterEl = portal.find('.__floater');
 
-      expect(tooltip.state('status')).toBe('open');
-      expect(tooltipEl).toHaveStyle('opacity', 1);
-      expect(tooltipEl).toHaveStyle('visibility', 'visible');
+      expect(floater.state('status')).toBe('open');
+      expect(floaterEl).toHaveStyle('opacity', 1);
+      expect(floaterEl).toHaveStyle('visibility', 'visible');
     });
 
-    it('should be able to hide the tooltip', () => {
+    it('should be able to hide the floater', () => {
       updateTooltip();
-      const tooltipEl = portal.find('.__tooltip');
+      const floaterEl = portal.find('.__floater');
 
-      expect(tooltip.state('status')).toBe('idle');
-      expect(tooltipEl).toHaveStyle('opacity', 0);
-      expect(tooltipEl).toHaveStyle('visibility', 'hidden');
+      expect(floater.state('status')).toBe('idle');
+      expect(floaterEl).toHaveStyle('opacity', 0);
+      expect(floaterEl).toHaveStyle('visibility', 'hidden');
     });
 
-    it('should be able to show the tooltip again', () => {
+    it('should be able to show the floater again', () => {
       updateTooltip();
-      const tooltipEl = portal.find('.__tooltip');
+      const floaterEl = portal.find('.__floater');
 
-      expect(tooltip.state('status')).toBe('open');
-      expect(tooltipEl).toHaveStyle('opacity', 1);
-      expect(tooltipEl).toHaveStyle('visibility', 'visible');
+      expect(floater.state('status')).toBe('open');
+      expect(floaterEl).toHaveStyle('opacity', 1);
+      expect(floaterEl).toHaveStyle('visibility', 'visible');
     });
   });
 
   describe('with `callback`', () => {
     beforeAll(() => {
-      tooltip = setup({
+      floater = setup({
         ...props,
         callback: mockCallback,
       });
@@ -172,7 +172,7 @@ describe('ReactFloater', () => {
     it('should call the callback function on open', () => {
       updateTooltip();
 
-      expect(tooltip.state('status')).toBe('open');
+      expect(floater.state('status')).toBe('open');
       expect(mockCallback).toHaveBeenCalledWith('open', {
         autoOpen: false,
         callback: mockCallback,
@@ -197,7 +197,7 @@ describe('ReactFloater', () => {
 
     it('should call the callback function on close', () => {
       updateTooltip();
-      expect(tooltip.state('status')).toBe('idle');
+      expect(floater.state('status')).toBe('idle');
 
       expect(mockCallback).toHaveBeenCalledWith('close', {
         autoOpen: false,
@@ -224,79 +224,79 @@ describe('ReactFloater', () => {
 
   describe('with `event` hover', () => {
     beforeAll(() => {
-      tooltip = setup({
+      floater = setup({
         ...props,
         event: 'hover',
       });
     });
 
-    it('should be able to show the tooltip', () => {
+    it('should be able to show the floater', () => {
       updateTooltip('mouseEnter');
 
-      expect(tooltip.state('status')).toBe('open');
+      expect(floater.state('status')).toBe('open');
     });
 
     it('should still be open while the cursor is over it', () => {
       updateTooltip(false);
 
-      expect(tooltip.state('status')).toBe('open');
+      expect(floater.state('status')).toBe('open');
     });
 
     it('should have close itself after `eventDelay`', () => {
       updateTooltip('mouseLeave');
 
-      jest.advanceTimersByTime(tooltip.prop('eventDelay') * 1000); // trigger the close animation
-      expect(tooltip.state('status')).toBe('closing');
+      jest.advanceTimersByTime(floater.prop('eventDelay') * 1000); // trigger the close animation
+      expect(floater.state('status')).toBe('closing');
 
       jest.advanceTimersByTime(400); // trigger the fake transitionend event
-      expect(tooltip.state('status')).toBe('idle');
+      expect(floater.state('status')).toBe('idle');
     });
   });
 
   describe('with `event` hover and `eventDelay` set to 0', () => {
     beforeAll(() => {
-      tooltip = setup({
+      floater = setup({
         ...props,
         event: 'hover',
         eventDelay: 0,
       });
     });
 
-    it('should be able to show the tooltip', () => {
+    it('should be able to show the floater', () => {
       updateTooltip('mouseEnter');
 
-      expect(tooltip.state('status')).toBe('open');
+      expect(floater.state('status')).toBe('open');
     });
 
     it('should have close itself immediately', () => {
       updateTooltip('mouseLeave');
 
-      expect(tooltip.state('status')).toBe('idle');
+      expect(floater.state('status')).toBe('idle');
 
       jest.advanceTimersByTime(0); // trigger the fake transitionend event
 
-      expect(tooltip.state('status')).toBe('idle');
+      expect(floater.state('status')).toBe('idle');
     });
   });
 
   describe('with `title`', () => {
     beforeAll(() => {
       const Title = () => (<h3>My Title</h3>);
-      tooltip = setup({
+      floater = setup({
         ...props,
         title: (<Title />),
       });
     });
 
     it('should have rendered the title', () => {
-      expect(tooltip.find('Title')).toExist();
+      expect(floater.find('Title')).toExist();
 
-      tooltip.setProps({
+      floater.setProps({
         title: (<div className="__title">Other Title</div>)
       });
 
-      expect(tooltip.find('Title')).not.toExist();
-      expect(tooltip.find('.__title')).toExist();
+      expect(floater.find('Title')).not.toExist();
+      expect(floater.find('.__title')).toExist();
     });
   });
 
@@ -307,185 +307,185 @@ describe('ReactFloater', () => {
           <button>NEXT</button>
         </footer>
       );
-      tooltip = setup({
+      floater = setup({
         ...props,
         footer: (<Footer />),
       });
     });
 
     it('should have rendered the footer', () => {
-      expect(tooltip.find('Footer')).toExist();
+      expect(floater.find('Footer')).toExist();
 
-      tooltip.setProps({
+      floater.setProps({
         footer: (<div className="__footer">Hello</div>)
       });
 
-      expect(tooltip.find('Footer')).not.toExist();
-      expect(tooltip.find('.__footer')).toExist();
+      expect(floater.find('Footer')).not.toExist();
+      expect(floater.find('.__footer')).toExist();
     });
   });
 
   describe('with `id`', () => {
     beforeAll(() => {
-      tooltip = setup({
+      floater = setup({
         ...props,
         id: 'hello-world',
       });
     });
 
-    it('should have added the id to the portal tooltip', () => {
+    it('should have added the id to the portal floater', () => {
       const namedPortal = document.getElementById('hello-world');
 
       expect(namedPortal).toBeInstanceOf(HTMLDivElement);
-      expect(namedPortal.querySelector('.__tooltip')).toBeInstanceOf(HTMLDivElement);
+      expect(namedPortal.querySelector('.__floater')).toBeInstanceOf(HTMLDivElement);
     });
   });
 
   describe('with `open`', () => {
     beforeAll(() => {
-      tooltip = setup({
+      floater = setup({
         ...props,
         open: false,
       });
     });
 
-    it('should not be able to show the tooltip with click', () => {
+    it('should not be able to show the floater with click', () => {
       updateTooltip('click');
 
-      expect(tooltip.state('status')).toBe('idle');
+      expect(floater.state('status')).toBe('idle');
     });
 
-    it('should not be able to show the tooltip with hover', () => {
-      tooltip.setProps({ event: 'hover' });
+    it('should not be able to show the floater with hover', () => {
+      floater.setProps({ event: 'hover' });
       updateTooltip('mouseEnter');
 
-      expect(tooltip.state('status')).toBe('idle');
+      expect(floater.state('status')).toBe('idle');
     });
 
-    it('should show the tooltip when `open` is true', () => {
-      tooltip.setProps({ open: true });
-      expect(tooltip.state('status')).toBe('opening');
+    it('should show the floater when `open` is true', () => {
+      floater.setProps({ open: true });
+      expect(floater.state('status')).toBe('opening');
 
-      tooltip.instance().handleTransitionEnd();
-      expect(tooltip.state('status')).toBe('open');
+      floater.instance().handleTransitionEnd();
+      expect(floater.state('status')).toBe('open');
     });
 
-    it('should close the tooltip when `open` is false', () => {
-      tooltip.setProps({ open: false });
-      expect(tooltip.state('status')).toBe('closing');
+    it('should close the floater when `open` is false', () => {
+      floater.setProps({ open: false });
+      expect(floater.state('status')).toBe('closing');
 
-      tooltip.instance().handleTransitionEnd();
-      expect(tooltip.state('status')).toBe('idle');
+      floater.instance().handleTransitionEnd();
+      expect(floater.state('status')).toBe('idle');
     });
   });
 
   describe('with `placement` top', () => {
     beforeAll(() => {
-      tooltip = setup({
+      floater = setup({
         ...props,
         placement: 'top',
       });
     });
 
     it('should use `placement` top', () => {
-      expect(tooltip.instance().popper.originalPlacement).toBe('top');
-      expect(tooltip.state('currentPlacement')).toBe('top');
+      expect(floater.instance().popper.originalPlacement).toBe('top');
+      expect(floater.state('currentPlacement')).toBe('top');
     });
   });
 
   describe('with `placement` center', () => {
     beforeAll(() => {
-      tooltip = setup({
+      floater = setup({
         ...props,
         placement: 'center',
       });
     });
 
     it('should use `placement` center', () => {
-      expect(tooltip.instance().popper).not.toBeDefined();
-      expect(tooltip.state('currentPlacement')).toBe('center');
+      expect(floater.instance().popper).not.toBeDefined();
+      expect(floater.state('currentPlacement')).toBe('center');
     });
 
     it('should have skipped the arrow', () => {
       updateTooltip();
 
-      const tooltipEl = portal.find('.__tooltip');
+      const floaterEl = portal.find('.__floater');
 
-      expect(tooltip.state('status')).toBe('open');
-      expect(tooltipEl.find('.__tooltip__arrow')).not.toExist();
+      expect(floater.state('status')).toBe('open');
+      expect(floaterEl.find('.__floater__arrow')).not.toExist();
     });
   });
 
   describe('with `component` as function', () => {
     beforeAll(() => {
-      tooltip = setup({
+      floater = setup({
         component: Styled,
       });
     });
 
-    it('should show the tooltip with click', () => {
+    it('should show the floater with click', () => {
       updateTooltip('click');
 
-      expect(tooltip.state('status')).toBe('open');
+      expect(floater.state('status')).toBe('open');
     });
 
     it('should have a StyledComponent', () => {
-      expect(tooltip.find('StyledComponent')).toExist();
+      expect(floater.find('StyledComponent')).toExist();
     });
 
-    it('should be able to close the tooltip with `closeFn` prop', () => {
-      tooltip.find('StyledComponent').find('button').simulate('click');
+    it('should be able to close the floater with `closeFn` prop', () => {
+      floater.find('StyledComponent').find('button').simulate('click');
 
-      expect(tooltip.state('status')).toBe('closing');
+      expect(floater.state('status')).toBe('closing');
     });
   });
 
   describe('with `component` as element', () => {
     beforeAll(() => {
-      tooltip = setup({
+      floater = setup({
         component: <Styled />,
       });
     });
 
-    it('should show the tooltip with click', () => {
+    it('should show the floater with click', () => {
       updateTooltip('click');
 
-      expect(tooltip.state('status')).toBe('open');
+      expect(floater.state('status')).toBe('open');
     });
 
     it('should have a StyledComponent', () => {
-      expect(tooltip.find('StyledComponent')).toExist();
+      expect(floater.find('StyledComponent')).toExist();
     });
 
-    it('should be able to close the tooltip with `closeFn` prop', () => {
-      tooltip.find('StyledComponent').find('button').simulate('click');
+    it('should be able to close the floater with `closeFn` prop', () => {
+      floater.find('StyledComponent').find('button').simulate('click');
 
-      expect(tooltip.state('status')).toBe('closing');
+      expect(floater.state('status')).toBe('closing');
     });
   });
 
   describe('with `showCloseButton`', () => {
     beforeAll(() => {
-      tooltip = setup({
+      floater = setup({
         ...props,
         showCloseButton: true,
       });
     });
 
-    it('should show the tooltip with click', () => {
+    it('should show the floater with click', () => {
       updateTooltip('click');
 
-      expect(tooltip.state('status')).toBe('open');
+      expect(floater.state('status')).toBe('open');
     });
 
     it('should have a close button', () => {
-      expect(tooltip.find('CloseBtn')).toExist();
+      expect(floater.find('CloseBtn')).toExist();
     });
 
-    it('should be able to close the tooltip clicking the close button', () => {
-      tooltip.find('CloseBtn').simulate('click');
+    it('should be able to close the floater clicking the close button', () => {
+      floater.find('CloseBtn').simulate('click');
 
-      expect(tooltip.state('status')).toBe('closing');
+      expect(floater.state('status')).toBe('closing');
     });
   });
 

@@ -10,7 +10,6 @@ export default class Portal extends React.Component {
     if (!canUseDOM) return;
 
     this.node = document.createElement('div');
-    this.node.style.zIndex = 1;
     if (props.id) {
       this.node.id = props.id;
     }

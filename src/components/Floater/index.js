@@ -29,16 +29,16 @@ export default class Floater extends React.Component {
     title: PropTypes.node,
   };
 
-  get tooltipStyle() {
+  get floaterStyle() {
     const { disableAnimation, component, placement, hideArrow, isPositioned, status, styles } = this.props;
     const {
       arrow: { length },
-      tooltip,
-      tooltipCentered,
-      tooltipClosing,
-      tooltipOpening,
-      tooltipWithAnimation,
-      tooltipWithComponent,
+      floater,
+      floaterCentered,
+      floaterClosing,
+      floaterOpening,
+      floaterWithAnimation,
+      floaterWithComponent,
     } = styles;
     let element = {};
 
@@ -58,27 +58,27 @@ export default class Floater extends React.Component {
     }
 
     if ([STATUS.OPENING, STATUS.OPEN].includes(status)) {
-      element = { ...element, ...tooltipOpening };
+      element = { ...element, ...floaterOpening };
     }
 
     if (status === STATUS.CLOSING) {
-      element = { ...element, ...tooltipClosing };
+      element = { ...element, ...floaterClosing };
     }
 
     if (status === STATUS.OPEN && !disableAnimation && !isPositioned) {
-      element = { ...element, ...tooltipWithAnimation };
+      element = { ...element, ...floaterWithAnimation };
     }
 
     if (placement === 'center') {
-      element = { ...element, ...tooltipCentered };
+      element = { ...element, ...floaterCentered };
     }
 
     if (component) {
-      element = { ...element, ...tooltipWithComponent };
+      element = { ...element, ...floaterWithComponent };
     }
 
     return {
-      ...tooltip,
+      ...floater,
       ...element,
     };
   }
@@ -112,8 +112,8 @@ export default class Floater extends React.Component {
     return (
       <div
         ref={setFloaterRef}
-        className="__tooltip"
-        style={this.tooltipStyle}
+        className="__floater"
+        style={this.floaterStyle}
       >
         {output.content}
         {output.arrow}
