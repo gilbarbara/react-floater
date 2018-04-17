@@ -341,10 +341,10 @@ export default class ReactFloater extends React.Component {
   handleClick = () => {
     if (is.boolean(this.props.open)) return;
 
-    const { status } = this.state;
+    const { positionWrapper, status } = this.state;
 
     /* istanbul ignore else */
-    if (this.event === 'click') {
+    if (this.event === 'click' || (this.event === 'hover' && positionWrapper)) {
       log({
         title: 'click',
         data: [
