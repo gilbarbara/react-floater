@@ -89,9 +89,11 @@ export default class Floater extends React.Component {
       handleClick: closeFn,
       hideArrow,
       setFloaterRef,
+      status,
     } = this.props;
 
     const output = {};
+    const classes = ['__floater'];
 
     if (component) {
       if (React.isValidElement(component)) {
@@ -105,6 +107,10 @@ export default class Floater extends React.Component {
       output.content = <Container {...this.props} />;
     }
 
+    if (status === STATUS.OPEN) {
+      classes.push('__floater__open');
+    }
+
     if (!hideArrow) {
       output.arrow = <Arrow {...this.props} />;
     }
@@ -112,11 +118,13 @@ export default class Floater extends React.Component {
     return (
       <div
         ref={setFloaterRef}
-        className="__floater"
+        className={classes.join(' ')}
         style={this.floaterStyle}
       >
-        {output.content}
-        {output.arrow}
+        <div className="__floater__body">
+          {output.content}
+          {output.arrow}
+        </div>
       </div>
     );
   }

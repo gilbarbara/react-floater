@@ -8,7 +8,7 @@ export default class Arrow extends React.Component {
     styles: PropTypes.object.isRequired,
   };
 
-  get arrowStyle() {
+  get parentStyle() {
     const { placement, styles } = this.props;
     const { length } = styles.arrow;
     const arrow = {
@@ -17,14 +17,16 @@ export default class Arrow extends React.Component {
 
     /* istanbul ignore else */
     if (placement.startsWith('top')) {
-      arrow.bottom = length;
+      arrow.bottom = 0;
       arrow.left = 0;
       arrow.right = 0;
+      arrow.height = length;
     }
     else if (placement.startsWith('bottom')) {
-      arrow.top = 0;
       arrow.left = 0;
       arrow.right = 0;
+      arrow.top = 0;
+      arrow.height = length;
     }
     else if (placement.startsWith('left')) {
       arrow.right = 0;
@@ -51,7 +53,7 @@ export default class Arrow extends React.Component {
     /* istanbul ignore else */
     if (placement.startsWith('top')) {
       points = `0,0 ${x / 2},${y} ${x},0`;
-      arrowStyles.bottom = -y;
+      arrowStyles.bottom = 0;
     }
     else if (placement.startsWith('bottom')) {
       points = `${x},${y} ${x / 2},0 0,${y}`;
@@ -73,7 +75,7 @@ export default class Arrow extends React.Component {
     return (
       <div
         className="__floater__arrow"
-        style={this.arrowStyle}
+        style={this.parentStyle}
       >
         <span ref={setArrowRef} style={arrowStyles}>
           <svg
