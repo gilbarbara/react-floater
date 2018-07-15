@@ -29,7 +29,6 @@ export default class Portal extends React.Component {
     ]),
     placement: PropTypes.string,
     setRef: PropTypes.func.isRequired,
-    status: PropTypes.string,
     target: PropTypes.oneOfType([
       PropTypes.object,
       PropTypes.string,
@@ -44,15 +43,10 @@ export default class Portal extends React.Component {
     }
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate() {
     if (!canUseDOM) return;
 
-    const { placement, status } = this.props;
-
-    if (
-      !isReact16
-      && (prevProps.status !== status || prevProps.placement !== placement)
-    ) {
+    if (!isReact16) {
       this.renderPortal();
     }
   }
