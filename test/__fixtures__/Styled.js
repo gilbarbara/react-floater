@@ -8,7 +8,7 @@ const Wrapper = styled.div`
 const Styled = ({ closeFn }) => (
   <Wrapper>
     <div>Styled</div>
-    <button onClick={closeFn}>close</button>
+    <button onClick={closeFn} type="button">close</button>
   </Wrapper>
 );
 

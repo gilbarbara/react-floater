@@ -110,7 +110,7 @@ describe('ReactFloater', () => {
     beforeAll(() => {
       floater = setup(props, [
         <div key={0}>Hello</div>,
-        <div key={1}>World</div>
+        <div key={1}>World</div>,
       ]);
       portal = mount(floater.find('Portal').get(0));
     });
@@ -191,7 +191,7 @@ describe('ReactFloater', () => {
         showCloseButton: false,
         styles: {},
         target: null,
-        wrapperOptions: { position: false }
+        wrapperOptions: { position: false },
       });
     });
 
@@ -217,7 +217,7 @@ describe('ReactFloater', () => {
         showCloseButton: false,
         styles: {},
         target: null,
-        wrapperOptions: { position: false }
+        wrapperOptions: { position: false },
       });
     });
   });
@@ -292,7 +292,7 @@ describe('ReactFloater', () => {
       expect(floater.find('Title')).toExist();
 
       floater.setProps({
-        title: (<div className="__title">Other Title</div>)
+        title: (<div className="__title">Other Title</div>),
       });
 
       expect(floater.find('Title')).not.toExist();
@@ -304,7 +304,7 @@ describe('ReactFloater', () => {
     beforeAll(() => {
       const Footer = () => (
         <footer>
-          <button>NEXT</button>
+          <button type="button">NEXT</button>
         </footer>
       );
       floater = setup({
@@ -317,7 +317,7 @@ describe('ReactFloater', () => {
       expect(floater.find('Footer')).toExist();
 
       floater.setProps({
-        footer: (<div className="__footer">Hello</div>)
+        footer: (<div className="__footer">Hello</div>),
       });
 
       expect(floater.find('Footer')).not.toExist();
@@ -501,4 +501,3 @@ describe('ReactFloater', () => {
 
   });
 });
-

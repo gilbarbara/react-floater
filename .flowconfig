@@ -9,8 +9,6 @@
 ./defs
 
 [options]
-module.name_mapper='^scripts\/?\(.*\)?$' -> '<PROJECT_ROOT>/src/scripts/\1'
-module.name_mapper='^styles\/\(.*\)$' -> '<PROJECT_ROOT>/src/styles/\1'
 
 munge_underscores=true
 

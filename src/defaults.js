@@ -4,5 +4,5 @@ export default {
   },
   preventOverflow: {
     padding: 10,
-  }
+  },
 };

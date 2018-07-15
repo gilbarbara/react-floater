@@ -17,7 +17,7 @@ const FloaterContainer = ({
   const output = {
     content: React.isValidElement(content)
       ? content
-      : <div className="__floater__content" style={styles.content}>{content}</div>
+      : <div className="__floater__content" style={styles.content}>{content}</div>,
   };
 
   if (title) {

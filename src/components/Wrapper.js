@@ -36,7 +36,7 @@ export default class Wrapper extends React.Component {
         else {
           const refProp = is.function(children.type) ? 'innerRef' : 'ref';
           element = React.cloneElement(React.Children.only(children), {
-            [refProp]: setChildRef
+            [refProp]: setChildRef,
           });
         }
       }

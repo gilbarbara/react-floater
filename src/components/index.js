@@ -84,6 +84,7 @@ export default class ReactFloater extends React.Component {
     ]),
     title: PropTypes.node,
     wrapperOptions: PropTypes.shape({
+      offset: PropTypes.number,
       placement: PropTypes.oneOf([
         'top', 'top-start', 'top-end',
         'bottom', 'bottom-start', 'bottom-end',
@@ -92,8 +93,7 @@ export default class ReactFloater extends React.Component {
         'auto',
       ]),
       position: PropTypes.bool,
-      offset: PropTypes.number,
-    })
+    }),
   };
 
   static defaultProps = {
@@ -114,7 +114,7 @@ export default class ReactFloater extends React.Component {
     target: null,
     wrapperOptions: {
       position: false,
-    }
+    },
   };
 
   componentDidMount() {
@@ -249,11 +249,12 @@ export default class ReactFloater extends React.Component {
         },
         onUpdate: (data) => {
           this.popper = data;
+          const { currentPlacement } = this.state;
 
-          if (data.placement !== this.state.currentPlacement) {
+          if (data.placement !== currentPlacement) {
             this.setState({ currentPlacement: data.placement });
           }
-        }
+        },
       });
     }
 
@@ -271,7 +272,7 @@ export default class ReactFloater extends React.Component {
           },
           flip: {
             enabled: false,
-          }
+          },
         },
         onCreate: (data) => {
           this.wrapperPopper = data;
@@ -284,25 +285,26 @@ export default class ReactFloater extends React.Component {
               data.instance.update();
             }, 1);
           }
-        }
+        },
       });
     }
   }
 
   changeWrapperPosition({ target, wrapperOptions }) {
     this.setState({
-      positionWrapper: wrapperOptions.position && !!target
+      positionWrapper: wrapperOptions.position && !!target,
     });
   }
 
   toggle(forceStatus) {
-    let status = this.state.status === STATUS.OPEN ? STATUS.CLOSING : STATUS.OPENING;
+    const { status } = this.state;
+    let nextStatus = status === STATUS.OPEN ? STATUS.CLOSING : STATUS.OPENING;
 
     if (!is.undefined(forceStatus)) {
-      status = forceStatus;
+      nextStatus = forceStatus;
     }
 
-    this.setState({ status });
+    this.setState({ status: nextStatus });
   }
 
   setArrowRef = (ref) => {
@@ -324,6 +326,7 @@ export default class ReactFloater extends React.Component {
   };
 
   handleTransitionEnd = () => {
+    const { status } = this.state;
     const { callback } = this.props;
 
     /* istanbul ignore else */
@@ -332,14 +335,17 @@ export default class ReactFloater extends React.Component {
     }
 
     this.setState({
-      status: this.state.status === STATUS.OPENING ? STATUS.OPEN : STATUS.IDLE
+      status: status === STATUS.OPENING ? STATUS.OPEN : STATUS.IDLE,
     }, () => {
-      callback(this.state.status === STATUS.OPEN ? 'open' : 'close', this.props);
+      const { status: newStatus } = this.state;
+      callback(newStatus === STATUS.OPEN ? 'open' : 'close', this.props);
     });
   };
 
   handleClick = () => {
-    if (is.boolean(this.props.open)) return;
+    const { event, open } = this.props;
+
+    if (is.boolean(open)) return;
 
     const { positionWrapper, status } = this.state;
 
@@ -348,7 +354,7 @@ export default class ReactFloater extends React.Component {
       log({
         title: 'click',
         data: [
-          { event: this.props.event, status: status === STATUS.OPEN ? 'closing' : 'opening' },
+          { event, status: status === STATUS.OPEN ? 'closing' : 'opening' },
         ],
         debug: this.debug,
       });
@@ -358,7 +364,10 @@ export default class ReactFloater extends React.Component {
   };
 
   handleMouseEnter = () => {
-    if (is.boolean(this.props.open) || isMobile()) return;
+    const { event, open } = this.props;
+
+    if (is.boolean(open) || isMobile()) return;
+
     const { status } = this.state;
 
     /* istanbul ignore else */
@@ -366,7 +375,7 @@ export default class ReactFloater extends React.Component {
       log({
         title: 'mouseEnter',
         data: [
-          { key: 'originalEvent', value: this.props.event },
+          { key: 'originalEvent', value: event },
         ],
         debug: this.debug,
       });
@@ -377,9 +386,10 @@ export default class ReactFloater extends React.Component {
   };
 
   handleMouseLeave = () => {
-    if (is.boolean(this.props.open) || isMobile()) return;
+    const { event, eventDelay, open } = this.props;
 
-    const { event, eventDelay } = this.props;
+    if (is.boolean(open) || isMobile()) return;
+
     const { status, positionWrapper } = this.state;
 
     /* istanbul ignore else */
@@ -406,7 +416,9 @@ export default class ReactFloater extends React.Component {
   };
 
   get debug() {
-    return this.props.debug || !!global.ReactFloaterDebug;
+    const { debug } = this.props;
+
+    return debug || !!global.ReactFloaterDebug;
   }
 
   get event() {
@@ -443,7 +455,7 @@ export default class ReactFloater extends React.Component {
 
       nextStyles.wrapper = {
         ...nextStyles.wrapper,
-        ...wrapperStyles
+        ...wrapperStyles,
       };
     }
 
@@ -455,7 +467,7 @@ export default class ReactFloater extends React.Component {
       if (this.wrapperStyles) {
         nextStyles.wrapper = {
           ...nextStyles.wrapper,
-          ...this.wrapperStyles
+          ...this.wrapperStyles,
         };
       }
       else if (!['relative', 'static'].includes(targetStyles.position)) {
@@ -468,7 +480,7 @@ export default class ReactFloater extends React.Component {
 
           nextStyles.wrapper = {
             ...nextStyles.wrapper,
-            ...this.wrapperStyles
+            ...this.wrapperStyles,
           };
 
           this.target.style.position = 'relative';
