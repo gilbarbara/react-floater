@@ -43,8 +43,8 @@ export default class Arrow extends React.Component {
 
   render() {
     const { placement, setArrowRef, styles } = this.props;
-    const { arrow: { color, display, length, position, spread } } = styles;
-    const arrowStyles = { display, position };
+    const { arrow: { color, display, length, position, spread, left, top, right, bottom } } = styles;
+    const arrowStyles = { display, position, left, top, right, bottom };
 
     let points;
     let x = spread;
