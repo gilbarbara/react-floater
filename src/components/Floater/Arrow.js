@@ -43,8 +43,15 @@ export default class Arrow extends React.Component {
 
   render() {
     const { placement, setArrowRef, styles } = this.props;
-    const { arrow: { color, display, length, position, spread } } = styles;
+    const { arrow: { color, display, length, position, spread, left, top, right, bottom } } = styles;
     const arrowStyles = { display, position };
+    const parentStyleWithOffsets = {
+      ...this.parentStyle,
+      left: left || this.parentStyle.left,
+      top: top || this.parentStyle.top,
+      right: right || this.parentStyle.right,
+      bottom: bottom || this.parentStyle.bottom,
+    };
 
     let points;
     let x = spread;
@@ -75,7 +82,7 @@ export default class Arrow extends React.Component {
     return (
       <div
         className="__floater__arrow"
-        style={this.parentStyle}
+        style={parentStyleWithOffsets}
       >
         <span ref={setArrowRef} style={arrowStyles}>
           <svg
