@@ -120,6 +120,10 @@ The distance between the Floater and its target in pixels.
 The switch between normal and controlled modes.  
 *Setting this prop will disabled the normal behavior.*
 
+**openDelay** {number} ▶︎ `0`  
+The amount of time (in seconds) that the floater should wait after a `mouseEnter` event before showing.
+Only valid for the event type `hover`.
+
 **placement** {string} ▶︎ `bottom`  
 The placement of the Floater. It will update the position if there's no space available.
 
