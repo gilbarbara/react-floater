@@ -33,7 +33,15 @@ describe('ReactFloater', () => {
       floater.find('Wrapper').childAt(0).simulate(event);
 
       if (['click', 'mouseEnter'].includes(event)) {
-        floater.instance().handleTransitionEnd(); // mock transitionend
+        if (floater.prop('openDelay')) {
+          setTimeout(() => {
+            floater.instance().handleTransitionEnd();
+          }, floater.prop('openDelay') * 1000);
+        }
+        else {
+          jest.advanceTimersByTime(0); // trigger open animation
+          floater.instance().handleTransitionEnd(); // mock transitionend
+        }
       }
       else {
         setTimeout(() => {
@@ -187,6 +195,7 @@ describe('ReactFloater', () => {
         getPopper: mockGetPopper,
         hideArrow: false,
         offset: 15,
+        openDelay: 0,
         placement: 'bottom',
         showCloseButton: false,
         styles: {},
@@ -213,6 +222,7 @@ describe('ReactFloater', () => {
         getPopper: mockGetPopper,
         hideArrow: false,
         offset: 15,
+        openDelay: 0,
         placement: 'bottom',
         showCloseButton: false,
         styles: {},
@@ -275,6 +285,45 @@ describe('ReactFloater', () => {
 
       jest.advanceTimersByTime(0); // trigger the fake transitionend event
 
+      expect(floater.state('status')).toBe('idle');
+    });
+  });
+
+  describe('with `event` hover and `openDelay` set to 1', () => {
+    beforeAll(() => {
+      floater = setup({
+        ...props,
+        event: 'hover',
+        openDelay: 1,
+      });
+    });
+
+    it('should be able to show the floater', () => {
+      updateTooltip('mouseEnter');
+
+      jest.advanceTimersByTime(floater.prop('openDelay') * 1000); // trigger the open animation
+      expect(floater.state('status')).toBe('open');
+    });
+
+    it('should be able to close the floater', () => {
+      updateTooltip('mouseLeave');
+
+      jest.advanceTimersByTime(floater.prop('eventDelay') * 1000);
+      expect(floater.state('status')).toBe('closing');
+
+      jest.advanceTimersByTime(floater.prop('eventDelay') * 400);
+      expect(floater.state('status')).toBe('idle');
+    });
+
+    it('should not show the floater if the cursor moves away', () => {
+      updateTooltip('mouseEnter');
+
+      jest.advanceTimersByTime(floater.prop('openDelay') * 900); // trigger the open animation
+      expect(floater.state('status')).toBe('idle');
+
+      updateTooltip('mouseLeave');
+
+      jest.advanceTimersByTime(floater.prop('openDelay') * 1000); // trigger the open animation
       expect(floater.state('status')).toBe('idle');
     });
   });

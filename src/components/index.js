@@ -67,6 +67,7 @@ export default class ReactFloater extends React.Component {
     isPositioned: PropTypes.bool,
     offset: PropTypes.number,
     open: PropTypes.bool,
+    openDelay: PropTypes.number,
     options: PropTypes.object,
     placement: PropTypes.oneOf([
       'top', 'top-start', 'top-end',
@@ -108,6 +109,7 @@ export default class ReactFloater extends React.Component {
     getPopper: noop,
     hideArrow: false,
     offset: 15,
+    openDelay: 0,
     placement: 'bottom',
     showCloseButton: false,
     styles: {},
@@ -364,7 +366,7 @@ export default class ReactFloater extends React.Component {
   };
 
   handleMouseEnter = () => {
-    const { event, open } = this.props;
+    const { event, open, openDelay } = this.props;
 
     if (is.boolean(open) || isMobile()) return;
 
@@ -381,7 +383,12 @@ export default class ReactFloater extends React.Component {
       });
 
       clearTimeout(this.eventDelayTimeout);
-      this.toggle();
+
+      this.openDelayTimeout = setTimeout(() => {
+        delete this.openDelayTimeout;
+
+        this.toggle();
+      }, openDelay * 1000);
     }
   };
 
@@ -401,6 +408,8 @@ export default class ReactFloater extends React.Component {
         ],
         debug: this.debug,
       });
+
+      clearTimeout(this.openDelayTimeout);
 
       if (!eventDelay) {
         this.toggle(STATUS.IDLE);
