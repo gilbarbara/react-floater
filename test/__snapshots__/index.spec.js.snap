@@ -1,0 +1,349 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ReactFloater with \`component\` as element should have rendered the component 1`] = `
+<div
+  className="__floater__body"
+>
+  <Styled
+    closeFn={[Function]}
+  >
+    <styled.div>
+      <div
+        className="sc-bdVaJa cCXpfk"
+      >
+        <div>
+          Styled
+        </div>
+        <button
+          onClick={[Function]}
+          type="button"
+        >
+          close
+        </button>
+      </div>
+    </styled.div>
+  </Styled>
+  <FloaterArrow
+    component={<Styled />}
+    disableAnimation={false}
+    handleClick={[Function]}
+    hideArrow={false}
+    placement="bottom"
+    positionWrapper={false}
+    setArrowRef={[Function]}
+    setFloaterRef={[Function]}
+    showCloseButton={false}
+    status="open"
+    styles={
+      Object {
+        "arrow": Object {
+          "color": "#fff",
+          "display": "inline-flex",
+          "length": 16,
+          "position": "absolute",
+          "spread": 32,
+        },
+        "close": Object {
+          "WebkitAppearance": "none",
+          "backgroundColor": "transparent",
+          "border": 0,
+          "borderRadius": 0,
+          "color": "#555",
+          "fontSize": 0,
+          "height": 15,
+          "outline": "none",
+          "padding": 10,
+          "position": "absolute",
+          "right": 0,
+          "top": 0,
+          "width": 15,
+        },
+        "container": Object {
+          "backgroundColor": "#fff",
+          "color": "#666",
+          "minHeight": 60,
+          "minWidth": 200,
+          "padding": 20,
+          "position": "relative",
+        },
+        "content": Object {
+          "fontSize": 15,
+        },
+        "floater": Object {
+          "display": "inline-block",
+          "filter": "drop-shadow(0 0 3px rgba(0, 0, 0, 0.3))",
+          "maxWidth": 300,
+          "opacity": 0,
+          "position": "relative",
+          "transition": "opacity 0.3s",
+          "visibility": "hidden",
+          "zIndex": 1000,
+        },
+        "floaterCentered": Object {
+          "left": "50%",
+          "position": "fixed",
+          "top": "50%",
+          "transform": "translate(-50%, -50%)",
+        },
+        "floaterClosing": Object {
+          "opacity": 0,
+          "visibility": "visible",
+        },
+        "floaterOpening": Object {
+          "opacity": 1,
+          "visibility": "visible",
+        },
+        "floaterWithAnimation": Object {
+          "opacity": 1,
+          "transition": "opacity 0.3s, transform 0.2s",
+          "visibility": "visible",
+        },
+        "floaterWithComponent": Object {
+          "maxWidth": "100%",
+        },
+        "footer": Object {
+          "borderTop": "1px solid #ccc",
+          "fontSize": 13,
+          "marginTop": 10,
+          "paddingTop": 5,
+        },
+        "options": Object {
+          "zIndex": 1000,
+        },
+        "title": Object {
+          "borderBottom": "1px solid #555",
+          "color": "#555",
+          "fontSize": 18,
+          "marginBottom": 5,
+          "paddingBottom": 6,
+          "paddingRight": 18,
+        },
+        "wrapper": Object {
+          "bottom": "",
+          "cursor": "help",
+          "display": "inline-flex",
+          "flexDirection": "column",
+          "left": "",
+          "position": "",
+          "right": "",
+          "top": "",
+          "zIndex": 1000,
+        },
+        "wrapperPosition": Object {
+          "left": -1000,
+          "position": "absolute",
+          "top": -1000,
+          "visibility": "hidden",
+        },
+      }
+    }
+  >
+    <div
+      className="__floater__arrow"
+      style={
+        Object {
+          "height": 16,
+          "left": 0,
+          "position": "absolute",
+          "right": 0,
+          "top": 0,
+        }
+      }
+    >
+      <span
+        style={
+          Object {
+            "display": "inline-flex",
+            "position": "absolute",
+            "top": 0,
+          }
+        }
+      >
+        <svg
+          height={16}
+          version="1.1"
+          width={32}
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <polygon
+            fill="#fff"
+            points="32,16 16,0 0,16"
+          />
+        </svg>
+      </span>
+    </div>
+  </FloaterArrow>
+</div>
+`;
+
+exports[`ReactFloater with \`component\` as function should have rendered the component 1`] = `
+<div
+  className="__floater__body"
+>
+  <styled.div>
+    <div
+      className="sc-bdVaJa cCXpfk"
+    >
+      <div>
+        Styled
+      </div>
+      <button
+        onClick={[Function]}
+        type="button"
+      >
+        close
+      </button>
+    </div>
+  </styled.div>
+  <FloaterArrow
+    component={[Function]}
+    disableAnimation={false}
+    handleClick={[Function]}
+    hideArrow={false}
+    placement="bottom"
+    positionWrapper={false}
+    setArrowRef={[Function]}
+    setFloaterRef={[Function]}
+    showCloseButton={false}
+    status="open"
+    styles={
+      Object {
+        "arrow": Object {
+          "color": "#fff",
+          "display": "inline-flex",
+          "length": 16,
+          "position": "absolute",
+          "spread": 32,
+        },
+        "close": Object {
+          "WebkitAppearance": "none",
+          "backgroundColor": "transparent",
+          "border": 0,
+          "borderRadius": 0,
+          "color": "#555",
+          "fontSize": 0,
+          "height": 15,
+          "outline": "none",
+          "padding": 10,
+          "position": "absolute",
+          "right": 0,
+          "top": 0,
+          "width": 15,
+        },
+        "container": Object {
+          "backgroundColor": "#fff",
+          "color": "#666",
+          "minHeight": 60,
+          "minWidth": 200,
+          "padding": 20,
+          "position": "relative",
+        },
+        "content": Object {
+          "fontSize": 15,
+        },
+        "floater": Object {
+          "display": "inline-block",
+          "filter": "drop-shadow(0 0 3px rgba(0, 0, 0, 0.3))",
+          "maxWidth": 300,
+          "opacity": 0,
+          "position": "relative",
+          "transition": "opacity 0.3s",
+          "visibility": "hidden",
+          "zIndex": 100,
+        },
+        "floaterCentered": Object {
+          "left": "50%",
+          "position": "fixed",
+          "top": "50%",
+          "transform": "translate(-50%, -50%)",
+        },
+        "floaterClosing": Object {
+          "opacity": 0,
+          "visibility": "visible",
+        },
+        "floaterOpening": Object {
+          "opacity": 1,
+          "visibility": "visible",
+        },
+        "floaterWithAnimation": Object {
+          "opacity": 1,
+          "transition": "opacity 0.3s, transform 0.2s",
+          "visibility": "visible",
+        },
+        "floaterWithComponent": Object {
+          "maxWidth": "100%",
+        },
+        "footer": Object {
+          "borderTop": "1px solid #ccc",
+          "fontSize": 13,
+          "marginTop": 10,
+          "paddingTop": 5,
+        },
+        "options": Object {
+          "zIndex": 100,
+        },
+        "title": Object {
+          "borderBottom": "1px solid #555",
+          "color": "#555",
+          "fontSize": 18,
+          "marginBottom": 5,
+          "paddingBottom": 6,
+          "paddingRight": 18,
+        },
+        "wrapper": Object {
+          "bottom": "",
+          "cursor": "help",
+          "display": "inline-flex",
+          "flexDirection": "column",
+          "left": "",
+          "position": "",
+          "right": "",
+          "top": "",
+          "zIndex": 100,
+        },
+        "wrapperPosition": Object {
+          "left": -1000,
+          "position": "absolute",
+          "top": -1000,
+          "visibility": "hidden",
+        },
+      }
+    }
+  >
+    <div
+      className="__floater__arrow"
+      style={
+        Object {
+          "height": 16,
+          "left": 0,
+          "position": "absolute",
+          "right": 0,
+          "top": 0,
+        }
+      }
+    >
+      <span
+        style={
+          Object {
+            "display": "inline-flex",
+            "position": "absolute",
+            "top": 0,
+          }
+        }
+      >
+        <svg
+          height={16}
+          version="1.1"
+          width={32}
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <polygon
+            fill="#fff"
+            points="32,16 16,0 0,16"
+          />
+        </svg>
+      </span>
+    </div>
+  </FloaterArrow>
+</div>
+`;

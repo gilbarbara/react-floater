@@ -30,7 +30,7 @@ describe('ReactFloater', () => {
 
   const updateTooltip = (event = 'click') => {
     if (event) {
-      floater.find('Wrapper').childAt(0).simulate(event);
+      floater.find('ReactFloaterWrapper').childAt(0).simulate(event);
 
       if (['click', 'mouseEnter'].includes(event)) {
         floater.instance().handleTransitionEnd(); // mock transitionend
@@ -43,19 +43,19 @@ describe('ReactFloater', () => {
     }
 
     floater.update();
-    portal = mount(floater.find('Portal').get(0));
+    portal = floater.find('ReactFloaterPortal');
   };
 
   describe('basic usage', () => {
     beforeAll(() => {
       floater = setup();
-      portal = mount(floater.find('Portal').get(0));
+      portal = floater.find('ReactFloaterPortal');
     });
 
     it('should render properly', () => {
       expect(floater.find('ReactFloater')).toExist();
-      expect(floater.find('Portal')).toExist();
-      expect(floater.find('Wrapper span').at(0)).toHaveText('Places');
+      expect(floater.find('ReactFloaterPortal').length).toBe(1);
+      expect(floater.find('ReactFloaterWrapper span').at(0)).toHaveText('Places');
     });
 
     it('should have created a Portal', () => {
@@ -101,8 +101,7 @@ describe('ReactFloater', () => {
       floater.unmount();
       expect(floater.find('ReactFloater')).not.toExist();
 
-      portal.unmount();
-      expect(portal.find('Portal')).not.toExist();
+      expect(floater.find('ReactFloaterPortal')).not.toExist();
     });
   });
 
@@ -112,14 +111,14 @@ describe('ReactFloater', () => {
         <div key={0}>Hello</div>,
         <div key={1}>World</div>,
       ]);
-      portal = mount(floater.find('Portal').get(0));
+      portal = floater.find('ReactFloaterPortal');
     });
 
     it('should render properly', () => {
-      const content = floater.find('Wrapper').childAt(0).find('div');
+      const content = floater.find('ReactFloaterWrapper').childAt(0).find('div');
 
       expect(floater.find('ReactFloater')).toExist();
-      expect(floater.find('Portal')).toExist();
+      expect(floater.find('ReactFloaterPortal')).toExist();
       expect(content.at(0)).toHaveText('Hello');
       expect(content.at(1)).toHaveText('World');
     });
@@ -429,12 +428,12 @@ describe('ReactFloater', () => {
       expect(floater.state('status')).toBe('open');
     });
 
-    it('should have a StyledComponent', () => {
-      expect(floater.find('StyledComponent')).toExist();
+    it('should have rendered the component', () => {
+      expect(floater.find('.__floater__body')).toMatchSnapshot();
     });
 
     it('should be able to close the floater with `closeFn` prop', () => {
-      floater.find('StyledComponent').find('button').simulate('click');
+      floater.find('.__floater__body button').simulate('click');
 
       expect(floater.state('status')).toBe('closing');
     });
@@ -444,6 +443,11 @@ describe('ReactFloater', () => {
     beforeAll(() => {
       floater = setup({
         component: <Styled />,
+        styles: {
+          options: {
+            zIndex: 1000,
+          },
+        },
       });
     });
 
@@ -453,12 +457,12 @@ describe('ReactFloater', () => {
       expect(floater.state('status')).toBe('open');
     });
 
-    it('should have a StyledComponent', () => {
-      expect(floater.find('StyledComponent')).toExist();
+    it('should have rendered the component', () => {
+      expect(floater.find('.__floater__body')).toMatchSnapshot();
     });
 
     it('should be able to close the floater with `closeFn` prop', () => {
-      floater.find('StyledComponent').find('button').simulate('click');
+      floater.find('.__floater__body button').simulate('click');
 
       expect(floater.state('status')).toBe('closing');
     });
@@ -479,11 +483,14 @@ describe('ReactFloater', () => {
     });
 
     it('should have a close button', () => {
-      expect(floater.find('CloseBtn')).toExist();
+      expect(floater.find('FloaterCloseBtn')).toExist();
     });
 
     it('should be able to close the floater clicking the close button', () => {
-      floater.find('CloseBtn').simulate('click');
+      console.log(floater.debug());
+      console.log('---');
+      console.log('---');
+      floater.find('FloaterCloseBtn').simulate('click');
 
       expect(floater.state('status')).toBe('closing');
     });
