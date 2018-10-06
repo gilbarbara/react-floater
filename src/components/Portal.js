@@ -13,6 +13,9 @@ export default class Portal extends React.Component {
     if (props.id) {
       this.node.id = props.id;
     }
+    if (props.zIndex) {
+      this.node.style.zIndex = props.zIndex;
+    }
 
     document.body.appendChild(this.node);
   }
@@ -33,6 +36,7 @@ export default class Portal extends React.Component {
       PropTypes.object,
       PropTypes.string,
     ]),
+    zIndex: PropTypes.number,
   };
 
   componentDidMount() {

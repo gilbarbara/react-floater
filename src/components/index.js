@@ -13,7 +13,7 @@ import Portal from './Portal';
 import Floater from './Floater';
 import Wrapper from './Wrapper';
 
-import STYLES from '../styles';
+import getStyles from '../styles';
 
 const POSITIONING_PROPS = ['position', 'top', 'right', 'bottom', 'left'];
 
@@ -441,7 +441,7 @@ export default class ReactFloater extends React.Component {
     const { status, positionWrapper, statusWrapper } = this.state;
     const { styles } = this.props;
 
-    const nextStyles = deepmerge(STYLES, styles);
+    const nextStyles = deepmerge(getStyles(styles), styles);
 
     if (positionWrapper) {
       let wrapperStyles;
@@ -518,10 +518,12 @@ export default class ReactFloater extends React.Component {
       disableAnimation,
       footer,
       hideArrow,
+      id,
       isPositioned,
       open,
       showCloseButton,
       style,
+      target,
       title,
     } = this.props;
 
@@ -551,11 +553,13 @@ export default class ReactFloater extends React.Component {
     return (
       <span>
         <Portal
-          {...this.props}
           hasChildren={!!children}
+          id={id}
           placement={currentPlacement}
           setRef={this.setFloaterRef}
           status={status}
+          zIndex={this.styles.options.zIndex}
+          target={target}
         >
           <Floater
             component={component}
