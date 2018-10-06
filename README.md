@@ -110,6 +110,15 @@ Only valid for event type `hover`.
 **footer** {node}  
 It can be anything that can be rendered.
 
+**getPopper** {function}
+Get the pooper.js instance. It receives with 2 parameters:
+
+- **popper** {object} the popper object  
+- **origin** {object} `floater` or `wrapper`
+
+**hideArrow** {bool} ▶︎ `false`  
+Don't show the arrow. Useful for centered or modal layout.
+
 **id** {string|number}  
 In case that you need to identify the portal.
 
@@ -119,6 +128,10 @@ The distance between the Floater and its target in pixels.
 **open** {bool} ▶︎ `false`  
 The switch between normal and controlled modes.  
 *Setting this prop will disabled the normal behavior.*
+
+**options** {object}  
+Customize popper.js modifiers.  
+*Don't use it unless you know what you're doing*
 
 **placement** {string} ▶︎ `bottom`  
 The placement of the Floater. It will update the position if there's no space available.
@@ -137,7 +150,7 @@ It will show a ⨉ button to close the Floater.
 This will be `true` when you change `wrapperOptions` position.
 
 **styles** {object} ▶︎ `defaultStyles`  
-You can customize the UI using this prop.
+Customize the default UI.
 
 **target** {object|string}  
 The target used to calculate the Floater position. If it's not set, it will use the `children` as the target.
