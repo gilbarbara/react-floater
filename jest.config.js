@@ -16,6 +16,9 @@ module.exports = {
     '<rootDir>/test/__setup__/index.js',
   ],
   setupTestFrameworkScriptFile: 'jest-enzyme/lib/index.js',
+  snapshotSerializers: [
+    'enzyme-to-json/serializer',
+  ],
   testEnvironmentOptions: { pretendToBeVisual: true },
   testRegex: '/test/.*?\\.(test|spec)\\.js$',
   testURL: 'http://localhost:3000',
