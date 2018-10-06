@@ -41,7 +41,6 @@
     "production": {
       "plugins": [
         "array-includes",
-        "@babel/plugin-transform-flow-strip-types",
         "transform-node-env-inline"
       ]
     },
