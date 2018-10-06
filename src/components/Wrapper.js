@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import is from 'is-lite';
 
-export default class Wrapper extends React.Component {
+export default class ReactFloaterWrapper extends React.Component {
   static propTypes = {
     children: PropTypes.node,
     handleClick: PropTypes.func.isRequired,

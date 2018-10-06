@@ -29,7 +29,7 @@ export default class Floater extends React.Component {
     title: PropTypes.node,
   };
 
-  get floaterStyle() {
+  get style() {
     const { disableAnimation, component, placement, hideArrow, isPositioned, status, styles } = this.props;
     const {
       arrow: { length },
@@ -119,7 +119,7 @@ export default class Floater extends React.Component {
       <div
         ref={setFloaterRef}
         className={classes.join(' ')}
-        style={this.floaterStyle}
+        style={this.style}
       >
         <div className="__floater__body">
           {output.content}

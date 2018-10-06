@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export default class Arrow extends React.Component {
+export default class FloaterArrow extends React.Component {
   static propTypes = {
     placement: PropTypes.string.isRequired,
     setArrowRef: PropTypes.func.isRequired,

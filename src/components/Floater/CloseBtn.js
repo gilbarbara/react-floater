@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const CloseBtn = ({ handleClick, styles }) => {
+const FloaterCloseBtn = ({ handleClick, styles }) => {
   const { color, height, width, ...style } = styles;
 
   return (
@@ -30,9 +30,9 @@ const CloseBtn = ({ handleClick, styles }) => {
   );
 };
 
-CloseBtn.propTypes = {
+FloaterCloseBtn.propTypes = {
   handleClick: PropTypes.func.isRequired,
   styles: PropTypes.object.isRequired,
 };
 
-export default CloseBtn;
+export default FloaterCloseBtn;

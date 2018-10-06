@@ -1,3 +1,3 @@
-import Floater from './components';
+import ReactFloater from './components';
 
-export default Floater;
+export default ReactFloater;

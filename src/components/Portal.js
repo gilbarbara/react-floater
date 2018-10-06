@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import { canUseDOM, isReact16 } from '../utils';
 
-export default class Portal extends React.Component {
+export default class ReactFloaterPortal extends React.Component {
   constructor(props) {
     super(props);
 
