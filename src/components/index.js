@@ -502,8 +502,14 @@ export default class ReactFloater extends React.Component {
       if (is.domElement(target)) {
         return target;
       }
-
-      return document.querySelector(target);
+      const all = document.querySelectorAll(target);
+      for (let i = 0; i < all.length; i++) {
+        const el = all[i];
+        if (el.offsetParent !== null) {
+          return el;
+        }
+      }
+      return null;
     }
 
     return this.childRef || this.wrapperRef;
