@@ -40,6 +40,8 @@ export default class ReactFloater extends React.Component {
       status: STATUS.INIT,
       statusWrapper: STATUS.INIT,
     };
+
+    this._isMounted = false;
   }
 
   static propTypes = {
@@ -122,6 +124,8 @@ export default class ReactFloater extends React.Component {
     const { positionWrapper } = this.state;
     const { children, open, target } = this.props;
 
+    this._isMounted = true;
+
     log({
       title: 'init',
       data: {
@@ -181,6 +185,8 @@ export default class ReactFloater extends React.Component {
   componentWillUnmount() {
     if (!canUseDOM) return;
 
+    this._isMounted = false;
+
     if (this.popper) {
       this.popper.instance.destroy();
     }
@@ -236,10 +242,12 @@ export default class ReactFloater extends React.Component {
 
           getPopper(data, 'floater');
 
-          this.setState({
-            currentPlacement: data.placement,
-            status: STATUS.IDLE,
-          });
+          if (this._isMounted) {
+            this.setState({
+              currentPlacement: data.placement,
+              status: STATUS.IDLE,
+            });
+          }
 
           if (placement !== data.placement) {
             setTimeout(() => {
@@ -251,7 +259,7 @@ export default class ReactFloater extends React.Component {
           this.popper = data;
           const { currentPlacement } = this.state;
 
-          if (data.placement !== currentPlacement) {
+          if (this._isMounted && data.placement !== currentPlacement) {
             this.setState({ currentPlacement: data.placement });
           }
         },
@@ -276,7 +284,10 @@ export default class ReactFloater extends React.Component {
         },
         onCreate: (data) => {
           this.wrapperPopper = data;
-          this.setState({ statusWrapper: STATUS.IDLE });
+
+          if (this._isMounted) {
+            this.setState({ statusWrapper: STATUS.IDLE });
+          }
 
           getPopper(data, 'wrapper');
 
