@@ -38,17 +38,17 @@ declare module "react-floater" {
     /**
      * An element to trigger the Floater.
      */
-    children?: Node,
+    children?: React.ReactNode,
     /**
      * A React component or function to as a custom UI for the Floater.
      * The prop closeFloater will be available in your component.
      */
-    component?: Node,
+    component?: React.ReactNode,
     /**
      * The Floater content. It can be anything that can be rendered.
      * This is the only required props, unless you pass a component.
      */
-    content: Node,
+    content: React.ReactNode,
     /**
      * Log some basic actions.
      */
@@ -77,7 +77,7 @@ declare module "react-floater" {
     /**
      * It can be anything that can be rendered.
      */
-    footer?: Node,
+    footer?: React.ReactNode,
     /**
      * Get the pooper.js instance
      */
@@ -123,7 +123,7 @@ declare module "react-floater" {
     /**
      * It can be anything that can be rendered.
      */
-    title?: Node,
+    title?: React.ReactNode,
     /**
      * Position the wrapper relative to the target.
      */
@@ -131,7 +131,7 @@ declare module "react-floater" {
   }
 
   export class Joyride extends React.Component<Props> {
-    constructor( props: Props );
+    constructor(props: Props);
 
     static defaultProps: Props;
   }
