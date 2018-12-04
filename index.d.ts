@@ -130,7 +130,7 @@ declare module "react-floater" {
     wrapperOptions?: Object,
   }
 
-  export class Joyride extends React.Component<Props> {
+  export default class Joyride extends React.Component<Props> {
     constructor(props: Props);
 
     static defaultProps: Props;

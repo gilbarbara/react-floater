@@ -17,9 +17,9 @@
     "es",
     "lib",
     "src",
-    "*.ts"
+    "index.d.ts"
   ],
-  "types": "./src/index.d.ts",
+  "types": "./index.d.ts",
   "keywords": [
     "react",
     "react-component",
