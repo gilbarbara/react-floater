@@ -487,24 +487,9 @@ describe('ReactFloater', () => {
     });
 
     it('should be able to close the floater clicking the close button', () => {
-      console.log(floater.debug());
-      console.log('---');
-      console.log('---');
       floater.find('FloaterCloseBtn').simulate('click');
 
       expect(floater.state('status')).toBe('closing');
     });
-  });
-
-  describe('with `styles`', () => {
-
-  });
-
-  describe('with `target`', () => {
-
-  });
-
-  describe('with `wrapperOptions`', () => {
-
   });
 });
