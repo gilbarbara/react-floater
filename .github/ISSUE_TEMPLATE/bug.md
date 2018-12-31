@@ -1,6 +1,9 @@
 ---
 name: "\U0001F41B Bug report"
-about: A clear and concise description of what the bug is.
+about: A clear and concise description of what the bug is
+title: ''
+labels: ''
+assignees: ''
 
 ---
 

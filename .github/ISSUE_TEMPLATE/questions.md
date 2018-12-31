@@ -1,6 +1,9 @@
 ---
 name: "\U0001F4AC Questions / Help"
-about: If you have questions, please check our Discord or StackOverflow
+about: If you have questions, please check the Discord or StackOverflow
+title: ''
+labels: ''
+assignees: ''
 
 ---
 
@@ -12,4 +15,4 @@ For questions or help please see:
 
 - [The README documentation](https://github.com/gilbarbara/react-floater/blob/master/README.md)
 - [The Reactiflux #library channel on discord](https://discord.gg/W7yyNU)
-- The [react-joyride](https://stackoverflow.com/questions/tagged/react-joyride) tag on [StackOverflow](https://stackoverflow.com/questions/ask)
+- The [react-floater](https://stackoverflow.com/questions/tagged/react-floater) tag on [StackOverflow](https://stackoverflow.com/questions/ask)
