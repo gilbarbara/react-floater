@@ -43,7 +43,7 @@ export default class FloaterArrow extends React.Component {
 
   render() {
     const { placement, setArrowRef, styles } = this.props;
-    const { arrow: { color, display, length, position, spread } } = styles;
+    const { arrow: { color, display, length, margin, position, spread } } = styles;
     const arrowStyles = { display, position };
 
     let points;
@@ -54,22 +54,30 @@ export default class FloaterArrow extends React.Component {
     if (placement.startsWith('top')) {
       points = `0,0 ${x / 2},${y} ${x},0`;
       arrowStyles.bottom = 0;
+      arrowStyles.marginLeft = margin;
+      arrowStyles.marginRight = margin;
     }
     else if (placement.startsWith('bottom')) {
       points = `${x},${y} ${x / 2},0 0,${y}`;
       arrowStyles.top = 0;
+      arrowStyles.marginLeft = margin;
+      arrowStyles.marginRight = margin;
     }
     else if (placement.startsWith('left')) {
       y = spread;
       x = length;
       points = `0,0 ${x},${y / 2} 0,${y}`;
       arrowStyles.right = 0;
+      arrowStyles.marginTop = margin;
+      arrowStyles.marginBottom = margin;
     }
     else if (placement.startsWith('right')) {
       y = spread;
       x = length;
       points = `${x},${y} ${x},0 0,${y / 2}`;
       arrowStyles.left = 0;
+      arrowStyles.marginTop = margin;
+      arrowStyles.marginBottom = margin;
     }
 
     return (
