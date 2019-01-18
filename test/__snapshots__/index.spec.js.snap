@@ -68,7 +68,7 @@ exports[`ReactFloater with \`component\` as element should have rendered the com
           "color": "#fff",
           "display": "inline-flex",
           "length": 16,
-          "margin": 0,
+          "margin": 8,
           "position": "absolute",
           "spread": 32,
         },
@@ -183,8 +183,8 @@ exports[`ReactFloater with \`component\` as element should have rendered the com
         style={
           Object {
             "display": "inline-flex",
-            "marginLeft": 0,
-            "marginRight": 0,
+            "marginLeft": 8,
+            "marginRight": 8,
             "position": "absolute",
             "top": 0,
           }
@@ -271,7 +271,7 @@ exports[`ReactFloater with \`component\` as function should have rendered the co
           "color": "#fff",
           "display": "inline-flex",
           "length": 16,
-          "margin": 0,
+          "margin": 8,
           "position": "absolute",
           "spread": 32,
         },
@@ -386,8 +386,8 @@ exports[`ReactFloater with \`component\` as function should have rendered the co
         style={
           Object {
             "display": "inline-flex",
-            "marginLeft": 0,
-            "marginRight": 0,
+            "marginLeft": 8,
+            "marginRight": 8,
             "position": "absolute",
             "top": 0,
           }
