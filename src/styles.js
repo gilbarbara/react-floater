@@ -96,7 +96,7 @@ export default function getStyles(styles) {
       color: '#fff',
       display: 'inline-flex',
       length: 16,
-      margin: 0,
+      margin: 8,
       position: 'absolute',
       spread: 32,
     },
