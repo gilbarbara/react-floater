@@ -108,10 +108,8 @@
     "watch-run": "^1.2.5"
   },
   "scripts": {
-    "build": "npm run clean && npm run build:commonjs && npm run build:es",
-    "build:commonjs": "cross-env NODE_ENV=production rollup -c -f cjs -o lib/index.js",
-    "build:es": "cross-env NODE_ENV=production rollup -c",
-    "watch": "cross-env NODE_ENV=production rollup -cw",
+    "build": "cross-env NODE_ENV=production npm run clean && rollup -c",
+    "watch": "rollup -cw",
     "clean": "rimraf es && rimraf lib",
     "lint": "eslint --ext .js --ext .jsx src test",
     "test": "is-ci \"test:coverage\" \"test:watch\"",
