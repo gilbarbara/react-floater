@@ -8,10 +8,7 @@ import Container from './Container';
 
 export default class Floater extends React.Component {
   static propTypes = {
-    component: PropTypes.oneOfType([
-      PropTypes.func,
-      PropTypes.element,
-    ]),
+    component: PropTypes.oneOfType([PropTypes.func, PropTypes.element]),
     content: PropTypes.node,
     disableAnimation: PropTypes.bool.isRequired,
     footer: PropTypes.node,
@@ -30,7 +27,15 @@ export default class Floater extends React.Component {
   };
 
   get style() {
-    const { disableAnimation, component, placement, hideArrow, isPositioned, status, styles } = this.props;
+    const {
+      disableAnimation,
+      component,
+      placement,
+      hideArrow,
+      isPositioned,
+      status,
+      styles,
+    } = this.props;
     const {
       arrow: { length },
       floater,
@@ -45,14 +50,11 @@ export default class Floater extends React.Component {
     if (!hideArrow) {
       if (placement.startsWith('top')) {
         element.padding = `0 0 ${length}px`;
-      }
-      else if (placement.startsWith('bottom')) {
+      } else if (placement.startsWith('bottom')) {
         element.padding = `${length}px 0 0`;
-      }
-      else if (placement.startsWith('left')) {
+      } else if (placement.startsWith('left')) {
         element.padding = `0 ${length}px 0 0`;
-      }
-      else if (placement.startsWith('right')) {
+      } else if (placement.startsWith('right')) {
         element.padding = `0 0 0 ${length}px`;
       }
     }
@@ -84,13 +86,7 @@ export default class Floater extends React.Component {
   }
 
   render() {
-    const {
-      component,
-      handleClick: closeFn,
-      hideArrow,
-      setFloaterRef,
-      status,
-    } = this.props;
+    const { component, handleClick: closeFn, hideArrow, setFloaterRef, status } = this.props;
 
     const output = {};
     const classes = ['__floater'];
@@ -98,12 +94,10 @@ export default class Floater extends React.Component {
     if (component) {
       if (React.isValidElement(component)) {
         output.content = React.cloneElement(component, { closeFn });
-      }
-      else {
+      } else {
         output.content = component({ closeFn });
       }
-    }
-    else {
+    } else {
       output.content = <Container {...this.props} />;
     }
 
@@ -116,11 +110,7 @@ export default class Floater extends React.Component {
     }
 
     return (
-      <div
-        ref={setFloaterRef}
-        className={classes.join(' ')}
-        style={this.style}
-      >
+      <div ref={setFloaterRef} className={classes.join(' ')} style={this.style}>
         <div className="__floater__body">
           {output.content}
           {output.arrow}

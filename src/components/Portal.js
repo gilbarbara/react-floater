@@ -21,21 +21,12 @@ export default class ReactFloaterPortal extends React.Component {
   }
 
   static propTypes = {
-    children: PropTypes.oneOfType([
-      PropTypes.element,
-      PropTypes.array,
-    ]),
+    children: PropTypes.oneOfType([PropTypes.element, PropTypes.array]),
     hasChildren: PropTypes.bool,
-    id: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number,
-    ]),
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     placement: PropTypes.string,
     setRef: PropTypes.func.isRequired,
-    target: PropTypes.oneOfType([
-      PropTypes.object,
-      PropTypes.string,
-    ]),
+    target: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
     zIndex: PropTypes.number,
   };
 
@@ -72,10 +63,7 @@ export default class ReactFloaterPortal extends React.Component {
 
     /* istanbul ignore else */
     if (isReact16) {
-      return ReactDOM.createPortal(
-        children,
-        this.node,
-      );
+      return ReactDOM.createPortal(children, this.node);
     }
 
     const portal = ReactDOM.unstable_renderSubtreeIntoContainer(
@@ -93,7 +81,7 @@ export default class ReactFloaterPortal extends React.Component {
     const { hasChildren, placement, target } = this.props;
 
     if (!hasChildren) {
-      if ((target || placement === 'center')) {
+      if (target || placement === 'center') {
         return this.renderPortal();
       }
 

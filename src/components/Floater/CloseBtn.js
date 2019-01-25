@@ -5,12 +5,7 @@ const FloaterCloseBtn = ({ handleClick, styles }) => {
   const { color, height, width, ...style } = styles;
 
   return (
-    <button
-      aria-label="close"
-      onClick={handleClick}
-      style={style}
-      type="button"
-    >
+    <button aria-label="close" onClick={handleClick} style={style} type="button">
       <svg
         width={`${width}px`}
         height={`${height}px`}

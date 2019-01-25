@@ -32,15 +32,13 @@ export default class ReactFloaterWrapper extends React.Component {
       if (React.Children.count(children) === 1) {
         if (!React.isValidElement(children)) {
           element = <span>{children}</span>;
-        }
-        else {
+        } else {
           const refProp = is.function(children.type) ? 'innerRef' : 'ref';
           element = React.cloneElement(React.Children.only(children), {
             [refProp]: setChildRef,
           });
         }
-      }
-      else {
+      } else {
         element = children;
       }
     }
