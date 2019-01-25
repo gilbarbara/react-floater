@@ -146,25 +146,22 @@ export default class ReactFloater extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (!canUseDOM) return;
-
-    const { open, target, wrapperOptions } = this.props;
-
-    if (open !== nextProps.open) {
-      this.toggle();
-    }
-
-    if (wrapperOptions.position !== nextProps.wrapperOptions.position || target !== nextProps.target) {
-      this.changeWrapperPosition(nextProps);
-    }
-  }
-
   componentDidUpdate(prevProps, prevState) {
     if (!canUseDOM) return;
 
-    const { autoOpen, open } = this.props;
+    const { autoOpen, open, target, wrapperOptions } = this.props;
     const { changedFrom, changedTo } = comparator(prevState, this.state);
+
+    if (prevProps.open !== open) {
+      this.toggle();
+    }
+
+    if (
+      prevProps.wrapperOptions.position !== wrapperOptions.position
+      || prevProps.target !== target
+    ) {
+      this.changeWrapperPosition(this.props);
+    }
 
     if (changedTo('status', STATUS.IDLE) && open) {
       this.toggle(STATUS.OPEN);
@@ -568,9 +565,8 @@ export default class ReactFloater extends React.Component {
           id={id}
           placement={currentPlacement}
           setRef={this.setFloaterRef}
-          status={status}
-          zIndex={this.styles.options.zIndex}
           target={target}
+          zIndex={this.styles.options.zIndex}
         >
           <Floater
             component={component}
