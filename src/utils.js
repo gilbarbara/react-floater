@@ -1,3 +1,4 @@
+// @flow
 import ReactDOM from 'react-dom';
 import ExecutionEnvironment from 'exenv';
 import is from 'is-lite';
@@ -5,22 +6,8 @@ import is from 'is-lite';
 export const { canUseDOM } = ExecutionEnvironment;
 export const isReact16 = ReactDOM.createPortal !== undefined;
 
-export function comparator(data: Object, nextData: Object): Object {
-  return {
-    changedFrom(key: string, previous: string, actual: 'string'): boolean {
-      return data[key] === previous && nextData[key] === actual;
-    },
-    changedTo(key: string, actual: 'string'): boolean {
-      return data[key] !== actual && nextData[key] === actual;
-    },
-    changed(key: string): boolean {
-      return data[key] !== nextData[key];
-    },
-  };
-}
-
-export function isMobile() {
-  return ('ontouchstart' in window) && /Mobi/.test(navigator.userAgent);
+export function isMobile(): boolean {
+  return 'ontouchstart' in window && /Mobi/.test(navigator.userAgent);
 }
 
 export function getStyleComputedProperty(el: HTMLElement): Object {
@@ -31,7 +18,7 @@ export function getStyleComputedProperty(el: HTMLElement): Object {
   return getComputedStyle(el);
 }
 
-export function isFixed(el?: HTMLElement): boolean {
+export function isFixed(el: HTMLElement): boolean {
   if (!el) {
     return false;
   }
@@ -46,7 +33,7 @@ export function isFixed(el?: HTMLElement): boolean {
     return true;
   }
 
-  return isFixed(el.parentNode);
+  return el.parentNode instanceof HTMLElement ? isFixed(el.parentNode) : false;
 }
 
 /**
@@ -64,19 +51,20 @@ export function log({ title, data, warn = false, debug = false }: Object) {
   const logFn = warn ? console.warn || console.error : console.log;
 
   if (debug && title && data) {
-    console.groupCollapsed(`%creact-floater: ${title}`, 'color: #9b00ff; font-weight: bold; font-size: 12px;');
+    console.groupCollapsed(
+      `%creact-floater: ${title}`,
+      'color: #9b00ff; font-weight: bold; font-size: 12px;',
+    );
 
     if (Array.isArray(data)) {
       data.forEach(d => {
         if (is.plainObject(d) && d.key) {
           logFn.apply(console, [d.key, d.value]);
-        }
-        else {
+        } else {
           logFn.apply(console, [d]);
         }
       });
-    }
-    else {
+    } else {
       logFn.apply(console, [data]);
     }
 
@@ -85,18 +73,19 @@ export function log({ title, data, warn = false, debug = false }: Object) {
   /* eslint-enable */
 }
 
-export function on(element, event, cb, capture = false) {
+export function on(element: Element, event: string, cb: Function, capture: boolean = false) {
   element.addEventListener(event, cb, capture);
 }
 
-export function off(element, event, cb, capture = false) {
+export function off(element: Element, event: string, cb: Function, capture: boolean = false) {
   element.removeEventListener(event, cb, capture);
 }
 
-export function once(element, event, cb, capture = false) {
+export function once(element: Element, event: string, cb: Function, capture: boolean = false) {
   let nextCB;
 
-  nextCB = e => { //eslint-disable-line prefer-const
+  // eslint-disable-next-line prefer-const
+  nextCB = e => {
     cb(e);
     off(element, event, nextCB);
   };

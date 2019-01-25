@@ -16,12 +16,9 @@ const props = {
 };
 
 function setup(ownProps = props, children = 'Places') {
-  return mount(
-    <ReactFloater {...ownProps}>
-      {children}
-    </ReactFloater>,
-    { attachTo: document.getElementById('react') }
-  );
+  return mount(<ReactFloater {...ownProps}>{children}</ReactFloater>, {
+    attachTo: document.getElementById('react'),
+  });
 }
 
 describe('ReactFloater', () => {
@@ -30,12 +27,14 @@ describe('ReactFloater', () => {
 
   const updateTooltip = (event = 'click') => {
     if (event) {
-      floater.find('ReactFloaterWrapper').childAt(0).simulate(event);
+      floater
+        .find('ReactFloaterWrapper')
+        .childAt(0)
+        .simulate(event);
 
       if (['click', 'mouseEnter'].includes(event)) {
         floater.instance().handleTransitionEnd(); // mock transitionend
-      }
-      else {
+      } else {
         setTimeout(() => {
           floater.instance().handleTransitionEnd();
         }, floater.prop('eventDelay') * 1100);
@@ -107,15 +106,15 @@ describe('ReactFloater', () => {
 
   describe('with multiple children', () => {
     beforeAll(() => {
-      floater = setup(props, [
-        <div key={0}>Hello</div>,
-        <div key={1}>World</div>,
-      ]);
+      floater = setup(props, [<div key={0}>Hello</div>, <div key={1}>World</div>]);
       portal = floater.find('ReactFloaterPortal');
     });
 
     it('should render properly', () => {
-      const content = floater.find('ReactFloaterWrapper').childAt(0).find('div');
+      const content = floater
+        .find('ReactFloaterWrapper')
+        .childAt(0)
+        .find('div');
 
       expect(floater.find('ReactFloater')).toExist();
       expect(floater.find('ReactFloaterPortal')).toExist();
@@ -280,10 +279,10 @@ describe('ReactFloater', () => {
 
   describe('with `title`', () => {
     beforeAll(() => {
-      const Title = () => (<h3>My Title</h3>);
+      const Title = () => <h3>My Title</h3>;
       floater = setup({
         ...props,
-        title: (<Title />),
+        title: <Title />,
       });
     });
 
@@ -291,7 +290,7 @@ describe('ReactFloater', () => {
       expect(floater.find('Title')).toExist();
 
       floater.setProps({
-        title: (<div className="__title">Other Title</div>),
+        title: <div className="__title">Other Title</div>,
       });
 
       expect(floater.find('Title')).not.toExist();
@@ -308,7 +307,7 @@ describe('ReactFloater', () => {
       );
       floater = setup({
         ...props,
-        footer: (<Footer />),
+        footer: <Footer />,
       });
     });
 
@@ -316,7 +315,7 @@ describe('ReactFloater', () => {
       expect(floater.find('Footer')).toExist();
 
       floater.setProps({
-        footer: (<div className="__footer">Hello</div>),
+        footer: <div className="__footer">Hello</div>,
       });
 
       expect(floater.find('Footer')).not.toExist();

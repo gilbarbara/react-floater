@@ -16,9 +16,7 @@ module.exports = {
   testURL: 'http://localhost:3000',
   watchPlugins: ['jest-watch-typeahead/filename', 'jest-watch-typeahead/testname'],
   collectCoverage: false,
-  collectCoverageFrom: [
-    'src/**/*.js',
-  ],
+  collectCoverageFrom: ['src/**/*.js'],
   coverageThreshold: {
     global: {
       branches: 55,

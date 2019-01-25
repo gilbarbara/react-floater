@@ -21,19 +21,16 @@ export default class FloaterArrow extends React.Component {
       arrow.left = 0;
       arrow.right = 0;
       arrow.height = length;
-    }
-    else if (placement.startsWith('bottom')) {
+    } else if (placement.startsWith('bottom')) {
       arrow.left = 0;
       arrow.right = 0;
       arrow.top = 0;
       arrow.height = length;
-    }
-    else if (placement.startsWith('left')) {
+    } else if (placement.startsWith('left')) {
       arrow.right = 0;
       arrow.top = 0;
       arrow.bottom = 0;
-    }
-    else if (placement.startsWith('right')) {
+    } else if (placement.startsWith('right')) {
       arrow.left = 0;
       arrow.top = 0;
     }
@@ -43,7 +40,9 @@ export default class FloaterArrow extends React.Component {
 
   render() {
     const { placement, setArrowRef, styles } = this.props;
-    const { arrow: { color, display, length, margin, position, spread } } = styles;
+    const {
+      arrow: { color, display, length, margin, position, spread },
+    } = styles;
     const arrowStyles = { display, position };
 
     let points;
@@ -56,22 +55,19 @@ export default class FloaterArrow extends React.Component {
       arrowStyles.bottom = 0;
       arrowStyles.marginLeft = margin;
       arrowStyles.marginRight = margin;
-    }
-    else if (placement.startsWith('bottom')) {
+    } else if (placement.startsWith('bottom')) {
       points = `${x},${y} ${x / 2},0 0,${y}`;
       arrowStyles.top = 0;
       arrowStyles.marginLeft = margin;
       arrowStyles.marginRight = margin;
-    }
-    else if (placement.startsWith('left')) {
+    } else if (placement.startsWith('left')) {
       y = spread;
       x = length;
       points = `0,0 ${x},${y / 2} 0,${y}`;
       arrowStyles.right = 0;
       arrowStyles.marginTop = margin;
       arrowStyles.marginBottom = margin;
-    }
-    else if (placement.startsWith('right')) {
+    } else if (placement.startsWith('right')) {
       y = spread;
       x = length;
       points = `${x},${y} ${x},0 0,${y / 2}`;
@@ -81,17 +77,9 @@ export default class FloaterArrow extends React.Component {
     }
 
     return (
-      <div
-        className="__floater__arrow"
-        style={this.parentStyle}
-      >
+      <div className="__floater__arrow" style={this.parentStyle}>
         <span ref={setArrowRef} style={arrowStyles}>
-          <svg
-            width={x}
-            height={y}
-            version="1.1"
-            xmlns="http://www.w3.org/2000/svg"
-          >
+          <svg width={x} height={y} version="1.1" xmlns="http://www.w3.org/2000/svg">
             <polygon points={points} fill={color} />
           </svg>
         </span>

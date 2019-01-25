@@ -4,10 +4,11 @@ import isRequiredIf from 'react-proptype-conditional-require';
 import Popper from 'popper.js';
 import deepmerge from 'deepmerge';
 import is from 'is-lite';
+import treeChanges from 'tree-changes';
 
 import DEFAULTS from '../defaults';
 import STATUS from '../status';
-import { canUseDOM, comparator, isMobile, log, noop, once } from '../utils';
+import { canUseDOM, isMobile, log, noop, once } from '../utils';
 
 import Portal from './Portal';
 import Floater from './Floater';
@@ -48,10 +49,10 @@ export default class ReactFloater extends React.Component {
     autoOpen: PropTypes.bool,
     callback: PropTypes.func,
     children: PropTypes.node,
-    component: isRequiredIf(PropTypes.oneOfType([
-      PropTypes.func,
-      PropTypes.element,
-    ]), props => !props.content),
+    component: isRequiredIf(
+      PropTypes.oneOfType([PropTypes.func, PropTypes.element]),
+      props => !props.content,
+    ),
     content: isRequiredIf(PropTypes.node, props => !props.component),
     debug: PropTypes.bool,
     disableAnimation: PropTypes.bool,
@@ -62,36 +63,47 @@ export default class ReactFloater extends React.Component {
     footer: PropTypes.node,
     getPopper: PropTypes.func,
     hideArrow: PropTypes.bool,
-    id: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number,
-    ]),
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     isPositioned: PropTypes.bool,
     offset: PropTypes.number,
     open: PropTypes.bool,
     options: PropTypes.object,
     placement: PropTypes.oneOf([
-      'top', 'top-start', 'top-end',
-      'bottom', 'bottom-start', 'bottom-end',
-      'left', 'left-start', 'left-end',
-      'right', 'right-start', 'right-end',
-      'auto', 'center',
+      'top',
+      'top-start',
+      'top-end',
+      'bottom',
+      'bottom-start',
+      'bottom-end',
+      'left',
+      'left-start',
+      'left-end',
+      'right',
+      'right-start',
+      'right-end',
+      'auto',
+      'center',
     ]),
     showCloseButton: PropTypes.bool,
     style: PropTypes.object,
     styles: PropTypes.object,
-    target: PropTypes.oneOfType([
-      PropTypes.object,
-      PropTypes.string,
-    ]),
+    target: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
     title: PropTypes.node,
     wrapperOptions: PropTypes.shape({
       offset: PropTypes.number,
       placement: PropTypes.oneOf([
-        'top', 'top-start', 'top-end',
-        'bottom', 'bottom-start', 'bottom-end',
-        'left', 'left-start', 'left-end',
-        'right', 'right-start', 'right-end',
+        'top',
+        'top-start',
+        'top-end',
+        'bottom',
+        'bottom-start',
+        'bottom-end',
+        'left',
+        'left-start',
+        'left-end',
+        'right',
+        'right-start',
+        'right-end',
         'auto',
       ]),
       position: PropTypes.bool,
@@ -150,30 +162,28 @@ export default class ReactFloater extends React.Component {
     if (!canUseDOM) return;
 
     const { autoOpen, open, target, wrapperOptions } = this.props;
-    const { changedFrom, changedTo } = comparator(prevState, this.state);
+    const { changedFrom, changedTo } = treeChanges(prevState, this.state);
 
     if (prevProps.open !== open) {
       this.toggle();
     }
 
     if (
-      prevProps.wrapperOptions.position !== wrapperOptions.position
-      || prevProps.target !== target
+      prevProps.wrapperOptions.position !== wrapperOptions.position ||
+      prevProps.target !== target
     ) {
       this.changeWrapperPosition(this.props);
     }
 
     if (changedTo('status', STATUS.IDLE) && open) {
       this.toggle(STATUS.OPEN);
-    }
-    else if (changedFrom('status', STATUS.INIT, STATUS.IDLE) && autoOpen) {
+    } else if (changedFrom('status', STATUS.INIT, STATUS.IDLE) && autoOpen) {
       this.toggle(STATUS.OPEN);
     }
 
     if (
-      this.floaterRef
-      && (changedTo('status', STATUS.OPENING) || changedTo('status', STATUS.CLOSING)
-      )
+      this.floaterRef &&
+      (changedTo('status', STATUS.OPENING) || changedTo('status', STATUS.CLOSING))
     ) {
       once(this.floaterRef, 'transitionend', this.handleTransitionEnd);
     }
@@ -196,20 +206,15 @@ export default class ReactFloater extends React.Component {
   initPopper(target = this.target) {
     const { positionWrapper } = this.state;
     const { disableFlip, getPopper, hideArrow, offset, placement, wrapperOptions } = this.props;
-    const flipBehavior = placement === 'top' || placement === 'bottom' ? 'flip' : [
-      'right',
-      'bottom-end',
-      'top-end',
-      'left',
-      'top-start',
-      'bottom-start',
-    ];
+    const flipBehavior =
+      placement === 'top' || placement === 'bottom'
+        ? 'flip'
+        : ['right', 'bottom-end', 'top-end', 'left', 'top-start', 'bottom-start'];
 
     /* istanbul ignore else */
     if (placement === 'center') {
       this.setState({ status: STATUS.IDLE });
-    }
-    else if (target && this.floaterRef) {
+    } else if (target && this.floaterRef) {
       new Popper(target, this.floaterRef, {
         placement,
         modifiers: {
@@ -234,7 +239,7 @@ export default class ReactFloater extends React.Component {
           preventOverflow: this.options.preventOverflow,
           shift: this.options.shift,
         },
-        onCreate: (data) => {
+        onCreate: data => {
           this.popper = data;
 
           getPopper(data, 'floater');
@@ -252,7 +257,7 @@ export default class ReactFloater extends React.Component {
             }, 1);
           }
         },
-        onUpdate: (data) => {
+        onUpdate: data => {
           this.popper = data;
           const { currentPlacement } = this.state;
 
@@ -279,7 +284,7 @@ export default class ReactFloater extends React.Component {
             enabled: false,
           },
         },
-        onCreate: (data) => {
+        onCreate: data => {
           this.wrapperPopper = data;
 
           if (this._isMounted) {
@@ -315,21 +320,21 @@ export default class ReactFloater extends React.Component {
     this.setState({ status: nextStatus });
   }
 
-  setArrowRef = (ref) => {
+  setArrowRef = ref => {
     this.arrowRef = ref;
   };
 
-  setChildRef = (ref) => {
+  setChildRef = ref => {
     this.childRef = ref;
   };
 
-  setFloaterRef = (ref) => {
+  setFloaterRef = ref => {
     if (!this.floaterRef) {
       this.floaterRef = ref;
     }
   };
 
-  setWrapperRef = (ref) => {
+  setWrapperRef = ref => {
     this.wrapperRef = ref;
   };
 
@@ -342,12 +347,15 @@ export default class ReactFloater extends React.Component {
       this.wrapperPopper.instance.update();
     }
 
-    this.setState({
-      status: status === STATUS.OPENING ? STATUS.OPEN : STATUS.IDLE,
-    }, () => {
-      const { status: newStatus } = this.state;
-      callback(newStatus === STATUS.OPEN ? 'open' : 'close', this.props);
-    });
+    this.setState(
+      {
+        status: status === STATUS.OPENING ? STATUS.OPEN : STATUS.IDLE,
+      },
+      () => {
+        const { status: newStatus } = this.state;
+        callback(newStatus === STATUS.OPEN ? 'open' : 'close', this.props);
+      },
+    );
   };
 
   handleClick = () => {
@@ -361,9 +369,7 @@ export default class ReactFloater extends React.Component {
     if (this.event === 'click' || (this.event === 'hover' && positionWrapper)) {
       log({
         title: 'click',
-        data: [
-          { event, status: status === STATUS.OPEN ? 'closing' : 'opening' },
-        ],
+        data: [{ event, status: status === STATUS.OPEN ? 'closing' : 'opening' }],
         debug: this.debug,
       });
 
@@ -382,9 +388,7 @@ export default class ReactFloater extends React.Component {
     if (this.event === 'hover' && status === STATUS.IDLE) {
       log({
         title: 'mouseEnter',
-        data: [
-          { key: 'originalEvent', value: event },
-        ],
+        data: [{ key: 'originalEvent', value: event }],
         debug: this.debug,
       });
 
@@ -404,16 +408,17 @@ export default class ReactFloater extends React.Component {
     if (this.event === 'hover') {
       log({
         title: 'mouseLeave',
-        data: [
-          { key: 'originalEvent', value: event },
-        ],
+        data: [{ key: 'originalEvent', value: event }],
         debug: this.debug,
       });
 
       if (!eventDelay) {
         this.toggle(STATUS.IDLE);
-      }
-      else if ([STATUS.OPENING, STATUS.OPEN].includes(status) && !positionWrapper && !this.eventDelayTimeout) {
+      } else if (
+        [STATUS.OPENING, STATUS.OPEN].includes(status) &&
+        !positionWrapper &&
+        !this.eventDelayTimeout
+      ) {
         this.eventDelayTimeout = setTimeout(() => {
           delete this.eventDelayTimeout;
 
@@ -456,8 +461,7 @@ export default class ReactFloater extends React.Component {
 
       if (![STATUS.IDLE].includes(status) || ![STATUS.IDLE].includes(statusWrapper)) {
         wrapperStyles = nextStyles.wrapperPosition;
-      }
-      else {
+      } else {
         wrapperStyles = this.wrapperPopper.styles;
       }
 
@@ -477,8 +481,7 @@ export default class ReactFloater extends React.Component {
           ...nextStyles.wrapper,
           ...this.wrapperStyles,
         };
-      }
-      else if (!['relative', 'static'].includes(targetStyles.position)) {
+      } else if (!['relative', 'static'].includes(targetStyles.position)) {
         this.wrapperStyles = {};
 
         if (!positionWrapper) {
@@ -553,8 +556,7 @@ export default class ReactFloater extends React.Component {
 
     if (positionWrapper) {
       output.wrapperInPortal = wrapper;
-    }
-    else {
+    } else {
       output.wrapperAsChildren = wrapper;
     }
 

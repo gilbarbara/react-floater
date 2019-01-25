@@ -15,33 +15,37 @@ const FloaterContainer = ({
   styles,
 }) => {
   const output = {
-    content: React.isValidElement(content)
-      ? content
-      : <div className="__floater__content" style={styles.content}>{content}</div>,
+    content: React.isValidElement(content) ? (
+      content
+    ) : (
+      <div className="__floater__content" style={styles.content}>
+        {content}
+      </div>
+    ),
   };
 
   if (title) {
-    output.title = React.isValidElement(title)
-      ? title
-      : <div className="__floater__title" style={styles.title}>{title}</div>;
+    output.title = React.isValidElement(title) ? (
+      title
+    ) : (
+      <div className="__floater__title" style={styles.title}>
+        {title}
+      </div>
+    );
   }
 
   if (footer) {
-    output.footer = React.isValidElement(footer)
-      ? footer
-      : <div className="__floater__footer" style={styles.footer}>{footer}</div>;
+    output.footer = React.isValidElement(footer) ? (
+      footer
+    ) : (
+      <div className="__floater__footer" style={styles.footer}>
+        {footer}
+      </div>
+    );
   }
 
-  if (
-    (showCloseButton || positionWrapper)
-    && !is.boolean(open)
-  ) {
-    output.close = (
-      <CloseBtn
-        styles={styles.close}
-        handleClick={handleClick}
-      />
-    );
+  if ((showCloseButton || positionWrapper) && !is.boolean(open)) {
+    output.close = <CloseBtn styles={styles.close} handleClick={handleClick} />;
   }
   return (
     <div className="__floater__container" style={styles.container}>
