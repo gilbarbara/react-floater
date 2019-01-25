@@ -16,7 +16,6 @@
   "files": [
     "es",
     "lib",
-    "src",
     "index.d.ts"
   ],
   "types": "./index.d.ts",
