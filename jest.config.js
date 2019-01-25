@@ -2,26 +2,19 @@ module.exports = {
   transform: {
     '^.+\\.jsx?$': 'babel-jest',
   },
-  moduleFileExtensions: [
-    'js',
-    'json',
-  ],
-  moduleDirectories: [
-    'node_modules',
-    'src',
-    './',
-  ],
-  setupFiles: [
-    '<rootDir>/test/__setup__/shim.js',
-    '<rootDir>/test/__setup__/index.js',
-  ],
-  setupTestFrameworkScriptFile: 'jest-enzyme/lib/index.js',
-  snapshotSerializers: [
-    'enzyme-to-json/serializer',
-  ],
-  testEnvironmentOptions: { pretendToBeVisual: true },
+  moduleFileExtensions: ['js', 'jsx', 'json'],
+  moduleDirectories: ['node_modules', 'src', './'],
+  moduleNameMapper: {
+    '^.+\\.(css|scss)$': '<rootDir>/test/__setup__/styleMock.js',
+    '^.+\\.(jpe?g|png|gif|ttf|eot|svg|md)$': '<rootDir>/test/__setup__/fileMock.js',
+  },
+  setupFiles: ['<rootDir>/test/__setup__/setupFiles.js'],
+  setupFilesAfterEnv: ['<rootDir>/test/__setup__/setupTests.js'],
+  snapshotSerializers: ['enzyme-to-json/serializer'],
+  testEnvironmentOptions: { resources: 'usable' },
   testRegex: '/test/.*?\\.(test|spec)\\.js$',
   testURL: 'http://localhost:3000',
+  watchPlugins: ['jest-watch-typeahead/filename', 'jest-watch-typeahead/testname'],
   collectCoverage: false,
   collectCoverageFrom: [
     'src/**/*.js',
@@ -34,5 +27,5 @@ module.exports = {
       statements: 65,
     },
   },
-  verbose: true,
+  verbose: false,
 };

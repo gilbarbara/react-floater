@@ -39,6 +39,7 @@
   "dependencies": {
     "deepmerge": "^3.1.0",
     "exenv": "^1.2.2",
+    "is-ci-cli": "^1.1.1",
     "is-lite": "^0.2.2",
     "popper.js": "^1.14.6",
     "react-proptype-conditional-require": "^1.0.4"
@@ -89,8 +90,11 @@
     "eslint-plugin-react": "^7.12.4",
     "flow-bin": "^0.91.0",
     "husky": "^1.3.1",
-    "jest": "^23.6.0",
+    "jest": "^24.0.0",
+    "jest-chain": "^1.1.2",
     "jest-enzyme": "^7.0.1",
+    "jest-extended": "^0.11.0",
+    "jest-watch-typeahead": "^0.2.1",
     "prop-types": "^15.6.2",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
@@ -110,10 +114,11 @@
     "watch": "cross-env NODE_ENV=production rollup -cw",
     "clean": "rimraf es && rimraf lib",
     "lint": "eslint --ext .js --ext .jsx src test",
-    "test": "jest --coverage",
-    "test:watch": "jest --watch",
+    "test": "is-ci \"test:coverage\" \"test:watch\"",
+    "test:coverage": "jest --bail --coverage",
+    "test:watch": "jest --watch --verbose",
     "bundlesize": "bundlesize",
-    "precommit": "npm run lint && npm test && bundlesize",
+    "precommit": "npm run lint && npm run test:coverage",
     "prepublishOnly": "npm run build"
   },
   "bundlesize": [
