@@ -43,6 +43,18 @@ export default class ReactFloater extends React.Component {
     };
 
     this._isMounted = false;
+
+    if (canUseDOM) {
+      window.addEventListener('load', () => {
+        if (this.popper) {
+          this.popper.instance.update();
+        }
+
+        if (this.wrapperPopper) {
+          this.wrapperPopper.instance.update();
+        }
+      });
+    }
   }
 
   static propTypes = {
@@ -179,6 +191,10 @@ export default class ReactFloater extends React.Component {
       this.toggle(STATUS.OPEN);
     } else if (changedFrom('status', STATUS.INIT, STATUS.IDLE) && autoOpen) {
       this.toggle(STATUS.OPEN);
+    }
+
+    if (this.popper && changedTo('status', STATUS.OPENING)) {
+      this.popper.instance.update();
     }
 
     if (
@@ -507,6 +523,8 @@ export default class ReactFloater extends React.Component {
   }
 
   get target() {
+    if (!canUseDOM) return null;
+
     const { target } = this.props;
 
     if (target) {

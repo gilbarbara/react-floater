@@ -8,7 +8,7 @@ import Styled from './__fixtures__/Styled';
 jest.useFakeTimers();
 
 const mockCallback = jest.fn();
-const mockGetPopper = jest.fn();
+const mockGetPopper = jest.fn(() => ({ instance: {} }));
 
 const props = {
   content: 'Hello! This is my content!',
