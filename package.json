@@ -16,9 +16,9 @@
   "files": [
     "es",
     "lib",
-    "index.d.ts"
+    "types/*.ts"
   ],
-  "types": "./index.d.ts",
+  "types": "./types/index.d.ts",
   "keywords": [
     "react",
     "react-component",
@@ -67,6 +67,7 @@
     "@babel/preset-env": "7.3.1",
     "@babel/preset-flow": "7.0.0",
     "@babel/preset-react": "7.0.0",
+    "@types/react": "^16.7.20",
     "autoprefixer": "^9.4.6",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
@@ -77,6 +78,7 @@
     "bundlesize": "^0.17.1",
     "chalk": "^2.4.2",
     "cross-env": "^5.2.0",
+    "dtslint": "^0.4.2",
     "enzyme": "^3.8.0",
     "enzyme-adapter-react-16": "^1.8.0",
     "enzyme-to-json": "^3.3.5",
