@@ -177,7 +177,14 @@ export default class ReactFloater extends React.Component {
     const { changedFrom, changedTo } = treeChanges(prevState, this.state);
 
     if (prevProps.open !== open) {
-      this.toggle();
+      let forceStatus;
+
+      // always follow `open` in controlled mode
+      if (is.boolean(open)) {
+        forceStatus = open ? STATUS.OPENING : STATUS.CLOSING;
+      }
+
+      this.toggle(forceStatus);
     }
 
     if (
