@@ -16,9 +16,7 @@ const props = {
 };
 
 function setup(ownProps = props, children = 'Places') {
-  return mount(<ReactFloater {...ownProps}>{children}</ReactFloater>, {
-    attachTo: document.getElementById('react'),
-  });
+  return mount(<ReactFloater {...ownProps}>{children}</ReactFloater>);
 }
 
 describe('ReactFloater', () => {

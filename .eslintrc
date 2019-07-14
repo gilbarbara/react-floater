@@ -43,7 +43,6 @@
     "function-paren-newline": "off",
     "generator-star-spacing": "off",
     "global-require": "off",
-    "indent": ["warn", 2, { "SwitchCase": 1 }],
     "max-len": "off",
     "newline-per-chained-call": ["warn", { "ignoreChainWithDepth": 5 }],
     "no-case-declarations": "warn",
