@@ -77,6 +77,7 @@ export default class ReactFloater extends React.Component {
     hideArrow: PropTypes.bool,
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     isPositioned: PropTypes.bool,
+    nodeId: PropTypes.string,
     offset: PropTypes.number,
     open: PropTypes.bool,
     options: PropTypes.object,
@@ -556,6 +557,7 @@ export default class ReactFloater extends React.Component {
       hideArrow,
       id,
       isPositioned,
+      nodeId,
       open,
       showCloseButton,
       style,
@@ -590,6 +592,7 @@ export default class ReactFloater extends React.Component {
         <Portal
           hasChildren={!!children}
           id={id}
+          nodeId={nodeId}
           placement={currentPlacement}
           setRef={this.setFloaterRef}
           target={target}

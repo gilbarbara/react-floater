@@ -9,21 +9,28 @@ export default class ReactFloaterPortal extends React.Component {
 
     if (!canUseDOM) return;
 
-    this.node = document.createElement('div');
-    if (props.id) {
+    /**
+     * Portal to an existing DOM node.
+     */
+    const { nodeId } = this.props;
+    this.node = nodeId ? document.getElementById(nodeId) : document.createElement('div');
+    if (props.id && !nodeId) {
       this.node.id = props.id;
     }
     if (props.zIndex) {
       this.node.style.zIndex = props.zIndex;
     }
-
-    document.body.appendChild(this.node);
+    /**
+     * Append DOM node only if it's a newly created one.
+     */
+    if (!nodeId) document.body.appendChild(this.node);
   }
 
   static propTypes = {
     children: PropTypes.oneOfType([PropTypes.element, PropTypes.array]),
     hasChildren: PropTypes.bool,
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    nodeId: PropTypes.string,
     placement: PropTypes.string,
     setRef: PropTypes.func.isRequired,
     target: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
@@ -49,11 +56,15 @@ export default class ReactFloaterPortal extends React.Component {
   componentWillUnmount() {
     if (!canUseDOM || !this.node) return;
 
-    if (!isReact16) {
+    const { nodeId } = this.props;
+
+    if (!isReact16 && !nodeId) {
       ReactDOM.unmountComponentAtNode(this.node);
     }
-
-    document.body.removeChild(this.node);
+    /**
+     * If it's an existing DOM node, don't remove it.
+     */
+    if (!nodeId) document.body.removeChild(this.node);
   }
 
   renderPortal() {
