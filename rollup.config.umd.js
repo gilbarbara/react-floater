@@ -10,6 +10,11 @@ export default {
       format: 'umd',
       name: 'Floater',
       intro: 'var global = typeof self !== undefined ? self : this;',
+      globals: {
+        react: 'React',
+        'prop-types': 'PropTypes',
+        'react-dom': 'ReactDOM',
+      },
     },
   ],
   external: [...Object.keys(packageJSON.peerDependencies)],
