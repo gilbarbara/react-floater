@@ -6,8 +6,8 @@ export default {
   input: 'src/index.js',
   output: [
     {
-      file: 'lib/index.iife.js',
-      format: 'iife',
+      file: 'lib/index.umd.js',
+      format: 'umd',
       name: 'Floater',
       intro: 'var global = typeof self !== undefined ? self : this;',
     },
