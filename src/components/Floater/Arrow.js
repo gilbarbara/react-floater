@@ -13,6 +13,7 @@ export default class FloaterArrow extends React.Component {
     const { length } = styles.arrow;
     const arrow = {
       position: 'absolute',
+      width: '100%',
     };
 
     /* istanbul ignore else */
