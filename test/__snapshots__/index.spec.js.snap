@@ -176,6 +176,7 @@ exports[`ReactFloater with \`component\` as element should have rendered the com
           "position": "absolute",
           "right": 0,
           "top": 0,
+          "width": "100%",
         }
       }
     >
@@ -379,6 +380,7 @@ exports[`ReactFloater with \`component\` as function should have rendered the co
           "position": "absolute",
           "right": 0,
           "top": 0,
+          "width": "100%",
         }
       }
     >
