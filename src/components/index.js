@@ -76,7 +76,6 @@ export default class ReactFloater extends React.Component {
     getPopper: PropTypes.func,
     hideArrow: PropTypes.bool,
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    isPositioned: PropTypes.bool,
     offset: PropTypes.number,
     open: PropTypes.bool,
     options: PropTypes.object,
@@ -555,7 +554,6 @@ export default class ReactFloater extends React.Component {
       footer,
       hideArrow,
       id,
-      isPositioned,
       open,
       showCloseButton,
       style,
@@ -602,7 +600,6 @@ export default class ReactFloater extends React.Component {
             footer={footer}
             handleClick={this.handleClick}
             hideArrow={hideArrow || currentPlacement === 'center'}
-            isPositioned={isPositioned}
             open={open}
             placement={currentPlacement}
             positionWrapper={positionWrapper}

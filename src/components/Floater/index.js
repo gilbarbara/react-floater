@@ -14,7 +14,6 @@ export default class Floater extends React.Component {
     footer: PropTypes.node,
     handleClick: PropTypes.func.isRequired,
     hideArrow: PropTypes.bool.isRequired,
-    isPositioned: PropTypes.bool,
     open: PropTypes.bool,
     placement: PropTypes.string.isRequired,
     positionWrapper: PropTypes.bool.isRequired,
@@ -27,15 +26,7 @@ export default class Floater extends React.Component {
   };
 
   get style() {
-    const {
-      disableAnimation,
-      component,
-      placement,
-      hideArrow,
-      isPositioned,
-      status,
-      styles,
-    } = this.props;
+    const { disableAnimation, component, placement, hideArrow, status, styles } = this.props;
     const {
       arrow: { length },
       floater,
@@ -67,7 +58,7 @@ export default class Floater extends React.Component {
       element = { ...element, ...floaterClosing };
     }
 
-    if (status === STATUS.OPEN && !disableAnimation && !isPositioned) {
+    if (status === STATUS.OPEN && !disableAnimation) {
       element = { ...element, ...floaterWithAnimation };
     }
 
