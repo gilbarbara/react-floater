@@ -6,8 +6,8 @@ React Floater
 [![Maintainability](https://api.codeclimate.com/v1/badges/a3457f536c0915c0935b/maintainability)](https://codeclimate.com/github/gilbarbara/react-floater/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/a3457f536c0915c0935b/test_coverage)](https://codeclimate.com/github/gilbarbara/react-floater/test_coverage)
 
-### View the [demo](https://84vn36m178.codesandbox.io/)
-You can view and edit the code for each Floater [here](https://codesandbox.io/s/84vn36m178)
+### View the [demo](https://d0pt7.csb.app)
+You can view and edit the code for each Floater [here](https://codesandbox.io/s/github/gilbarbara/react-floater-demo)
 
 ## Usage
 
