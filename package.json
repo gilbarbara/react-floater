@@ -115,8 +115,8 @@
   },
   "scripts": {
     "build": "npm run clean && npm run build:base && npm run build:umd",
-    "build:base": "cross-env NODE_ENV=production rollup -c"
-    "build:umd": "cross-env NODE_ENV=production rollup -c rollup.config.umd.js"
+    "build:base": "cross-env NODE_ENV=production rollup -c",
+    "build:umd": "cross-env NODE_ENV=production rollup -c rollup.config.umd.js",
     "watch": "rollup -cw",
     "clean": "rimraf es && rimraf lib",
     "lint": "eslint --ext .js --ext .jsx src test",
