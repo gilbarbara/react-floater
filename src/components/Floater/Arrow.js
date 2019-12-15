@@ -12,6 +12,7 @@ export default class FloaterArrow extends React.Component {
     const { placement, styles } = this.props;
     const { length } = styles.arrow;
     const arrow = {
+      pointerEvents: 'none',
       position: 'absolute',
       width: '100%',
     };

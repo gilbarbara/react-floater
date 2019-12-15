@@ -94,6 +94,7 @@ exports[`ReactFloater with \`component\` as element should have rendered the com
           "minWidth": 200,
           "padding": 20,
           "position": "relative",
+          "zIndex": 10,
         },
         "content": Object {
           "fontSize": 15,
@@ -173,6 +174,7 @@ exports[`ReactFloater with \`component\` as element should have rendered the com
         Object {
           "height": 16,
           "left": 0,
+          "pointerEvents": "none",
           "position": "absolute",
           "right": 0,
           "top": 0,
@@ -298,6 +300,7 @@ exports[`ReactFloater with \`component\` as function should have rendered the co
           "minWidth": 200,
           "padding": 20,
           "position": "relative",
+          "zIndex": 10,
         },
         "content": Object {
           "fontSize": 15,
@@ -377,6 +380,7 @@ exports[`ReactFloater with \`component\` as function should have rendered the co
         Object {
           "height": 16,
           "left": 0,
+          "pointerEvents": "none",
           "position": "absolute",
           "right": 0,
           "top": 0,
