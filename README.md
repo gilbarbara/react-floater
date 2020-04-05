@@ -111,7 +111,7 @@ Only valid for event type `hover`.
 It can be anything that can be rendered.
 
 **getPopper** {function}
-Get the pooper.js instance. It receives with 2 parameters:
+Get the popper.js instance. It receives with 2 parameters:
 
 - **popper** {object} the popper object  
 - **origin** {object} `floater` or `wrapper`
