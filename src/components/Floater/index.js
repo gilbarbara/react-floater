@@ -76,6 +76,10 @@ export default class Floater extends React.Component {
     };
   }
 
+  handleClick = e => {
+    e.stopPropagation();
+  };
+
   render() {
     const { component, handleClick: closeFn, hideArrow, setFloaterRef, status } = this.props;
 
@@ -101,7 +105,12 @@ export default class Floater extends React.Component {
     }
 
     return (
-      <div ref={setFloaterRef} className={classes.join(' ')} style={this.style}>
+      <div
+        ref={setFloaterRef}
+        className={classes.join(' ')}
+        style={this.style}
+        onClick={this.handleClick}
+      >
         <div className="__floater__body">
           {output.content}
           {output.arrow}
