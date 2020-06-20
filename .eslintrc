@@ -122,6 +122,7 @@
         "requireReturnDescription": false
       }
     ],
+    "flowtype/no-types-missing-file-annotation": "off",
     "flowtype/require-parameter-type": ["warn", { "excludeArrowFunctions": true }],
     "flowtype/require-return-type": ["warn", "always", { "excludeArrowFunctions": true }],
     "flowtype/space-after-type-colon": ["error", "always"],
@@ -137,6 +138,7 @@
     "jsx-a11y/no-static-element-interactions": "off",
     "jsx-quotes": "warn",
     "react/forbid-prop-types": "off",
+    "react/jsx-boolean-value": "off",
     "react/jsx-closing-bracket-location": ["warn", "line-aligned"],
     "react/jsx-filename-extension": "off",
     "react/jsx-first-prop-new-line": ["warn", "multiline"],
@@ -144,19 +146,19 @@
     "react/jsx-indent-props": ["warn", 2],
     "react/jsx-key": "warn",
     "react/jsx-max-props-per-line": ["warn", { "maximum": 4 }],
+    "react/jsx-no-duplicate-props": "warn",
     "react/jsx-no-target-blank": "off",
+    "react/jsx-one-expression-per-line": "off",
+    "react/jsx-pascal-case": "warn",
+    "react/jsx-props-no-spreading": "off",
     "react/no-array-index-key": "off",
     "react/no-danger": "off",
     "react/no-did-mount-set-state": "warn",
     "react/no-did-update-set-state": "warn",
-    "react/jsx-boolean-value": "off",
-    "react/jsx-no-duplicate-props": "warn",
-    "react/jsx-one-expression-per-line": "off",
-    "react/jsx-pascal-case": "warn",
     "react/no-direct-mutation-state": "warn",
+    "react/no-unescaped-entities": "off",
     "react/no-unused-prop-types": "warn",
     "react/no-unused-state": "warn",
-    "react/no-unescaped-entities": "off",
     "react/prefer-stateless-function": "off",
     "react/prop-types": "error",
     "react/require-default-props": "off",
@@ -189,6 +191,7 @@
           ]
         }
       }
-    ]
+    ],
+    "react/static-property-placement": "off"
   }
 }

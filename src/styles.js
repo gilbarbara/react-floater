@@ -59,6 +59,7 @@ export default function getStyles(styles) {
       minWidth: 200,
       padding: 20,
       position: 'relative',
+      zIndex: 10,
     },
     title: {
       borderBottom: '1px solid #555',

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Data, Modifiers } from 'popper.js';
 
 export type Placement =
   | 'top'
@@ -18,25 +19,31 @@ export type Placement =
 
 export type Action = 'open' | 'close';
 
-export interface Options {
-  arrow?: object;
-  computeStyle?: object;
-  flip?: object;
-  keepTogether?: object;
-  hide?: object;
-  inner?: object;
-  offset?: object;
-  preventOverflow?: object;
-  shift?: object;
-}
-
-export interface CallBackProps {
-  action: Action;
-  props: Props;
-}
-
 export interface RenderProps {
   closeFn: () => void;
+}
+
+export interface Styles {
+  arrow: React.CSSProperties & {
+    length?: number;
+    spread?: number;
+  };
+  close: React.CSSProperties;
+  container: React.CSSProperties;
+  content: React.CSSProperties;
+  floater: React.CSSProperties;
+  floaterOpening: React.CSSProperties;
+  floaterWithAnimation: React.CSSProperties;
+  floaterWithComponent: React.CSSProperties;
+  floaterClosing: React.CSSProperties;
+  floaterCentered: React.CSSProperties;
+  footer: React.CSSProperties;
+  options: {
+    zIndex?: number;
+  };
+  title: React.CSSProperties;
+  wrapper: React.CSSProperties;
+  wrapperPosition: React.CSSProperties;
 }
 
 export interface Props {
@@ -47,21 +54,11 @@ export interface Props {
   /**
    * It will be called when the Floater change state
    */
-  callback?: () => CallBackProps;
+  callback?: (action: Action, props: PropsWithComponent | PropsWithContent) => void;
   /**
    * An element to trigger the Floater.
    */
   children?: React.ReactNode;
-  /**
-   * A React component or function to as a custom UI for the Floater.
-   * The prop closeFloater will be available in your component.
-   */
-  component?: (renderProps: RenderProps) => React.ReactNode;
-  /**
-   * The Floater content. It can be anything that can be rendered.
-   * This is the only required props, unless you pass a component.
-   */
-  content: React.ReactNode;
   /**
    * Log some basic actions.
    */
@@ -82,7 +79,7 @@ export interface Props {
    * The event that will trigger the Floater. It can be hover | click.
    * These won't work in controlled mode.
    */
-  event?: string;
+  event?: 'click' | 'hover';
   /**
    * The amount of time (in seconds) that the floater should wait after a mouseLeave event before hiding. Only valid for event type hover.
    */
@@ -92,9 +89,9 @@ export interface Props {
    */
   footer?: React.ReactNode;
   /**
-   * Get the pooper.js instance
+   * Get the popper.js instance
    */
-  getPopper?: () => void;
+  getPopper?: (popper: Data, origin: 'floater' | 'wrapper') => void;
   /**
    * Don't show the arrow. Useful for centered or modal layout.
    */
@@ -103,19 +100,18 @@ export interface Props {
    * In case that you need to identify the portal.
    */
   id?: string | number;
-  isPositioned?: boolean;
   /**
    * The distance between the Floater and its target in pixels.
    */
   offset?: number;
   /**
-   * The switch between normal and controlled modes.
+   * Controlled mode.
    */
   open?: boolean;
   /**
    * Customize popper.js modifiers.
    */
-  options?: Options;
+  options?: Modifiers;
   /**
    * The placement of the Floater. It will update the position if there's no space available.
    */
@@ -124,15 +120,15 @@ export interface Props {
    * It will show a ⨉ button to close the Floater.
    */
   showCloseButton?: boolean;
-  style?: object;
+  style?: React.CSSProperties;
   /**
    * Customize the default UI.
    */
-  styles?: object;
+  styles?: Partial<Styles>;
   /**
    * The target used to calculate the Floater position. If it's not set, it will use the `children` as the target.
    */
-  target?: string | object;
+  target?: string | HTMLElement | null;
   /**
    * It can be anything that can be rendered.
    */
@@ -140,7 +136,27 @@ export interface Props {
   /**
    * Position the wrapper relative to the target.
    */
-  wrapperOptions?: object;
+  wrapperOptions?: {
+    offset?: number;
+    placement?: Omit<Placement, 'center'>;
+    position?: boolean;
+  };
 }
 
-export default class ReactFloater extends React.Component<Props> {}
+export interface PropsWithComponent extends Props {
+  /**
+   * A React component or function to as a custom UI for the Floater.
+   * The prop closeFloater will be available in your component.
+   */
+  component: (renderProps: RenderProps) => React.ReactNode;
+}
+
+export interface PropsWithContent extends Props {
+  /**
+   * The Floater content. It can be anything that can be rendered.
+   * This is the only required props, unless you pass a component.
+   */
+  content: React.ReactNode;
+}
+
+export default class ReactFloater extends React.Component<PropsWithComponent | PropsWithContent> {}

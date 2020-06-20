@@ -239,29 +239,26 @@ export default class ReactFloater extends React.Component {
     if (placement === 'center') {
       this.setState({ status: STATUS.IDLE });
     } else if (target && this.floaterRef) {
+      const { arrow, flip, offset: offsetOptions, ...rest } = this.options;
+
       new Popper(target, this.floaterRef, {
         placement,
         modifiers: {
           arrow: {
             enabled: !hideArrow,
             element: this.arrowRef,
-            ...this.options.arrow,
+            ...arrow,
           },
-          computeStyle: this.options.computeStyle,
           flip: {
             enabled: !disableFlip,
             behavior: flipBehavior,
-            ...this.options.flip,
+            ...flip,
           },
-          keepTogether: this.options.keepTogether,
-          hide: this.options.hide,
-          inner: this.options.inner,
           offset: {
             offset: `0, ${offset}px`,
-            ...this.options.offset,
+            ...offsetOptions,
           },
-          preventOverflow: this.options.preventOverflow,
-          shift: this.options.shift,
+          ...rest,
         },
         onCreate: data => {
           this.popper = data;
@@ -605,7 +602,6 @@ export default class ReactFloater extends React.Component {
             footer={footer}
             handleClick={this.handleClick}
             hideArrow={hideArrow || currentPlacement === 'center'}
-            isPositioned={isPositioned}
             open={open}
             placement={currentPlacement}
             positionWrapper={positionWrapper}
