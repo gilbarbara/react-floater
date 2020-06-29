@@ -434,6 +434,16 @@ describe('ReactFloater', () => {
 
       expect(floater.state('status')).toBe('closing');
     });
+
+    it('should pass floater status to the callback', () => {
+      updateTooltip('click');
+
+      expect(floater.find('input').props().value).toBe('open');
+
+      floater.find('.__floater__body button').simulate('click');
+
+      expect(floater.find('input').props().value).toBe('closing');
+    });
   });
 
   describe('with `component` as element', () => {

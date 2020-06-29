@@ -86,7 +86,7 @@ export default class Floater extends React.Component {
       if (React.isValidElement(component)) {
         output.content = React.cloneElement(component, { closeFn });
       } else {
-        output.content = component({ closeFn });
+        output.content = component({ closeFn, status });
       }
     } else {
       output.content = <Container {...this.props} />;
