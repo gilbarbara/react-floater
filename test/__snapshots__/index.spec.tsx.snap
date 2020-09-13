@@ -1,0 +1,59 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ReactFloater with \`component\` as element should have rendered the component 1`] = `
+<div class="__floater__body">
+  <div class="sc-bdfBwQ gbZmDx">
+    <div>
+      Styled
+    </div>
+    <button type="button">
+      close
+    </button>
+  </div>
+  <div class="__floater__arrow"
+       style="pointer-events: none; position: absolute; width: 100%; left: 0px; right: 0px; top: 0px; height: 16px;"
+  >
+    <span style="display: inline-flex; position: absolute; margin-left: 8px; margin-right: 8px;">
+      <svg width="32"
+           height="16"
+           version="1.1"
+           xmlns="http://www.w3.org/2000/svg"
+      >
+        <polygon points="32,16 16,0 0,16"
+                 fill="#fff"
+        >
+        </polygon>
+      </svg>
+    </span>
+  </div>
+</div>
+`;
+
+exports[`ReactFloater with \`component\` as function should have rendered the component 1`] = `
+<div class="__floater__body">
+  <div class="sc-bdfBwQ gbZmDx">
+    <div>
+      Styled
+    </div>
+    <button type="button">
+      close
+    </button>
+  </div>
+  <div class="__floater__arrow"
+       style="pointer-events: none; position: absolute; width: 100%; left: 0px; right: 0px; top: 0px; height: 16px;"
+  >
+    <span style="display: inline-flex; position: absolute; margin-left: 8px; margin-right: 8px;">
+      <svg width="32"
+           height="16"
+           version="1.1"
+           xmlns="http://www.w3.org/2000/svg"
+      >
+        <polygon points="32,16 16,0 0,16"
+                 fill="#fff"
+        >
+        </polygon>
+      </svg>
+    </span>
+  </div>
+</div>
+`;

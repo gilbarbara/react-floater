@@ -1,17 +1,17 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import * as React from 'react';
+import { Styles } from '../../types';
 
-export default class FloaterArrow extends React.Component {
-  static propTypes = {
-    placement: PropTypes.string.isRequired,
-    setArrowRef: PropTypes.func.isRequired,
-    styles: PropTypes.object.isRequired,
-  };
+interface Props {
+  arrowRef: React.Ref<HTMLSpanElement>;
+  placement: string;
+  styles: Styles;
+}
 
-  get parentStyle() {
+export default class FloaterArrow extends React.PureComponent<Props> {
+  private get parentStyle() {
     const { placement, styles } = this.props;
     const { length } = styles.arrow;
-    const arrow = {
+    const arrow: React.CSSProperties = {
       pointerEvents: 'none',
       position: 'absolute',
       width: '100%',
@@ -40,12 +40,12 @@ export default class FloaterArrow extends React.Component {
     return arrow;
   }
 
-  render() {
-    const { placement, setArrowRef, styles } = this.props;
+  render(): JSX.Element {
+    const { arrowRef, placement, styles } = this.props;
     const {
       arrow: { color, display, length, margin, position, spread },
     } = styles;
-    const arrowStyles = { display, position };
+    const arrowStyles: React.CSSProperties = { display, position };
 
     let points;
     let x = spread;
@@ -80,7 +80,7 @@ export default class FloaterArrow extends React.Component {
 
     return (
       <div className="__floater__arrow" style={this.parentStyle}>
-        <span ref={setArrowRef} style={arrowStyles}>
+        <span ref={arrowRef} style={arrowStyles}>
           <svg width={x} height={y} version="1.1" xmlns="http://www.w3.org/2000/svg">
             <polygon points={points} fill={color} />
           </svg>

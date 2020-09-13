@@ -1,7 +1,8 @@
-import React from 'react';
-import { mount } from 'enzyme';
+import * as React from 'react';
+import { mount, ReactWrapper } from 'enzyme';
 
-import ReactFloater from '../src/index';
+import ReactFloater from '../src';
+import { Props, State } from '../src/types';
 
 import Styled from './__fixtures__/Styled';
 
@@ -10,32 +11,35 @@ jest.useFakeTimers();
 const mockCallback = jest.fn();
 const mockGetPopper = jest.fn(() => ({ instance: {} }));
 
-const props = {
+const props: Props = {
   content: 'Hello! This is my content!',
   getPopper: mockGetPopper,
 };
 
-function setup(ownProps = props, children = 'Places') {
+function setup(
+  ownProps = props,
+  children: string | React.ReactNode = 'Places',
+): ReactWrapper<Props, State> {
   return mount(<ReactFloater {...ownProps}>{children}</ReactFloater>);
 }
 
 describe('ReactFloater', () => {
-  let portal;
-  let floater;
+  let portal: ReactWrapper;
+  let floater: ReactWrapper<Props, State>;
 
-  const updateTooltip = (event = 'click') => {
+  const updateTooltip = (event: string | false = 'click') => {
     if (event) {
-      floater
-        .find('ReactFloaterWrapper')
-        .childAt(0)
-        .simulate(event);
+      floater.find('ReactFloaterWrapper').childAt(0).simulate(event);
+      const delay = floater.prop('eventDelay') || 1;
 
       if (['click', 'mouseEnter'].includes(event)) {
+        // @ts-ignore
         floater.instance().handleTransitionEnd(); // mock transitionend
       } else {
         setTimeout(() => {
+          // @ts-ignore
           floater.instance().handleTransitionEnd();
-        }, floater.prop('eventDelay') * 1100);
+        }, delay * 1100);
       }
     }
 
@@ -62,8 +66,10 @@ describe('ReactFloater', () => {
     });
 
     it('should have called getPopper', () => {
+      // @ts-ignore
       const popper = mockGetPopper.mock.calls[0][0];
 
+      // @ts-ignore
       expect(popper.instance.constructor.name).toBe('Popper');
     });
 
@@ -109,10 +115,7 @@ describe('ReactFloater', () => {
     });
 
     it('should render properly', () => {
-      const content = floater
-        .find('ReactFloaterWrapper')
-        .childAt(0)
-        .find('div');
+      const content = floater.find('ReactFloaterWrapper').childAt(0).find('div');
 
       expect(floater.find('ReactFloater')).toExist();
       expect(floater.find('ReactFloaterPortal')).toExist();
@@ -241,6 +244,7 @@ describe('ReactFloater', () => {
     it('should have close itself after `eventDelay`', () => {
       updateTooltip('mouseLeave');
 
+      // @ts-ignore
       jest.advanceTimersByTime(floater.prop('eventDelay') * 1000); // trigger the close animation
       expect(floater.state('status')).toBe('closing');
 
@@ -333,7 +337,7 @@ describe('ReactFloater', () => {
       const namedPortal = document.getElementById('hello-world');
 
       expect(namedPortal).toBeInstanceOf(HTMLDivElement);
-      expect(namedPortal.querySelector('.__floater')).toBeInstanceOf(HTMLDivElement);
+      expect(namedPortal?.querySelector('.__floater')).toBeInstanceOf(HTMLDivElement);
     });
   });
 
@@ -362,6 +366,7 @@ describe('ReactFloater', () => {
       floater.setProps({ open: true });
       expect(floater.state('status')).toBe('opening');
 
+      // @ts-ignore
       floater.instance().handleTransitionEnd();
       expect(floater.state('status')).toBe('open');
     });
@@ -370,6 +375,7 @@ describe('ReactFloater', () => {
       floater.setProps({ open: false });
       expect(floater.state('status')).toBe('closing');
 
+      // @ts-ignore
       floater.instance().handleTransitionEnd();
       expect(floater.state('status')).toBe('idle');
     });
@@ -384,6 +390,7 @@ describe('ReactFloater', () => {
     });
 
     it('should use `placement` top', () => {
+      // @ts-ignore
       expect(floater.instance().popper.originalPlacement).toBe('top');
       expect(floater.state('currentPlacement')).toBe('top');
     });
@@ -398,6 +405,7 @@ describe('ReactFloater', () => {
     });
 
     it('should use `placement` center', () => {
+      // @ts-ignore
       expect(floater.instance().popper).not.toBeDefined();
       expect(floater.state('currentPlacement')).toBe('center');
     });
@@ -426,7 +434,7 @@ describe('ReactFloater', () => {
     });
 
     it('should have rendered the component', () => {
-      expect(floater.find('.__floater__body')).toMatchSnapshot();
+      expect(floater.find('.__floater__body').html()).toMatchSnapshot();
     });
 
     it('should be able to close the floater with `closeFn` prop', () => {
@@ -455,7 +463,7 @@ describe('ReactFloater', () => {
     });
 
     it('should have rendered the component', () => {
-      expect(floater.find('.__floater__body')).toMatchSnapshot();
+      expect(floater.find('.__floater__body').html()).toMatchSnapshot();
     });
 
     it('should be able to close the floater with `closeFn` prop', () => {
