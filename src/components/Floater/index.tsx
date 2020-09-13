@@ -1,31 +1,32 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import * as React from 'react';
 
 import STATUS from '../../status';
+
+import { HandlerFunction, PlainObject, RenderProps, Statuses, Styles } from '../../types';
 
 import Arrow from './Arrow';
 import Container from './Container';
 
-export default class Floater extends React.Component {
-  static propTypes = {
-    component: PropTypes.oneOfType([PropTypes.func, PropTypes.element]),
-    content: PropTypes.node,
-    disableAnimation: PropTypes.bool.isRequired,
-    footer: PropTypes.node,
-    handleClick: PropTypes.func.isRequired,
-    hideArrow: PropTypes.bool.isRequired,
-    open: PropTypes.bool,
-    placement: PropTypes.string.isRequired,
-    positionWrapper: PropTypes.bool.isRequired,
-    setArrowRef: PropTypes.func.isRequired,
-    setFloaterRef: PropTypes.func.isRequired,
-    showCloseButton: PropTypes.bool,
-    status: PropTypes.string.isRequired,
-    styles: PropTypes.object.isRequired,
-    title: PropTypes.node,
-  };
+interface Props {
+  arrowRef: React.Ref<HTMLSpanElement>;
+  component?: React.FunctionComponent<RenderProps> | React.ReactElement;
+  content?: React.ReactNode;
+  disableAnimation: boolean;
+  floaterRef: React.Ref<HTMLDivElement>;
+  footer?: React.ReactNode;
+  hideArrow: boolean;
+  onClick: HandlerFunction;
+  open?: boolean;
+  placement: string;
+  positionWrapper: boolean;
+  showCloseButton?: boolean;
+  status: Statuses;
+  styles: Styles;
+  title?: React.ReactNode;
+}
 
-  get style() {
+export default class Floater extends React.PureComponent<Props> {
+  private get style() {
     const { disableAnimation, component, placement, hideArrow, status, styles } = this.props;
     const {
       arrow: { length },
@@ -36,7 +37,7 @@ export default class Floater extends React.Component {
       floaterWithAnimation,
       floaterWithComponent,
     } = styles;
-    let element = {};
+    let element: React.CSSProperties = {};
 
     if (!hideArrow) {
       if (placement.startsWith('top')) {
@@ -50,7 +51,7 @@ export default class Floater extends React.Component {
       }
     }
 
-    if ([STATUS.OPENING, STATUS.OPEN].includes(status)) {
+    if (status === STATUS.OPENING || status === STATUS.OPEN) {
       element = { ...element, ...floaterOpening };
     }
 
@@ -76,10 +77,10 @@ export default class Floater extends React.Component {
     };
   }
 
-  render() {
-    const { component, handleClick: closeFn, hideArrow, setFloaterRef, status } = this.props;
+  render(): JSX.Element {
+    const { content, component, onClick: closeFn, floaterRef, hideArrow, status } = this.props;
 
-    const output = {};
+    const output: PlainObject = {};
     const classes = ['__floater'];
 
     if (component) {
@@ -89,7 +90,7 @@ export default class Floater extends React.Component {
         output.content = component({ closeFn });
       }
     } else {
-      output.content = <Container {...this.props} />;
+      output.content = <Container {...this.props} content={content} />;
     }
 
     if (status === STATUS.OPEN) {
@@ -101,7 +102,7 @@ export default class Floater extends React.Component {
     }
 
     return (
-      <div ref={setFloaterRef} className={classes.join(' ')} style={this.style}>
+      <div ref={floaterRef} className={classes.join(' ')} style={this.style}>
         <div className="__floater__body">
           {output.content}
           {output.arrow}

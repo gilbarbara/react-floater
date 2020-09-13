@@ -1,20 +1,25 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import * as React from 'react';
 import is from 'is-lite';
+
+import { HandlerFunction, PlainObject, Styles } from '../../types';
 
 import CloseBtn from './CloseBtn';
 
-const FloaterContainer = ({
-  content,
-  footer,
-  handleClick,
-  open,
-  positionWrapper,
-  showCloseButton,
-  title,
-  styles,
-}) => {
-  const output = {
+interface Props {
+  content: React.ReactNode;
+  footer?: React.ReactNode;
+  onClick: HandlerFunction<HTMLButtonElement>;
+  open?: boolean;
+  positionWrapper: boolean;
+  showCloseButton?: boolean;
+  styles: Styles;
+  title?: React.ReactNode;
+}
+
+function FloaterContainer(props: Props): JSX.Element {
+  const { content, footer, onClick, open, positionWrapper, showCloseButton, title, styles } = props;
+
+  const output: PlainObject = {
     content: React.isValidElement(content) ? (
       content
     ) : (
@@ -45,7 +50,7 @@ const FloaterContainer = ({
   }
 
   if ((showCloseButton || positionWrapper) && !is.boolean(open)) {
-    output.close = <CloseBtn styles={styles.close} handleClick={handleClick} />;
+    output.close = <CloseBtn onClick={onClick} styles={styles.close} />;
   }
   return (
     <div className="__floater__container" style={styles.container}>
@@ -55,17 +60,6 @@ const FloaterContainer = ({
       {output.footer}
     </div>
   );
-};
-
-FloaterContainer.propTypes = {
-  content: PropTypes.node.isRequired,
-  footer: PropTypes.node,
-  handleClick: PropTypes.func.isRequired,
-  open: PropTypes.bool,
-  positionWrapper: PropTypes.bool.isRequired,
-  showCloseButton: PropTypes.bool.isRequired,
-  styles: PropTypes.object.isRequired,
-  title: PropTypes.node,
-};
+}
 
 export default FloaterContainer;

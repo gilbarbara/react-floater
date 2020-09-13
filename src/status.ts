@@ -5,4 +5,4 @@ export default {
   OPEN: 'open',
   CLOSING: 'closing',
   ERROR: 'error',
-};
+} as const;

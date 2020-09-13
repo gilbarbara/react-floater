@@ -1,11 +1,16 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import * as React from 'react';
+import { HandlerFunction } from '../../types';
 
-const FloaterCloseBtn = ({ handleClick, styles }) => {
+interface Props {
+  onClick: HandlerFunction<HTMLButtonElement>;
+  styles: React.CSSProperties;
+}
+
+function FloaterCloseBtn({ onClick, styles }: Props): JSX.Element {
   const { color, height, width, ...style } = styles;
 
   return (
-    <button aria-label="close" onClick={handleClick} style={style} type="button">
+    <button aria-label="close" onClick={onClick} style={style} type="button">
       <svg
         width={`${width}px`}
         height={`${height}px`}
@@ -23,11 +28,6 @@ const FloaterCloseBtn = ({ handleClick, styles }) => {
       </svg>
     </button>
   );
-};
-
-FloaterCloseBtn.propTypes = {
-  handleClick: PropTypes.func.isRequired,
-  styles: PropTypes.object.isRequired,
-};
+}
 
 export default FloaterCloseBtn;
