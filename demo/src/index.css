@@ -1,0 +1,231 @@
+html {
+  font-size: 62.5%;
+  -webkit-font-smoothing: antialiased;
+  height: 100%;
+}
+
+body {
+  font-size: 16px;
+  margin: 0;
+  padding: 0;
+  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+}
+
+*,
+:after,
+:before {
+  box-sizing: border-box;
+}
+
+a {
+  color: #0044ff;
+}
+
+img {
+  display: inline-block;
+  max-width: 100%;
+}
+
+button {
+  -webkit-appearance: none;
+  background-color: #0044ff;
+  border-radius: 3px;
+  border: 0;
+  color: #fff;
+  font-size: 18px;
+  line-height: 1;
+  outline: none;
+  padding: 8px 16px;
+  white-space: nowrap;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+}
+
+p {
+  margin: 0;
+}
+
+p + p {
+  margin-top: 5px;
+}
+
+.App-content {
+  margin: 0 auto;
+  max-width: 500px;
+  width: 100%;
+}
+
+.App-content p {
+  color: #555;
+  font-size: 13px;
+  margin: 4px 0 0;
+}
+
+.App-flex {
+  align-items: flex-start;
+  display: flex;
+  margin: 0 auto;
+  max-width: 500px;
+  justify-content: space-between;
+}
+
+.App-hero {
+  padding: 60px 30px 60px;
+}
+
+.App-hero h1,
+.App-hero h2 {
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.App-hero h1 {
+  font-size: 3.4rem;
+}
+
+.App-hero h2 {
+  font-size: 2.4rem;
+}
+
+.App-clicks {
+  background-color: #eee;
+  padding: 20px 15px 120px;
+  text-align: center;
+}
+
+.App-clicks h2 {
+  margin-bottom: 160px;
+}
+
+.App-hover {
+  padding: 20px 15px 150px;
+  text-align: center;
+}
+
+.App-hover small {
+  display: block;
+  margin-bottom: 120px;
+}
+
+.App-hover button {
+  background-color: #668fff;
+}
+
+.App-text {
+  background-color: #eee;
+  padding: 20px 15px 70px;
+  text-align: center;
+}
+
+.App-text h2 {
+  margin-bottom: 50px;
+}
+
+.App-overlay {
+  background-color: #fff;
+  padding: 20px 15px 70px;
+  text-align: center;
+}
+
+.App-overlay h2 {
+  margin-bottom: 50px;
+}
+
+.App-target {
+  background-color: #eee;
+  padding: 20px 15px 20px;
+  text-align: center;
+}
+
+.App-target .App-content {
+  display: flex;
+  flex-direction: column;
+  max-width: 600px;
+}
+
+.App-target .App-content > div {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 350px;
+}
+
+.App-target .App-content > div:nth-child(1n + 3) {
+  min-height: 100px;
+}
+
+.App-target .github {
+  display: block;
+  margin: 0 auto;
+  height: 48px;
+}
+
+.beacon {
+  animation: BeaconFlick 1s infinite;
+  display: inline-block;
+  border-radius: 50%;
+  border: 3px solid #0044ff;
+  padding: 4px;
+}
+
+.beacon:before {
+  background-color: #0044ff;
+  border-radius: 50%;
+  content: "";
+  display: block;
+  height: 20px;
+  width: 20px;
+}
+
+@media (max-width: 480px) {
+  .App-hover {
+    padding-bottom: 60px;
+  }
+
+  .App-hover small {
+    margin-bottom: 60px;
+  }
+
+  .App-hover .App-flex {
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .App-hover .App-flex div + div {
+    margin-top: 15px;
+  }
+}
+
+@media (min-width: 768px) {
+  .App-target .App-content {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .App-target .App-content > div {
+    flex-basis: 50%;
+  }
+
+  .App-target .App-content > div + div {
+    margin-top: 0;
+  }
+}
+
+@keyframes BeaconFlick {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 1;
+  }
+}
