@@ -4,7 +4,7 @@ import is from 'is-lite';
 import treeChanges from 'tree-changes';
 
 import STATUS from '../status';
-import { canUseDOM, getOptions, isMobile, log, noop, once } from '../utils';
+import { canUseDOM, getOptions, isFixed, isMobile, log, noop, once } from '../utils';
 
 import { PlainObject, Props, State, Statuses, Styles } from '../types';
 
@@ -184,6 +184,7 @@ export default class ReactFloater extends React.PureComponent<Props, State> {
 
       new Popper(target, this.floaterRef.current, {
         placement,
+        positionFixed: isFixed(this.childRef.current),
         modifiers: {
           arrow: {
             enabled: !hideArrow,
