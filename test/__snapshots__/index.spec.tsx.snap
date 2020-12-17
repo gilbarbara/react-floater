@@ -57,3 +57,97 @@ exports[`ReactFloater with \`component\` as function should have rendered the co
   </div>
 </div>
 `;
+
+exports[`ReactFloater with \`portalElement\` should should render properly and use the \`portalElement\` 1`] = `
+<span>
+  <span style="cursor: help; display: inline-flex; flex-direction: column;">
+    <span>
+      Places
+    </span>
+  </span>
+</span>
+`;
+
+exports[`ReactFloater with multiple instances and \`portalElement\` should render properly, use the \`portalElement\` and don't remove it afterwards 1`] = `
+<p>
+  The
+  <span>
+    <span style="cursor: help; display: inline-flex; flex-direction: column;">
+      <span>
+        first president
+      </span>
+    </span>
+  </span>
+  of the
+  <span>
+    <span style="cursor: help; display: inline-flex; flex-direction: column;">
+      <span>
+        Republic of Bananas
+      </span>
+    </span>
+  </span>
+  is dead.
+</p>
+<button type="button">
+  Toggle
+</button>
+`;
+
+exports[`ReactFloater with multiple instances and \`portalElement\` should render properly, use the \`portalElement\` and don't remove it afterwards 2`] = `
+<p>
+  The first president of the
+  <span>
+    <span style="cursor: help; display: inline-flex; flex-direction: column;">
+      <span>
+        Republic of Bananas
+      </span>
+    </span>
+  </span>
+  is dead.
+</p>
+<button type="button">
+  Toggle
+</button>
+`;
+
+exports[`ReactFloater with multiple instances should render properly, add a single portal element and remove it after all tooltips unmount 1`] = `
+<p>
+  The
+  <span>
+    <span style="cursor: help; display: inline-flex; flex-direction: column;">
+      <span>
+        first president
+      </span>
+    </span>
+  </span>
+  of the
+  <span>
+    <span style="cursor: help; display: inline-flex; flex-direction: column;">
+      <span>
+        Republic of Bananas
+      </span>
+    </span>
+  </span>
+  is dead.
+</p>
+<button type="button">
+  Toggle
+</button>
+`;
+
+exports[`ReactFloater with multiple instances should render properly, add a single portal element and remove it after all tooltips unmount 2`] = `
+<p>
+  The first president of the
+  <span>
+    <span style="cursor: help; display: inline-flex; flex-direction: column;">
+      <span>
+        Republic of Bananas
+      </span>
+    </span>
+  </span>
+  is dead.
+</p>
+<button type="button">
+  Toggle
+</button>
+`;

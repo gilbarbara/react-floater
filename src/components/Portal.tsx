@@ -1,43 +1,58 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { canUseDOM } from '../utils';
+import is from 'is-lite';
+import { canUseDOM, portalId } from '../utils';
 
 import { PlacementOptions, SelectorOrElement } from '../types';
 
 interface Props {
   children: React.ReactNode;
   hasChildren: boolean;
-  id?: string;
   placement: PlacementOptions;
+  portalElement?: SelectorOrElement;
   target?: SelectorOrElement;
   zIndex: string | number;
 }
 
 export default class ReactFloaterPortal extends React.PureComponent<Props> {
-  readonly node?: HTMLDivElement;
+  readonly node?: HTMLElement;
 
   constructor(props: Props) {
     super(props);
+    const { portalElement, zIndex } = props;
 
     if (!canUseDOM) return;
 
-    this.node = document.createElement('div');
-
-    if (props.id) {
-      this.node.id = props.id;
+    if (portalElement) {
+      this.node = is.string(portalElement)
+        ? (document.querySelector(portalElement) as HTMLElement)
+        : portalElement;
     }
 
-    if (props.zIndex) {
-      this.node.style.zIndex = `${props.zIndex}`;
-    }
+    if (!portalElement || !this.node) {
+      const portal = document.getElementById('react-floater-portal');
 
-    document.body.appendChild(this.node);
+      if (portal) {
+        this.node = portal;
+      } else {
+        this.node = document.createElement('div');
+        this.node.id = portalId;
+
+        if (zIndex) {
+          this.node.style.zIndex = `${zIndex}`;
+        }
+
+        document.body.appendChild(this.node);
+      }
+    }
   }
 
   componentWillUnmount(): void {
     if (!canUseDOM || !this.node) return;
 
-    document.body.removeChild(this.node);
+    if (this.node.id === portalId && this.node.childElementCount <= 1) {
+      document.body.removeChild(this.node);
+    }
   }
 
   render(): React.ReactPortal | null {
