@@ -7,6 +7,7 @@ import * as deepmerge from 'deepmerge';
 import { PlainObject } from './types';
 
 export const { canUseDOM } = ExecutionEnvironment;
+export const portalId = 'react-floater-portal';
 
 export function getOptions(options?: PartialDeep<Modifiers>): Partial<Modifiers> {
   const defaultOptions = {

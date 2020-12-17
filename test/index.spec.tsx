@@ -5,6 +5,7 @@ import ReactFloater from '../src';
 import { Props, State } from '../src/types';
 
 import Styled from './__fixtures__/Styled';
+import { portalId } from '../src/utils';
 
 jest.useFakeTimers();
 
@@ -16,16 +17,19 @@ const props: Props = {
   getPopper: mockGetPopper,
 };
 
-function setup(
-  ownProps = props,
-  children: string | React.ReactNode = 'Places',
-): ReactWrapper<Props, State> {
+function setup(ownProps = props, children: React.ReactNode = 'Places'): ReactWrapper<Props, State> {
   return mount(<ReactFloater {...ownProps}>{children}</ReactFloater>);
 }
 
 describe('ReactFloater', () => {
   let portal: ReactWrapper;
   let floater: ReactWrapper<Props, State>;
+
+  const unmount = () => {
+    if (floater) {
+      floater.unmount();
+    }
+  };
 
   const updateTooltip = (event: string | false = 'click') => {
     if (event) {
@@ -52,6 +56,8 @@ describe('ReactFloater', () => {
       floater = setup();
       portal = floater.find('ReactFloaterPortal');
     });
+
+    afterAll(unmount);
 
     it('should render properly', () => {
       expect(floater.find('ReactFloater')).toExist();
@@ -114,6 +120,8 @@ describe('ReactFloater', () => {
       portal = floater.find('ReactFloaterPortal');
     });
 
+    afterAll(unmount);
+
     it('should render properly', () => {
       const content = floater.find('ReactFloaterWrapper').childAt(0).find('div');
 
@@ -124,6 +132,99 @@ describe('ReactFloater', () => {
     });
   });
 
+  describe('with multiple instances', () => {
+    const Component = () => {
+      const [showTooltip, setTooltip] = React.useState(true);
+
+      return (
+        <React.Fragment>
+          <p>
+            The{' '}
+            {showTooltip ? (
+              <ReactFloater content="It was that bearded guy!">first president</ReactFloater>
+            ) : (
+              'first president'
+            )}{' '}
+            of the <ReactFloater content="You know what I mean">Republic of Bananas</ReactFloater>{' '}
+            is dead.
+          </p>
+          <button onClick={() => setTooltip(s => !s)} type="button">
+            Toggle
+          </button>
+        </React.Fragment>
+      );
+    };
+
+    it('should render properly, add a single portal element and remove it after all tooltips unmount', () => {
+      floater = mount(<Component />);
+
+      expect(floater.html()).toMatchSnapshot();
+      expect(document.getElementById('react-floater-portal')?.childElementCount).toBe(2);
+
+      floater.find('button').simulate('click');
+      expect(floater.html()).toMatchSnapshot();
+      expect(document.getElementById('react-floater-portal')?.childElementCount).toBe(1);
+
+      floater.unmount();
+
+      expect(document.getElementById('react-floater-portal')).toBeNull();
+    });
+  });
+
+  describe('with multiple instances and `portalElement`', () => {
+    const element = document.createElement('div');
+    element.id = 'tooltips';
+
+    document.body.appendChild(element);
+
+    afterAll(() => {
+      document.body.removeChild(element);
+    });
+
+    const Component = () => {
+      const [showTooltip, setTooltip] = React.useState(true);
+
+      return (
+        <React.Fragment>
+          <p>
+            The{' '}
+            {showTooltip ? (
+              <ReactFloater content="It was that bearded guy!" portalElement={element}>
+                first president
+              </ReactFloater>
+            ) : (
+              'first president'
+            )}{' '}
+            of the{' '}
+            <ReactFloater content="You know what I mean" portalElement={element}>
+              Republic of Bananas
+            </ReactFloater>{' '}
+            is dead.
+          </p>
+          <button onClick={() => setTooltip(s => !s)} type="button">
+            Toggle
+          </button>
+        </React.Fragment>
+      );
+    };
+
+    it("should render properly, use the `portalElement` and don't remove it afterwards", () => {
+      const wrapper = mount(<Component />);
+
+      expect(document.getElementById(portalId)).toBeNull();
+      expect(wrapper.html()).toMatchSnapshot();
+      expect(element.childElementCount).toBe(2);
+
+      wrapper.find('button').simulate('click');
+      expect(wrapper.html()).toMatchSnapshot();
+      expect(element.childElementCount).toBe(1);
+
+      wrapper.unmount();
+
+      expect(element).not.toBeNull();
+    });
+  });
+
   describe('with `autoOpen`', () => {
     beforeAll(() => {
       floater = setup({
@@ -131,6 +232,8 @@ describe('ReactFloater', () => {
         autoOpen: true,
       });
     });
+
+    afterAll(unmount);
 
     it('should have rendered the Floater initially open', () => {
       updateTooltip(false);
@@ -167,6 +270,8 @@ describe('ReactFloater', () => {
         callback: mockCallback,
       });
     });
+
+    afterAll(unmount);
 
     it('should call the callback function on open', () => {
       updateTooltip();
@@ -229,6 +334,8 @@ describe('ReactFloater', () => {
       });
     });
 
+    afterAll(unmount);
+
     it('should be able to show the floater', () => {
       updateTooltip('mouseEnter');
 
@@ -262,6 +369,8 @@ describe('ReactFloater', () => {
       });
     });
 
+    afterAll(unmount);
+
     it('should be able to show the floater', () => {
       updateTooltip('mouseEnter');
 
@@ -288,6 +397,8 @@ describe('ReactFloater', () => {
       });
     });
 
+    afterAll(unmount);
+
     it('should have rendered the title', () => {
       expect(floater.find('Title')).toExist();
 
@@ -313,6 +424,8 @@ describe('ReactFloater', () => {
       });
     });
 
+    afterAll(unmount);
+
     it('should have rendered the footer', () => {
       expect(floater.find('Footer')).toExist();
 
@@ -325,19 +438,31 @@ describe('ReactFloater', () => {
     });
   });
 
-  describe('with `id`', () => {
-    beforeAll(() => {
-      floater = setup({
-        ...props,
-        id: 'hello-world',
-      });
+  describe('with `portalElement`', () => {
+    const element = document.createElement('div');
+    element.id = 'tooltips';
+
+    document.body.appendChild(element);
+
+    afterAll(() => {
+      document.body.removeChild(element);
+      unmount();
     });
 
-    it('should have added the id to the portal floater', () => {
-      const namedPortal = document.getElementById('hello-world');
+    it('should should render properly and use the `portalElement`', () => {
+      floater = setup({
+        ...props,
+        portalElement: element,
+      });
 
-      expect(namedPortal).toBeInstanceOf(HTMLDivElement);
-      expect(namedPortal?.querySelector('.__floater')).toBeInstanceOf(HTMLDivElement);
+      expect(floater.html()).toMatchSnapshot();
+      expect(element.childElementCount).toBe(1);
+      expect(document.getElementById(portalId)).toBeNull();
+
+      floater.unmount();
+
+      expect(element.childElementCount).toBe(0);
+      expect(element).not.toBeNull();
     });
   });
 
@@ -348,6 +473,8 @@ describe('ReactFloater', () => {
         open: false,
       });
     });
+
+    afterAll(unmount);
 
     it('should not be able to show the floater with click', () => {
       updateTooltip('click');
@@ -389,6 +516,8 @@ describe('ReactFloater', () => {
       });
     });
 
+    afterAll(unmount);
+
     it('should use `placement` top', () => {
       // @ts-ignore
       expect(floater.instance().popper.originalPlacement).toBe('top');
@@ -403,6 +532,8 @@ describe('ReactFloater', () => {
         placement: 'center',
       });
     });
+
+    afterAll(unmount);
 
     it('should use `placement` center', () => {
       // @ts-ignore
@@ -426,6 +557,8 @@ describe('ReactFloater', () => {
         component: Styled,
       });
     });
+
+    afterAll(unmount);
 
     it('should show the floater with click', () => {
       updateTooltip('click');
@@ -456,6 +589,8 @@ describe('ReactFloater', () => {
       });
     });
 
+    afterAll(unmount);
+
     it('should show the floater with click', () => {
       updateTooltip('click');
 
@@ -480,6 +615,8 @@ describe('ReactFloater', () => {
         showCloseButton: true,
       });
     });
+
+    afterAll(unmount);
 
     it('should show the floater with click', () => {
       updateTooltip('click');

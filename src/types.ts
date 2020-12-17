@@ -57,8 +57,6 @@ export interface BaseProps {
   getPopper?: (popper: Data, origin: 'floater' | 'wrapper') => void;
   /* Don't show the arrow. Useful for centered or modal layout. */
   hideArrow?: boolean;
-  /* In case that you need to identify the portal. */
-  id?: string;
   /* The distance between the Floater and its target in pixels. */
   offset?: number;
   /* Controlled mode. */
@@ -67,6 +65,8 @@ export interface BaseProps {
   options?: Modifiers;
   /* The placement of the Floater. It will update the position if there's no space available. */
   placement?: PlacementOptions;
+  /* An element to render the tooltip */
+  portalElement?: SelectorOrElement;
   /* It will show a ⨉ button to close the Floater. */
   showCloseButton?: boolean;
   style?: React.CSSProperties;

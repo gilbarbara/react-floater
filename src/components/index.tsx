@@ -484,8 +484,8 @@ export default class ReactFloater extends React.PureComponent<Props, State> {
       disableAnimation = false,
       footer,
       hideArrow,
-      id,
       open,
+      portalElement,
       showCloseButton,
       style,
       target,
@@ -518,8 +518,8 @@ export default class ReactFloater extends React.PureComponent<Props, State> {
       <span>
         <Portal
           hasChildren={!!children}
-          id={id}
           placement={currentPlacement}
+          portalElement={portalElement}
           target={target}
           zIndex={this.styles.options.zIndex}
         >
