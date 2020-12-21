@@ -16,7 +16,6 @@ interface Props {
   footer?: React.ReactNode;
   hideArrow: boolean;
   onClick: HandlerFunction;
-  open?: boolean;
   placement: string;
   positionWrapper: boolean;
   showCloseButton?: boolean;
@@ -25,9 +24,20 @@ interface Props {
   title?: React.ReactNode;
 }
 
-export default class Floater extends React.PureComponent<Props> {
-  private get style() {
-    const { disableAnimation, component, placement, hideArrow, status, styles } = this.props;
+function Floater(props: Props): JSX.Element | null {
+  const {
+    component,
+    content,
+    disableAnimation,
+    floaterRef,
+    hideArrow,
+    onClick: closeFn,
+    placement,
+    status,
+    styles,
+  } = props;
+
+  const style = React.useMemo(() => {
     const {
       arrow: { length },
       floater,
@@ -37,7 +47,7 @@ export default class Floater extends React.PureComponent<Props> {
       floaterWithAnimation,
       floaterWithComponent,
     } = styles;
-    let element: React.CSSProperties = {};
+    let element: React.CSSProperties = { ...floater };
 
     if (!hideArrow) {
       if (placement.startsWith('top')) {
@@ -51,12 +61,12 @@ export default class Floater extends React.PureComponent<Props> {
       }
     }
 
-    if (status === STATUS.OPENING || status === STATUS.OPEN) {
-      element = { ...element, ...floaterOpening };
-    }
-
     if (status === STATUS.CLOSING) {
       element = { ...element, ...floaterClosing };
+    }
+
+    if (status === STATUS.OPENING || status === STATUS.OPEN) {
+      element = { ...element, ...floaterOpening };
     }
 
     if (status === STATUS.OPEN && !disableAnimation) {
@@ -71,43 +81,44 @@ export default class Floater extends React.PureComponent<Props> {
       element = { ...element, ...floaterWithComponent };
     }
 
-    return {
-      ...floater,
-      ...element,
-    };
-  }
+    return element;
+  }, [component, disableAnimation, hideArrow, placement, status, styles]);
 
-  render(): JSX.Element {
-    const { content, component, onClick: closeFn, floaterRef, hideArrow, status } = this.props;
+  const shouldRender = ['render', 'open', 'opening', 'closing'].some(d => d === status);
 
-    const output: PlainObject = {};
-    const classes = ['__floater'];
+  const output: PlainObject = {};
+  const classes = ['__floater'];
 
-    if (component) {
-      if (React.isValidElement(component)) {
-        output.content = React.cloneElement(component, { closeFn });
-      } else {
-        output.content = component({ closeFn });
-      }
+  if (component) {
+    if (React.isValidElement(component)) {
+      output.content = React.cloneElement(component, { closeFn });
     } else {
-      output.content = <Container {...this.props} content={content} />;
+      output.content = component({ closeFn });
     }
-
-    if (status === STATUS.OPEN) {
-      classes.push('__floater__open');
-    }
-
-    if (!hideArrow) {
-      output.arrow = <Arrow {...this.props} />;
-    }
-
-    return (
-      <div ref={floaterRef} className={classes.join(' ')} style={this.style}>
-        <div className="__floater__body">
-          {output.content}
-          {output.arrow}
-        </div>
-      </div>
-    );
+  } else {
+    output.content = <Container {...props} content={content} />;
   }
+
+  if (status === STATUS.OPEN) {
+    classes.push('__floater__open');
+  }
+
+  if (!hideArrow) {
+    output.arrow = <Arrow {...props} />;
+  }
+
+  if (!shouldRender) {
+    return null;
+  }
+
+  return (
+    <div ref={floaterRef} className={classes.join(' ')} style={style}>
+      <div className="__floater__body">
+        {output.content}
+        {output.arrow}
+      </div>
+    </div>
+  );
 }
+
+export default React.memo(Floater);

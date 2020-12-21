@@ -3,21 +3,22 @@ import Popper, { Data, Behavior, Position } from 'popper.js';
 import is from 'is-lite';
 import treeChanges from 'tree-changes';
 
-import { canUseDOM, getOptions, isFixed, isMobile, log, noop, once } from '../utils';
-import { POSITIONING_PROPS, STATUS } from '../literals';
+import { POSITIONING_PROPS, STATUS } from './literals';
+import { canUseDOM, getOptions, isFixed, isMobile, log, noop, once, wait } from './utils';
 
-import { PlainObject, Props, State, Statuses, Styles } from '../types';
+import { PlainObject, Props, State, Statuses, Styles } from './types';
 
-import Portal from './Portal';
-import Floater from './Floater';
-import Wrapper from './Wrapper';
+import Portal from './components/Portal';
+import Floater from './components/Floater';
+import Wrapper from './components/Wrapper';
 
-import getStyles from '../styles';
+import getStyles from './styles';
 
 declare let window: any;
 
 export default class ReactFloater extends React.PureComponent<Props, State> {
   arrowRef = React.createRef<HTMLSpanElement>();
+  cachedStyles?: Styles;
   childRef = React.createRef<HTMLElement>();
   eventDelayTimeout?: number;
   floaterRef = React.createRef<HTMLDivElement>();
@@ -77,6 +78,7 @@ export default class ReactFloater extends React.PureComponent<Props, State> {
 
   componentDidMount(): void {
     if (!canUseDOM) return;
+
     const { positionWrapper } = this.state;
     const { children, open, target } = this.props;
 
@@ -105,42 +107,51 @@ export default class ReactFloater extends React.PureComponent<Props, State> {
   componentDidUpdate(prevProps: Props, prevState: State): void {
     if (!canUseDOM) return;
 
-    const { autoOpen, open, target, wrapperOptions } = this.props;
+    const { autoOpen, open } = this.props;
     const { changedFrom, changed } = treeChanges(prevState, this.state);
+    const { changed: changedProps } = treeChanges(prevProps, this.props);
 
-    if (prevProps.open !== open) {
+    if (changedProps('open')) {
       let forceStatus;
 
       // always follow `open` in controlled mode
       if (is.boolean(open)) {
-        forceStatus = open ? STATUS.OPENING : STATUS.CLOSING;
+        forceStatus = open ? STATUS.RENDER : STATUS.CLOSING;
       }
 
       this.toggle(forceStatus);
     }
 
-    if (
-      prevProps.wrapperOptions?.position !== wrapperOptions?.position ||
-      prevProps.target !== target
-    ) {
+    if (changedProps('wrapperOptions.position') || changedProps('target')) {
       this.changeWrapperPosition(this.props);
     }
 
-    if (changed('status', STATUS.IDLE) && open) {
-      this.toggle(STATUS.OPEN);
-    } else if (changedFrom('status', STATUS.INIT, STATUS.IDLE) && autoOpen) {
-      this.toggle(STATUS.OPEN);
-    }
-
-    if (this.popper && changed('status', STATUS.OPENING)) {
-      this.popper.instance.update();
+    if (changedProps('styles')) {
+      this.cachedStyles = undefined;
     }
 
     if (
-      this.floaterRef.current &&
-      (changed('status', STATUS.OPENING) || changed('status', STATUS.CLOSING))
+      (changed('status', STATUS.IDLE) && open) ||
+      (changedFrom('status', STATUS.INIT, STATUS.IDLE) && autoOpen)
     ) {
+      this.toggle(STATUS.RENDER);
+    }
+
+    if (changed('status', STATUS.RENDER)) {
+      if (this.popper) {
+        this.popper.instance.update();
+      } else {
+        this.initPopper();
+      }
+    }
+
+    if (this.floaterRef.current && changed('status', [STATUS.RENDER, STATUS.CLOSING])) {
       once(this.floaterRef.current, 'transitionend', this.handleTransitionEnd);
+    }
+
+    if (changedFrom('status', STATUS.CLOSING, STATUS.IDLE) && this.popper) {
+      this.popper.instance.destroy();
+      this.popper = undefined;
     }
   }
 
@@ -161,7 +172,7 @@ export default class ReactFloater extends React.PureComponent<Props, State> {
   }
 
   private initPopper(target = this.target) {
-    const { positionWrapper } = this.state;
+    const { positionWrapper, status } = this.state;
     const {
       disableFlip,
       getPopper,
@@ -173,62 +184,69 @@ export default class ReactFloater extends React.PureComponent<Props, State> {
     } = this.props;
     const flipBehavior: Behavior | Position[] =
       placement === 'top' || placement === 'bottom' ? 'flip' : ['right', 'bottom', 'left', 'top'];
+    const nextStatus = status === STATUS.RENDER ? STATUS.OPENING : STATUS.IDLE;
 
     /* istanbul ignore else */
     if (placement === 'center') {
-      this.setState({ status: STATUS.IDLE });
-    } else if (target && this.floaterRef.current) {
-      const { arrow, flip, offset: offsetOptions, ...rest } = getOptions(options);
-
-      new Popper(target, this.floaterRef.current, {
-        placement,
-        positionFixed: isFixed(this.childRef.current),
-        modifiers: {
-          arrow: {
-            enabled: !hideArrow,
-            element: this.arrowRef.current || undefined,
-            ...arrow,
-          },
-          flip: {
-            enabled: !disableFlip,
-            behavior: flipBehavior,
-            ...flip,
-          },
-          offset: {
-            offset: `0, ${offset}px`,
-            ...offsetOptions,
-          },
-          ...rest,
-        },
-        onCreate: data => {
-          this.popper = data;
-
-          if (getPopper) {
-            getPopper(data, 'floater');
-          }
-
-          if (this.isActive) {
-            this.setState({
-              currentPlacement: data.placement,
-              status: STATUS.IDLE,
-            });
-          }
-
-          if (placement !== data.placement) {
-            setTimeout(() => {
-              data.instance.update();
-            }, 1);
-          }
-        },
-        onUpdate: data => {
-          this.popper = data;
-          const { currentPlacement } = this.state;
-
-          if (this.isActive && data.placement !== currentPlacement) {
-            this.setState({ currentPlacement: data.placement });
-          }
-        },
+      wait(() => {
+        this.updateState({ status: nextStatus });
       });
+    } else if (target) {
+      if (this.floaterRef.current) {
+        const { arrow, flip, offset: offsetOptions, ...rest } = getOptions(options);
+
+        new Popper(target, this.floaterRef.current, {
+          placement,
+          positionFixed: isFixed(this.childRef.current),
+          modifiers: {
+            arrow: {
+              enabled: !hideArrow,
+              element: this.arrowRef.current || undefined,
+              ...arrow,
+            },
+            flip: {
+              enabled: !disableFlip,
+              behavior: flipBehavior,
+              ...flip,
+            },
+            offset: {
+              offset: `0, ${offset}px`,
+              ...offsetOptions,
+            },
+            ...rest,
+          },
+          onCreate: data => {
+            this.popper = data;
+
+            if (getPopper) {
+              getPopper(data, 'floater');
+            }
+
+            this.updateState({
+              currentPlacement: data.placement,
+              status: nextStatus,
+            });
+
+            if (placement !== data.placement) {
+              wait(() => {
+                data.instance.update();
+              });
+            }
+          },
+          onUpdate: data => {
+            this.popper = data;
+            const { currentPlacement } = this.state;
+
+            if (data.placement !== currentPlacement) {
+              this.updateState({ currentPlacement: data.placement });
+            }
+          },
+        });
+      } else {
+        this.updateState({
+          status: STATUS.IDLE,
+        });
+      }
     }
 
     if (positionWrapper && this.target && this.wrapperRef.current && placement !== 'center') {
@@ -250,18 +268,16 @@ export default class ReactFloater extends React.PureComponent<Props, State> {
         onCreate: data => {
           this.wrapperPopper = data;
 
-          if (this.isActive) {
-            this.setState({ statusWrapper: STATUS.IDLE });
-          }
+          this.updateState({ statusWrapper: STATUS.IDLE });
 
           if (getPopper) {
             getPopper(data, 'wrapper');
           }
 
           if (placement !== data.placement) {
-            setTimeout(() => {
+            wait(() => {
               data.instance.update();
-            }, 1);
+            });
           }
         },
       });
@@ -269,28 +285,33 @@ export default class ReactFloater extends React.PureComponent<Props, State> {
   }
 
   private changeWrapperPosition({ target, wrapperOptions }: Props) {
-    this.setState({
+    this.updateState({
       positionWrapper: !!wrapperOptions?.position && !!target,
     });
   }
 
   private toggle(forceStatus?: Statuses) {
     const { status } = this.state;
-    let nextStatus: Statuses = status === STATUS.OPEN ? STATUS.CLOSING : STATUS.OPENING;
+    let nextStatus: Statuses = status === STATUS.OPEN ? STATUS.CLOSING : STATUS.RENDER;
 
     if (!is.undefined(forceStatus)) {
       nextStatus = forceStatus;
     }
 
-    this.setState({ status: nextStatus });
+    this.updateState({ status: nextStatus });
+  }
+
+  private updateState(nextState: Partial<State>, callback?: () => void) {
+    if (this.isActive) {
+      this.setState(nextState as State, callback);
+    }
   }
 
   private handleClick = () => {
+    const { positionWrapper, status } = this.state;
     const { event, open } = this.props;
 
     if (is.boolean(open)) return;
-
-    const { positionWrapper, status } = this.state;
 
     /* istanbul ignore else */
     if (this.event === 'click' || (this.event === 'hover' && positionWrapper)) {
@@ -300,7 +321,7 @@ export default class ReactFloater extends React.PureComponent<Props, State> {
         debug: this.debug,
       });
 
-      this.toggle();
+      this.toggle(status === 'idle' ? STATUS.RENDER : undefined);
     }
   };
 
@@ -315,11 +336,10 @@ export default class ReactFloater extends React.PureComponent<Props, State> {
   };
 
   private handleMouseEnter = () => {
+    const { status } = this.state;
     const { event, open } = this.props;
 
     if (is.boolean(open) || isMobile()) return;
-
-    const { status } = this.state;
 
     /* istanbul ignore else */
     if (this.event === 'hover' && status === STATUS.IDLE) {
@@ -330,16 +350,15 @@ export default class ReactFloater extends React.PureComponent<Props, State> {
       });
 
       clearTimeout(this.eventDelayTimeout);
-      this.toggle();
+      this.toggle(status === 'idle' ? STATUS.RENDER : undefined);
     }
   };
 
   private handleMouseLeave = () => {
     const { event, eventDelay, open } = this.props;
+    const { positionWrapper, status } = this.state;
 
     if (is.boolean(open) || isMobile()) return;
-
-    const { status, positionWrapper } = this.state;
 
     /* istanbul ignore else */
     if (this.event === 'hover') {
@@ -352,7 +371,7 @@ export default class ReactFloater extends React.PureComponent<Props, State> {
       const hasOpenStatus = status === STATUS.OPENING || status === STATUS.OPEN;
 
       if (!eventDelay) {
-        this.toggle(STATUS.IDLE);
+        this.toggle(STATUS.CLOSING);
       } else if (hasOpenStatus && !positionWrapper && !this.eventDelayTimeout) {
         this.eventDelayTimeout = window.setTimeout(() => {
           delete this.eventDelayTimeout;
@@ -372,7 +391,7 @@ export default class ReactFloater extends React.PureComponent<Props, State> {
       this.wrapperPopper.instance.update();
     }
 
-    this.setState(
+    this.updateState(
       {
         status: status === STATUS.OPENING ? STATUS.OPEN : STATUS.IDLE,
       },
@@ -402,59 +421,63 @@ export default class ReactFloater extends React.PureComponent<Props, State> {
   }
 
   private get styles() {
-    const { status, positionWrapper, statusWrapper } = this.state;
-    const { styles } = this.props;
+    if (!this.cachedStyles) {
+      const { status, positionWrapper, statusWrapper } = this.state;
+      const { styles } = this.props;
 
-    const nextStyles: Styles = getStyles(styles);
+      const nextStyles: Styles = getStyles(styles);
 
-    if (positionWrapper) {
-      let wrapperStyles: PlainObject | undefined;
+      if (positionWrapper) {
+        let wrapperStyles: PlainObject | undefined;
 
-      if (status !== STATUS.IDLE || statusWrapper !== STATUS.IDLE) {
-        wrapperStyles = nextStyles.wrapperPosition;
-      } else {
-        wrapperStyles = this.wrapperPopper?.styles;
-      }
+        if (status !== STATUS.IDLE || statusWrapper !== STATUS.IDLE) {
+          wrapperStyles = nextStyles.wrapperPosition;
+        } else {
+          wrapperStyles = this.wrapperPopper?.styles;
+        }
 
-      nextStyles.wrapper = {
-        ...nextStyles.wrapper,
-        ...wrapperStyles,
-      };
-    }
-
-    /* istanbul ignore else */
-    if (this.target) {
-      const targetStyles = window.getComputedStyle(this.target);
-
-      /* istanbul ignore else */
-      if (this.wrapperStyles) {
         nextStyles.wrapper = {
           ...nextStyles.wrapper,
-          ...this.wrapperStyles,
+          ...wrapperStyles,
         };
-      } else if (!['relative', 'static'].includes(targetStyles.position)) {
-        this.wrapperStyles = {};
+      }
 
-        if (!positionWrapper) {
-          POSITIONING_PROPS.forEach(d => {
-            this.wrapperStyles[d] = targetStyles[d];
-          });
+      /* istanbul ignore else */
+      if (this.target) {
+        const targetStyles = window.getComputedStyle(this.target);
 
+        /* istanbul ignore else */
+        if (this.wrapperStyles) {
           nextStyles.wrapper = {
             ...nextStyles.wrapper,
             ...this.wrapperStyles,
           };
+        } else if (!['relative', 'static'].includes(targetStyles.position)) {
+          this.wrapperStyles = {};
 
-          this.target.style.position = 'relative';
-          this.target.style.top = 'auto';
-          this.target.style.right = 'auto';
-          this.target.style.bottom = 'auto';
-          this.target.style.left = 'auto';
+          if (!positionWrapper) {
+            POSITIONING_PROPS.forEach(d => {
+              this.wrapperStyles[d] = targetStyles[d];
+            });
+
+            nextStyles.wrapper = {
+              ...nextStyles.wrapper,
+              ...this.wrapperStyles,
+            };
+
+            this.target.style.position = 'relative';
+            this.target.style.top = 'auto';
+            this.target.style.right = 'auto';
+            this.target.style.bottom = 'auto';
+            this.target.style.left = 'auto';
+          }
         }
       }
+
+      this.cachedStyles = nextStyles as Styles;
     }
 
-    return nextStyles as Styles;
+    return this.cachedStyles;
   }
 
   private get target() {
@@ -482,7 +505,6 @@ export default class ReactFloater extends React.PureComponent<Props, State> {
       disableAnimation = false,
       footer,
       hideArrow,
-      open,
       portalElement,
       showCloseButton,
       style,
@@ -504,14 +526,6 @@ export default class ReactFloater extends React.PureComponent<Props, State> {
       </Wrapper>
     );
 
-    const output: PlainObject = {};
-
-    if (positionWrapper) {
-      output.wrapperInPortal = wrapper;
-    } else {
-      output.wrapperAsChildren = wrapper;
-    }
-
     return (
       <span>
         <Portal
@@ -530,7 +544,6 @@ export default class ReactFloater extends React.PureComponent<Props, State> {
             footer={footer}
             hideArrow={hideArrow || currentPlacement === 'center'}
             onClick={this.handleClick}
-            open={open}
             placement={currentPlacement}
             positionWrapper={positionWrapper}
             showCloseButton={showCloseButton}
@@ -538,9 +551,9 @@ export default class ReactFloater extends React.PureComponent<Props, State> {
             styles={this.styles}
             title={title}
           />
-          {output.wrapperInPortal}
+          {positionWrapper && wrapper}
         </Portal>
-        {output.wrapperAsChildren}
+        {!positionWrapper && wrapper}
       </span>
     );
   }
