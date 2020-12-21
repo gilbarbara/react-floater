@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import STATUS from '../../status';
+import { STATUS } from '../../literals';
 
 import { HandlerFunction, PlainObject, RenderProps, Statuses, Styles } from '../../types';
 

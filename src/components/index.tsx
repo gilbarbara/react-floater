@@ -3,8 +3,8 @@ import Popper, { Data, Behavior, Position } from 'popper.js';
 import is from 'is-lite';
 import treeChanges from 'tree-changes';
 
-import STATUS from '../status';
 import { canUseDOM, getOptions, isFixed, isMobile, log, noop, once } from '../utils';
+import { POSITIONING_PROPS, STATUS } from '../literals';
 
 import { PlainObject, Props, State, Statuses, Styles } from '../types';
 
@@ -15,8 +15,6 @@ import Wrapper from './Wrapper';
 import getStyles from '../styles';
 
 declare let window: any;
-
-const POSITIONING_PROPS = ['position', 'top', 'right', 'bottom', 'left'] as const;
 
 export default class ReactFloater extends React.PureComponent<Props, State> {
   arrowRef = React.createRef<HTMLSpanElement>();
