@@ -13,7 +13,7 @@ interface Props {
   wrapperRef: React.Ref<HTMLSpanElement>;
 }
 
-export default function ReactFloaterWrapper(props: Props): JSX.Element | null {
+function FloaterWrapper(props: Props): JSX.Element | null {
   const {
     childRef,
     children,
@@ -25,6 +25,10 @@ export default function ReactFloaterWrapper(props: Props): JSX.Element | null {
     wrapperRef,
   } = props;
   let element;
+
+  const mergedStyles = React.useMemo(() => {
+    return { ...styles, ...style };
+  }, [style, styles]);
 
   /* istanbul ignore else */
   if (children) {
@@ -49,7 +53,7 @@ export default function ReactFloaterWrapper(props: Props): JSX.Element | null {
   return (
     <span
       ref={wrapperRef}
-      style={{ ...styles, ...style }}
+      style={mergedStyles}
       onClick={onClick}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
@@ -58,3 +62,5 @@ export default function ReactFloaterWrapper(props: Props): JSX.Element | null {
     </span>
   );
 }
+
+export default React.memo(FloaterWrapper);

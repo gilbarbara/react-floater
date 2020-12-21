@@ -7,9 +7,10 @@ interface Props {
   styles: Styles;
 }
 
-export default class FloaterArrow extends React.PureComponent<Props> {
-  private get parentStyle() {
-    const { placement, styles } = this.props;
+function FloaterArrow(props: Props): JSX.Element {
+  const { arrowRef, placement, styles } = props;
+
+  const style = React.useMemo(() => {
     const { length } = styles.arrow;
     const arrow: React.CSSProperties = {
       pointerEvents: 'none',
@@ -38,54 +39,53 @@ export default class FloaterArrow extends React.PureComponent<Props> {
     }
 
     return arrow;
+  }, [placement, styles.arrow]);
+
+  const {
+    arrow: { color, display, length, margin, position, spread },
+  } = styles;
+  const arrowStyles: React.CSSProperties = { display, position };
+
+  let points;
+  let x = spread;
+  let y = length;
+
+  /* istanbul ignore else */
+  if (placement.startsWith('top')) {
+    points = `0,0 ${x / 2},${y} ${x},0`;
+    arrowStyles.bottom = 0;
+    arrowStyles.marginLeft = margin;
+    arrowStyles.marginRight = margin;
+  } else if (placement.startsWith('bottom')) {
+    points = `${x},${y} ${x / 2},0 0,${y}`;
+    arrowStyles.top = 0;
+    arrowStyles.marginLeft = margin;
+    arrowStyles.marginRight = margin;
+  } else if (placement.startsWith('left')) {
+    y = spread;
+    x = length;
+    points = `0,0 ${x},${y / 2} 0,${y}`;
+    arrowStyles.right = 0;
+    arrowStyles.marginTop = margin;
+    arrowStyles.marginBottom = margin;
+  } else if (placement.startsWith('right')) {
+    y = spread;
+    x = length;
+    points = `${x},${y} ${x},0 0,${y / 2}`;
+    arrowStyles.left = 0;
+    arrowStyles.marginTop = margin;
+    arrowStyles.marginBottom = margin;
   }
 
-  render(): JSX.Element {
-    const { arrowRef, placement, styles } = this.props;
-    const {
-      arrow: { color, display, length, margin, position, spread },
-    } = styles;
-    const arrowStyles: React.CSSProperties = { display, position };
-
-    let points;
-    let x = spread;
-    let y = length;
-
-    /* istanbul ignore else */
-    if (placement.startsWith('top')) {
-      points = `0,0 ${x / 2},${y} ${x},0`;
-      arrowStyles.bottom = 0;
-      arrowStyles.marginLeft = margin;
-      arrowStyles.marginRight = margin;
-    } else if (placement.startsWith('bottom')) {
-      points = `${x},${y} ${x / 2},0 0,${y}`;
-      arrowStyles.top = 0;
-      arrowStyles.marginLeft = margin;
-      arrowStyles.marginRight = margin;
-    } else if (placement.startsWith('left')) {
-      y = spread;
-      x = length;
-      points = `0,0 ${x},${y / 2} 0,${y}`;
-      arrowStyles.right = 0;
-      arrowStyles.marginTop = margin;
-      arrowStyles.marginBottom = margin;
-    } else if (placement.startsWith('right')) {
-      y = spread;
-      x = length;
-      points = `${x},${y} ${x},0 0,${y / 2}`;
-      arrowStyles.left = 0;
-      arrowStyles.marginTop = margin;
-      arrowStyles.marginBottom = margin;
-    }
-
-    return (
-      <div className="__floater__arrow" style={this.parentStyle}>
-        <span ref={arrowRef} style={arrowStyles}>
-          <svg width={x} height={y} version="1.1" xmlns="http://www.w3.org/2000/svg">
-            <polygon points={points} fill={color} />
-          </svg>
-        </span>
-      </div>
-    );
-  }
+  return (
+    <div className="__floater__arrow" style={style}>
+      <span ref={arrowRef} style={arrowStyles}>
+        <svg width={x} height={y} version="1.1" xmlns="http://www.w3.org/2000/svg">
+          <polygon points={points} fill={color} />
+        </svg>
+      </span>
+    </div>
+  );
 }
+
+export default FloaterArrow;

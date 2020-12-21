@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import * as ExecutionEnvironment from 'exenv';
 import is from 'is-lite';
 import { Modifiers } from 'popper.js';
@@ -81,14 +82,8 @@ export function log({ title, data, warn = false, debug = false }: PlainObject): 
   /* eslint-enable */
 }
 
-export function on(
-  element: HTMLElement,
-  eventType: string,
-  handler: EventListener,
-  options: boolean | PlainObject = false,
-): void {
-  element.addEventListener(eventType, handler, options);
-}
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+export function noop(): void {}
 
 export function off(
   element: Element,
@@ -97,6 +92,15 @@ export function off(
   options: boolean | PlainObject = false,
 ): void {
   element.removeEventListener(eventType, handler, options);
+}
+
+export function on(
+  element: HTMLElement,
+  eventType: string,
+  handler: EventListener,
+  options: boolean | PlainObject = false,
+): void {
+  element.addEventListener(eventType, handler, options);
 }
 
 export function once(
@@ -116,5 +120,17 @@ export function once(
   on(element, eventType, nextCB, options);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-function
-export function noop(): void {}
+export function useSingleton(cb: () => void): void {
+  const hasBeenCalled = useRef(false);
+
+  if (hasBeenCalled.current) {
+    return;
+  }
+
+  cb();
+  hasBeenCalled.current = true;
+}
+
+export function wait(cb: () => void, amount = 1): number {
+  return window.setTimeout(cb, amount);
+}

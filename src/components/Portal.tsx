@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import is from 'is-lite';
-import { canUseDOM, portalId } from '../utils';
+import { canUseDOM, portalId, useSingleton } from '../utils';
 
 import { PlacementOptions, SelectorOrElement } from '../types';
 
@@ -14,58 +14,74 @@ interface Props {
   zIndex: string | number;
 }
 
-export default class ReactFloaterPortal extends React.PureComponent<Props> {
-  readonly node?: HTMLElement;
+function FloaterPortal(props: Props): JSX.Element | null {
+  const { children, hasChildren, placement, portalElement, target, zIndex } = props;
+  const node = React.useRef<HTMLElement | null>(null);
 
-  constructor(props: Props) {
-    super(props);
-    const { portalElement, zIndex } = props;
-
+  const initialize = React.useCallback(() => {
     if (!canUseDOM) return;
 
     if (portalElement) {
-      this.node = is.string(portalElement)
+      node.current = is.string(portalElement)
         ? (document.querySelector(portalElement) as HTMLElement)
         : portalElement;
     }
 
-    if (!portalElement || !this.node) {
+    if (!portalElement || !node.current) {
       const portal = document.getElementById('react-floater-portal');
 
       if (portal) {
-        this.node = portal;
+        node.current = portal;
       } else {
-        this.node = document.createElement('div');
-        this.node.id = portalId;
+        node.current = document.createElement('div');
+        node.current.id = portalId;
 
         if (zIndex) {
-          this.node.style.zIndex = `${zIndex}`;
+          node.current.style.zIndex = `${zIndex}`;
         }
 
-        document.body.appendChild(this.node);
+        document.body.appendChild(node.current);
       }
     }
-  }
+  }, [portalElement, zIndex]);
 
-  componentWillUnmount(): void {
-    if (!canUseDOM || !this.node) return;
+  useSingleton(initialize);
 
-    if (this.node.id === portalId && this.node.childElementCount <= 1) {
-      document.body.removeChild(this.node);
-    }
-  }
-
-  render(): React.ReactPortal | null {
-    const { children, hasChildren, placement, target } = this.props;
-
-    if (this.node) {
-      if (!hasChildren && !target && placement !== 'center') {
-        return null;
+  React.useEffect(() => {
+    if (!portalElement && !document.getElementById(portalId)) {
+      if (node.current) {
+        document.body.appendChild(node.current);
+      } else {
+        initialize();
       }
+    }
+  });
 
-      return ReactDOM.createPortal(children, this.node);
+  React.useEffect(() => {
+    return () => {
+      if (!canUseDOM || !node) return;
+      try {
+        if (node.current && node.current.id === portalId && node.current.childElementCount === 0) {
+          if (document.body.contains(node.current)) {
+            document.body.removeChild(node.current);
+            node.current = null;
+          }
+        }
+      } catch (error) {
+        node.current = null;
+      }
+    };
+  }, []);
+
+  if (node.current) {
+    if (!hasChildren && !target && placement !== 'center') {
+      return null;
     }
 
-    return null;
+    return ReactDOM.createPortal(children, node.current);
   }
+
+  return null;
 }
+
+export default FloaterPortal;
