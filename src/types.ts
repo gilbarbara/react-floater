@@ -1,22 +1,14 @@
 import * as React from 'react';
 import { Data, Modifiers, Placement } from 'popper.js';
 import { PartialDeep, RequireExactlyOne, ValueOf } from 'type-fest';
+import { STATUS } from './literals';
 
 export type Action = 'open' | 'close';
 export type HandlerFunction<T = HTMLElement> = (event: React.SyntheticEvent<T>) => void;
 export type PlacementOptions = Placement | 'center';
 export type PlainObject<T = any> = Record<string, T>;
-export type Statuses = ValueOf<Status>;
 export type SelectorOrElement = string | null | HTMLElement;
-
-export interface Status {
-  INIT: 'init';
-  IDLE: 'idle';
-  OPENING: 'opening';
-  OPEN: 'open';
-  CLOSING: 'closing';
-  ERROR: 'error';
-}
+export type Statuses = ValueOf<typeof STATUS>;
 
 export interface RenderProps {
   closeFn: HandlerFunction;
