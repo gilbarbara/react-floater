@@ -16,7 +16,6 @@ export default function getStyles(styles?: PartialDeep<Styles>): Styles {
         color: '#fff',
         display: 'inline-flex',
         length: 16,
-        margin: 8,
         position: 'absolute',
         spread: 32,
       },
@@ -75,11 +74,6 @@ export default function getStyles(styles?: PartialDeep<Styles>): Styles {
       },
       floaterOpening: {
         opacity: 1,
-        visibility: 'visible',
-      },
-      floaterWithAnimation: {
-        opacity: 1,
-        transition: 'opacity 0.3s, transform 0.2s',
         visibility: 'visible',
       },
       floaterWithComponent: {

@@ -89,9 +89,6 @@ _This is the only required props, unless you pass a_ `component`.
 Log some basic actions.  
 _You can also set a global variable_ `ReactFloaterDebug = true;`
 
-**disableAnimation** {bool} ▶︎ `false`  
-Animate the Floater on scroll/resize.
-
 **disableFlip** {bool} ▶︎ `false`  
 Disable changes in the Floater position on scroll/resize.
 

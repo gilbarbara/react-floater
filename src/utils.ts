@@ -1,26 +1,41 @@
 import { useRef } from 'react';
+import * as deepmerge from 'deepmerge';
 import * as ExecutionEnvironment from 'exenv';
 import is from 'is-lite';
-import { Modifiers } from 'popper.js';
-import { PartialDeep } from 'type-fest';
 
-import * as deepmerge from 'deepmerge';
-import { PlainObject } from './types';
+import { Modifier, Placement } from '@popperjs/core';
+import { PlainObject, PopperModifiers } from './types';
 
 export const { canUseDOM } = ExecutionEnvironment;
 export const portalId = 'react-floater-portal';
 
-export function getOptions(options?: PartialDeep<Modifiers>): Partial<Modifiers> {
+export function getFallbackPlacements(placement: Placement): Placement[] | undefined {
+  if (placement.startsWith('left')) {
+    return ['top', 'bottom'];
+  }
+
+  if (placement.startsWith('right')) {
+    return ['bottom', 'top'];
+  }
+
+  return undefined;
+}
+
+export function getModifiers(modifiers?: PopperModifiers): PopperModifiers {
   const defaultOptions = {
     flip: {
-      padding: 20,
+      options: {
+        padding: 20,
+      },
     },
     preventOverflow: {
-      padding: 10,
+      options: {
+        padding: 10,
+      },
     },
   };
 
-  return deepmerge(defaultOptions, options || {}) as Partial<Modifiers>;
+  return deepmerge(defaultOptions, modifiers || {}) as PopperModifiers;
 }
 
 export function isFixed(el: HTMLElement | null): boolean {
@@ -80,6 +95,16 @@ export function log({ title, data, warn = false, debug = false }: PlainObject): 
     console.groupEnd();
   }
   /* eslint-enable */
+}
+
+export function mergeModifier(
+  modifier: Partial<Modifier<any, any>>,
+  customModifier?: Partial<Modifier<any, any>>,
+): Modifier<any, any> {
+  return deepmerge(modifier, customModifier || {}, {
+    arrayMerge: (_dest, source) => source,
+    isMergeableObject: is.plainObject,
+  });
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function

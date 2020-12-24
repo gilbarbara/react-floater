@@ -32,13 +32,14 @@
   "types": "lib",
   "sideEffects": false,
   "peerDependencies": {
-    "react": "^16.8.0 || ^17.0.0"
+    "react": "^16.8.0 || ^17.0.0",
+    "react-dom": "^16.8.0 || ^17.0.0"
   },
   "dependencies": {
+    "@popperjs/core": "^2.6.0",
     "deepmerge": "^4.2.2",
     "exenv": "^1.2.2",
     "is-lite": "^0.8.0",
-    "popper.js": "^1.16.1",
     "tree-changes": "^0.6.1"
   },
   "devDependencies": {
@@ -111,11 +112,19 @@
   "size-limit": [
     {
       "path": "./esm/index.js",
-      "limit": "60 kB"
+      "limit": "20 kB",
+      "ignore": [
+        "react",
+        "react-dom"
+      ]
     },
     {
       "path": "./lib/index.js",
-      "limit": "60 kB"
+      "limit": "20 kB",
+      "ignore": [
+        "react",
+        "react-dom"
+      ]
     }
   ],
   "husky": {

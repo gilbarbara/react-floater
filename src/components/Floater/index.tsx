@@ -11,7 +11,6 @@ interface Props {
   arrowRef: React.Ref<HTMLSpanElement>;
   component?: React.FunctionComponent<RenderProps> | React.ReactElement;
   content?: React.ReactNode;
-  disableAnimation: boolean;
   floaterRef: React.Ref<HTMLDivElement>;
   footer?: React.ReactNode;
   hideArrow: boolean;
@@ -28,7 +27,6 @@ function Floater(props: Props): JSX.Element | null {
   const {
     component,
     content,
-    disableAnimation,
     floaterRef,
     hideArrow,
     onClick: closeFn,
@@ -44,7 +42,6 @@ function Floater(props: Props): JSX.Element | null {
       floaterCentered,
       floaterClosing,
       floaterOpening,
-      floaterWithAnimation,
       floaterWithComponent,
     } = styles;
     let element: React.CSSProperties = { ...floater };
@@ -69,10 +66,6 @@ function Floater(props: Props): JSX.Element | null {
       element = { ...element, ...floaterOpening };
     }
 
-    if (status === STATUS.OPEN && !disableAnimation) {
-      element = { ...element, ...floaterWithAnimation };
-    }
-
     if (placement === 'center') {
       element = { ...element, ...floaterCentered };
     }
@@ -82,7 +75,7 @@ function Floater(props: Props): JSX.Element | null {
     }
 
     return element;
-  }, [component, disableAnimation, hideArrow, placement, status, styles]);
+  }, [component, hideArrow, placement, status, styles]);
 
   const shouldRender = ['render', 'open', 'opening', 'closing'].some(d => d === status);
 
@@ -112,10 +105,12 @@ function Floater(props: Props): JSX.Element | null {
   }
 
   return (
-    <div ref={floaterRef} className={classes.join(' ')} style={style}>
-      <div className="__floater__body">
-        {output.content}
-        {output.arrow}
+    <div ref={floaterRef}>
+      <div className={classes.join(' ')} style={style}>
+        <div className="__floater__body">
+          {output.content}
+          {output.arrow}
+        </div>
       </div>
     </div>
   );
