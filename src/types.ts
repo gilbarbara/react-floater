@@ -1,6 +1,16 @@
 import * as React from 'react';
-import { Data, Modifiers, Placement } from 'popper.js';
+import { Instance, Placement } from '@popperjs/core';
 import { PartialDeep, RequireExactlyOne, ValueOf } from 'type-fest';
+
+import { ApplyStylesModifier } from '@popperjs/core/lib/modifiers/applyStyles';
+import { ArrowModifier } from '@popperjs/core/lib/modifiers/arrow';
+import { ComputeStylesModifier } from '@popperjs/core/lib/modifiers/computeStyles';
+import { EventListenersModifier } from '@popperjs/core/lib/modifiers/eventListeners';
+import { FlipModifier } from '@popperjs/core/lib/modifiers/flip';
+import { HideModifier } from '@popperjs/core/lib/modifiers/hide';
+import { OffsetModifier } from '@popperjs/core/lib/modifiers/offset';
+import { PopperOffsetsModifier } from '@popperjs/core/lib/modifiers/popperOffsets';
+import { PreventOverflowModifier } from '@popperjs/core/lib/modifiers/preventOverflow';
 import { STATUS } from './literals';
 
 export type Action = 'open' | 'close';
@@ -19,54 +29,49 @@ export interface BaseProps {
   autoOpen?: boolean;
   /* It will be called when the Floater change state */
   callback?: (action: Action, props: Props) => void;
-  /* An element to trigger the Floater. */
+  /* The element to have the Floater. */
   children?: React.ReactNode;
   /**
-   * A React component or function to as a custom UI for the Floater.
+   * A React element or function to be used as the custom UI for the Floater.
    * The prop closeFloater will be available in your component.
    */
   component: React.FunctionComponent<RenderProps> | React.ReactElement;
-  /**
-   * The Floater content. It can be anything that can be rendered.
-   * This is the only required props, unless you pass a component.
-   */
+  /* Anything that can be rendered. */
   content: React.ReactNode;
-  /* Log some basic actions. */
+  /* Log some actions. */
   debug?: boolean;
-  /* Animate the Floater on scroll/resize. */
-  disableAnimation?: boolean;
-  /* Disable changes in the Floater position on scroll/resize. */
+  /* Disable placement adjustments on scroll/resize. */
   disableFlip?: boolean;
-  /* Don't convert hover event to click on mobile. */
+  /* Disable the conversion of hover to click on mobile. */
   disableHoverToClick?: boolean;
-  /* The event that will trigger the Floater. It can be hover | click. * These won't work in controlled mode. */
+  /* The event that will trigger the Floater. Unused in controlled mode. */
   event?: 'click' | 'hover';
   /* The amount of time (in seconds) that the floater should wait after a mouseLeave event before hiding. Only valid for event type hover  */
   eventDelay?: number;
-  /* It can be anything that can be rendered. */
+  /* Anything that can be rendered. */
   footer?: React.ReactNode;
-  /* Get the popper.js instance */
-  getPopper?: (popper: Data, origin: 'floater' | 'wrapper') => void;
-  /* Don't show the arrow. Useful for centered or modal layout. */
+  /* The popper.js instance */
+  getPopper?: (popper: Instance, origin: 'floater' | 'wrapper') => void;
+  /* Hide the arrow. */
   hideArrow?: boolean;
-  /* The distance between the Floater and its target in pixels. */
+  /* The distance between the target and the Floater in pixels. */
   offset?: number;
   /* Controlled mode. */
   open?: boolean;
   /* Customize popper.js modifiers. */
-  options?: Modifiers;
-  /* The placement of the Floater. It will update the position if there's no space available. */
+  modifiers?: PopperModifiers;
+  /* The placement of the Floater. This will be updated automatically if there's no space available unless the "disableFlip" is set to true */
   placement?: PlacementOptions;
-  /* An element to render the tooltip */
+  /* A custom element to render the tooltip */
   portalElement?: SelectorOrElement;
-  /* It will show a ⨉ button to close the Floater. */
+  /* It will show a button to close the Floater. */
   showCloseButton?: boolean;
   style?: React.CSSProperties;
-  /* Customize the default UI. */
+  /* Customize the UI. */
   styles?: PartialDeep<Styles>;
   /* The target for the Floater positioning. If it's not set, it will use the `children` as the target. */
   target?: SelectorOrElement;
-  /* It can be anything that can be rendered. */
+  /* Anything that can be rendered. */
   title?: React.ReactNode;
   /* Position the wrapper relative to the target. */
   wrapperOptions?: {
@@ -90,6 +95,18 @@ export interface CustomComponent {
   closeFn: HandlerFunction;
 }
 
+export interface PopperModifiers {
+  applyStyles?: Partial<ApplyStylesModifier>;
+  arrow?: Partial<ArrowModifier>;
+  computeStyles?: Partial<ComputeStylesModifier>;
+  eventListeners?: Partial<EventListenersModifier>;
+  flip?: Partial<FlipModifier>;
+  hide?: Partial<HideModifier>;
+  offset?: Partial<OffsetModifier>;
+  popperOffsets?: Partial<PopperOffsetsModifier>;
+  preventOverflow?: Partial<PreventOverflowModifier>;
+}
+
 export interface Styles {
   arrow: React.CSSProperties & {
     length: number;
@@ -111,4 +128,10 @@ export interface Styles {
   title: React.CSSProperties;
   wrapper: React.CSSProperties;
   wrapperPosition: React.CSSProperties;
+}
+
+declare global {
+  interface Window {
+    ReactFloaterDebug?: boolean;
+  }
 }
