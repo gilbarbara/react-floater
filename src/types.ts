@@ -54,6 +54,8 @@ export interface BaseProps {
   getPopper?: (popper: Instance, origin: 'floater' | 'wrapper') => void;
   /* Hide the arrow. */
   hideArrow?: boolean;
+  /* Used for the accessibility logic. Defaults to a randomly generated id. */
+  id?: string;
   /* The distance between the target and the Floater in pixels. */
   offset?: number;
   /* Controlled mode. */

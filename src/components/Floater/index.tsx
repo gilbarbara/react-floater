@@ -14,6 +14,7 @@ interface Props {
   floaterRef: React.Ref<HTMLDivElement>;
   footer?: React.ReactNode;
   hideArrow: boolean;
+  id: string;
   onClick: HandlerFunction;
   placement: string;
   positionWrapper: boolean;
@@ -29,6 +30,7 @@ function Floater(props: Props): JSX.Element | null {
     content,
     floaterRef,
     hideArrow,
+    id,
     onClick: closeFn,
     placement,
     status,
@@ -81,12 +83,15 @@ function Floater(props: Props): JSX.Element | null {
 
   const output: PlainObject = {};
   const classes = ['__floater'];
+  const baseProps = { id, role: 'tooltip' };
 
   if (component) {
+    const componentProps = { closeFn, ...baseProps };
+
     if (React.isValidElement(component)) {
-      output.content = React.cloneElement(component, { closeFn });
+      output.content = React.cloneElement(component, componentProps);
     } else {
-      output.content = component({ closeFn });
+      output.content = component(componentProps);
     }
   } else {
     output.content = <Container {...props} content={content} />;
@@ -106,7 +111,7 @@ function Floater(props: Props): JSX.Element | null {
 
   return (
     <div ref={floaterRef}>
-      <div className={classes.join(' ')} style={style}>
+      <div className={classes.join(' ')} style={style} {...baseProps}>
         <div className="__floater__body">
           {output.content}
           {output.arrow}

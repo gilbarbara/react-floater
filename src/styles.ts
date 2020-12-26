@@ -89,8 +89,6 @@ export default function getStyles(styles?: PartialDeep<Styles>): Styles {
       },
       wrapper: {
         cursor: 'help',
-        display: 'inline-flex',
-        flexDirection: 'column',
         zIndex: options.zIndex,
       },
       wrapperPosition: {
