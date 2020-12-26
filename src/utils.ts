@@ -145,6 +145,10 @@ export function once(
   on(element, eventType, nextCB, options);
 }
 
+export function randomId(): string {
+  return `rf-${Math.round(Math.random() * 1e5)}`;
+}
+
 export function useSingleton(cb: () => void): void {
   const hasBeenCalled = useRef(false);
 

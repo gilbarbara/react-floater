@@ -13,6 +13,7 @@ import {
   log,
   mergeModifier,
   once,
+  randomId,
   wait,
 } from './utils';
 
@@ -30,6 +31,7 @@ export default class ReactFloater extends React.PureComponent<Props, State> {
   childRef = React.createRef<HTMLElement>();
   eventDelayTimer?: number;
   floaterRef = React.createRef<HTMLDivElement>();
+  id = randomId();
   isActive = false;
   popper?: Instance;
   wrapperPopper?: Instance;
@@ -570,6 +572,8 @@ export default class ReactFloater extends React.PureComponent<Props, State> {
       content,
       footer,
       hideArrow,
+      id = this.id,
+      open,
       portalElement,
       showCloseButton,
       style,
@@ -579,9 +583,12 @@ export default class ReactFloater extends React.PureComponent<Props, State> {
     const wrapper = (
       <Wrapper
         childRef={this.childRef}
+        id={id}
+        isControlled={is.boolean(open)}
         onClick={this.handleClick}
         onMouseEnter={this.handleMouseEnter}
         onMouseLeave={this.handleMouseLeave}
+        status={status}
         style={style}
         styles={this.styles.wrapper}
         wrapperRef={this.wrapperRef}
@@ -606,6 +613,7 @@ export default class ReactFloater extends React.PureComponent<Props, State> {
             floaterRef={this.floaterRef}
             footer={footer}
             hideArrow={hideArrow || currentPlacement === 'center'}
+            id={id}
             onClick={this.handleClick}
             placement={currentPlacement}
             positionWrapper={positionWrapper}
