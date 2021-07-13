@@ -11,6 +11,7 @@ module.exports = {
   setupFiles: ['<rootDir>/test/__setup__/setupFiles.js'],
   setupFilesAfterEnv: ['<rootDir>/test/__setup__/setupTests.js'],
   snapshotSerializers: ['enzyme-to-json/serializer'],
+  testEnvironment: 'jsdom',
   testEnvironmentOptions: { resources: 'usable' },
   testRegex: '/test/.*?\\.(test|spec)\\.js$',
   testURL: 'http://localhost:3000',
