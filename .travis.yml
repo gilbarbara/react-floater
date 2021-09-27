@@ -12,5 +12,3 @@ script:
   - npm run validate
 after_success:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
-addons:
-  code_climate: true
