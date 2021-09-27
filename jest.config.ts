@@ -3,31 +3,30 @@ module.exports = {
   collectCoverageFrom: ['src/**/*.{ts,tsx}'],
   coverageThreshold: {
     global: {
-      branches: 55,
-      functions: 80,
-      lines: 80,
-      statements: 80,
+      branches: 70,
+      functions: 90,
+      lines: 90,
+      statements: 90,
     },
   },
   globals: {
     'ts-jest': {
       tsconfig: 'test/tsconfig.json',
-      diagnostics: false,
+      diagnostics: {
+        ignoreCodes: ['TS151001'],
+      },
     },
   },
   moduleDirectories: ['node_modules', 'src', './'],
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json'],
   preset: 'ts-jest',
-  setupFiles: ['<rootDir>/test/__setup__/setupFiles.ts'],
+  setupFiles: ['@testing-library/react/dont-cleanup-after-each'],
   setupFilesAfterEnv: ['<rootDir>/test/__setup__/setupTests.ts'],
   snapshotSerializers: ['jest-serializer-html'],
+  testEnvironment: 'jsdom',
   testMatch: null,
   testRegex: '/test/.*?\\.(test|spec)\\.tsx?$',
   testURL: 'http://localhost/',
-  transform: {
-    '.(js)': 'ts-jest',
-  },
-  transformIgnorePatterns: ['<rootDir>/node_modules/(?!popper.js)'],
   verbose: false,
   watchPlugins: ['jest-watch-typeahead/filename', 'jest-watch-typeahead/testname'],
 };
