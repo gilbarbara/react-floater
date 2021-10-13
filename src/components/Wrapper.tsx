@@ -1,10 +1,11 @@
 import * as React from 'react';
 import is from 'is-lite';
-import { HandlerFunction, PlainObject, Statuses } from '../types';
+
 import { STATUS } from '../literals';
+import { HandlerFunction, PlainObject, Statuses } from '../types';
 
 interface Props {
-  childRef: React.Ref<HTMLElement>;
+  childRef: React.RefObject<HTMLElement>;
   children: React.ReactNode;
   id: string;
   isControlled: boolean;
@@ -14,7 +15,7 @@ interface Props {
   status: Statuses;
   style?: React.CSSProperties;
   styles: React.CSSProperties;
-  wrapperRef: React.Ref<HTMLSpanElement>;
+  wrapperRef: React.RefObject<HTMLElement>;
 }
 
 function FloaterWrapper(props: Props): JSX.Element | null {
@@ -42,9 +43,12 @@ function FloaterWrapper(props: Props): JSX.Element | null {
   }, [children, style, styles]);
 
   let wrapperProps: PlainObject = {
-    'aria-describedby': [STATUS.OPENING, STATUS.OPEN, STATUS.CLOSING].some(d => d === status)
+    'aria-describedby': ([STATUS.OPENING, STATUS.OPEN, STATUS.CLOSING] as Statuses[]).includes(
+      status,
+    )
       ? id
       : undefined,
+    'data-id': id,
     style: mergedStyles,
   };
 
@@ -59,7 +63,12 @@ function FloaterWrapper(props: Props): JSX.Element | null {
 
   /* istanbul ignore else */
   if (children) {
-    if (React.Children.count(children) === 1 && React.isValidElement(children)) {
+    if (
+      React.Children.count(children) === 1 &&
+      React.isValidElement(children) &&
+      children.type !== React.Fragment
+    ) {
+      // eslint-disable-next-line unicorn/prefer-ternary
       if (is.function(children.type)) {
         element = (
           <span ref={wrapperRef}>

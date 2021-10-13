@@ -1,11 +1,15 @@
 import * as React from 'react';
-import { createPopper, ModifierArguments, Instance } from '@popperjs/core';
+import { createPopper, Instance, ModifierArguments } from '@popperjs/core';
 import is from 'is-lite';
-import treeChanges from 'tree-changes';
+import useTreeChanges from 'tree-changes-hook';
 
+import Floater from './components/Floater';
+import Portal from './components/Portal';
+import Wrapper from './components/Wrapper';
 import { POSITIONING_PROPS, STATUS } from './literals';
 import {
   canUseDOM,
+  enhanceProps,
   getFallbackPlacements,
   getModifiers,
   isFixed,
@@ -14,202 +18,208 @@ import {
   mergeModifier,
   once,
   randomId,
-  wait,
-} from './utils';
-
+} from './modules/helpers';
+import { useMount, useSetState, useSingleton, useUnmount, useUpdateEffect } from './modules/hooks';
+import getStyles from './modules/styles';
 import { PlainObject, Props, State, Statuses, Styles } from './types';
 
-import Portal from './components/Portal';
-import Floater from './components/Floater';
-import Wrapper from './components/Wrapper';
+export default function ReactFloater(props: Props): JSX.Element {
+  const {
+    autoOpen,
+    callback,
+    children,
+    component,
+    content,
+    debug,
+    disableFlip,
+    disableHoverToClick,
+    event,
+    eventDelay,
+    footer,
+    getPopper,
+    hideArrow,
+    id,
+    modifiers,
+    offset,
+    open,
+    placement,
+    portalElement,
+    showCloseButton,
+    style,
+    styles,
+    target,
+    title,
+    wrapperOptions,
+  } = enhanceProps(props);
 
-import getStyles from './styles';
+  const [state, setState] = useSetState<State>({
+    currentPlacement: placement || 'bottom',
+    positionWrapper: !!wrapperOptions?.position && !!target,
+    status: STATUS.INIT,
+    statusWrapper: STATUS.INIT,
+  });
 
-export default class ReactFloater extends React.PureComponent<Props, State> {
-  arrowRef = React.createRef<HTMLSpanElement>();
-  cachedStyles?: Styles;
-  childRef = React.createRef<HTMLElement>();
-  eventDelayTimer?: number;
-  floaterRef = React.createRef<HTMLDivElement>();
-  id = randomId();
-  isActive = false;
-  popper?: Instance;
-  wrapperPopper?: Instance;
-  wrapperRef = React.createRef<HTMLSpanElement>();
-  wrapperStyles: React.CSSProperties = {};
+  const arrowRef = React.useRef<HTMLSpanElement>(null);
+  const childRef = React.useRef<HTMLElement>(null);
+  const eventDelayTimer = React.useRef<number>();
+  const floaterRef = React.useRef<HTMLDivElement>(null);
+  const internalId = React.useRef(randomId());
+  const isMounted = React.useRef(false);
+  const popperRef = React.useRef<Instance>();
+  const stateRef = React.useRef<State>(state);
+  const wrapperPopper = React.useRef<Instance>();
+  const wrapperRef = React.useRef<HTMLSpanElement>(null);
+  const wrapperStyles = React.useRef<React.CSSProperties>({});
 
-  constructor(props: Props) {
-    super(props);
-    const { children, placement, open, target, wrapperOptions } = this.props;
+  const { currentPlacement, positionWrapper, status, statusWrapper } = state;
+
+  const { changed } = useTreeChanges(state);
+  const { changed: changedProps } = useTreeChanges(props);
+
+  const updateState = React.useCallback(
+    (nextState: Partial<State>, callback_?: () => void) => {
+      if (isMounted.current) {
+        setState(nextState);
+        stateRef.current = { ...state, ...nextState };
+
+        if (callback_) {
+          callback_();
+        }
+      }
+    },
+    [setState, state],
+  );
+
+  const toggle = React.useCallback(
+    (forceStatus?: Statuses) => {
+      let nextStatus: Statuses =
+        stateRef.current.status === STATUS.OPEN ? STATUS.CLOSING : STATUS.RENDER;
+
+      if (!is.undefined(forceStatus)) {
+        nextStatus = forceStatus;
+      }
+
+      updateState({
+        status: nextStatus,
+        statusWrapper: nextStatus === STATUS.CLOSING ? STATUS.RENDER : STATUS.IDLE,
+      });
+    },
+    [updateState],
+  );
+
+  const targetElement = React.useRef(() => {
+    if (!canUseDOM) {
+      return null;
+    }
+
+    if (target) {
+      if (is.domElement(target)) {
+        return target;
+      }
+
+      return document.querySelector(target) as HTMLElement;
+    }
+
+    return childRef.current || wrapperRef.current;
+  });
+
+  const currentDebug = React.useMemo(() => {
+    return debug || canUseDOM ? !!window.ReactFloaterDebug : false;
+  }, [debug]);
+
+  const currentEvent = React.useMemo(() => {
+    if (event === 'hover' && isMobile() && !disableHoverToClick) {
+      return 'click';
+    }
+
+    return event;
+  }, [disableHoverToClick, event]);
+
+  const currentStyles = React.useMemo(() => {
+    const nextStyles: Styles = getStyles(styles);
+    const element = targetElement.current();
+
+    if (positionWrapper) {
+      let wrapperCurrentStyles: PlainObject | undefined;
+
+      if (status !== STATUS.IDLE) {
+        wrapperCurrentStyles = nextStyles.wrapperPosition;
+      } else if (statusWrapper === STATUS.RENDER) {
+        wrapperCurrentStyles = wrapperPopper.current?.state.styles;
+      }
+
+      nextStyles.wrapper = {
+        ...nextStyles.wrapper,
+        ...wrapperCurrentStyles,
+      };
+    }
 
     /* istanbul ignore else */
-    if (process.env.NODE_ENV !== 'production') {
-      if (wrapperOptions?.position && !target) {
-        console.warn('Missing props! You need to set a `target` to use `wrapperOptions.position`'); // eslint-disable-line no-console
-      }
+    if (element) {
+      const targetStyles = window.getComputedStyle(element);
 
-      if (!children && !is.boolean(open)) {
-        console.warn('Missing props! You need to set `children`.'); // eslint-disable-line no-console
-      }
-    }
+      /* istanbul ignore else */
+      if (wrapperStyles.current) {
+        nextStyles.wrapper = {
+          ...nextStyles.wrapper,
+          ...wrapperStyles.current,
+        };
+      } else if (!['relative', 'static'].includes(targetStyles.position)) {
+        wrapperStyles.current = {};
 
-    this.state = {
-      currentPlacement: placement || 'bottom',
-      positionWrapper: !!wrapperOptions?.position && !!target,
-      status: STATUS.INIT,
-      statusWrapper: STATUS.INIT,
-    };
+        if (!positionWrapper) {
+          POSITIONING_PROPS.forEach(d => {
+            if (d === 'position') {
+              wrapperStyles.current[d] = targetStyles[d] as React.CSSProperties['position'];
+            } else {
+              wrapperStyles.current[d] = targetStyles[d];
+            }
+          });
 
-    if (canUseDOM) {
-      window.addEventListener('load', this.handleLoad);
-    }
-  }
-
-  static defaultProps = {
-    autoOpen: false,
-    debug: false,
-    disableFlip: false,
-    disableHoverToClick: false,
-    event: 'click',
-    eventDelay: 0.4,
-    hideArrow: false,
-    offset: 15,
-    placement: 'bottom',
-    showCloseButton: false,
-    styles: {},
-    target: null,
-    wrapperOptions: {
-      position: false,
-    },
-  };
-
-  componentDidMount(): void {
-    if (!canUseDOM) return;
-
-    const { positionWrapper } = this.state;
-    const { children, open, target } = this.props;
-
-    this.isActive = true;
-
-    log({
-      title: 'init',
-      data: {
-        hasChildren: !!children,
-        hasTarget: !!target,
-        isControlled: is.boolean(open),
-        positionWrapper,
-        target: this.target,
-        floater: this.floaterRef,
-      },
-      debug: this.debug,
-    });
-
-    this.initPopper();
-  }
-
-  componentDidUpdate(prevProps: Props, prevState: State): void {
-    if (!canUseDOM) return;
-
-    const { autoOpen, open } = this.props;
-    const { changedFrom, changed } = treeChanges(prevState, this.state);
-    const { changed: changedProps } = treeChanges(prevProps, this.props);
-
-    if (changedProps('open')) {
-      let forceStatus;
-
-      // always follow `open` in controlled mode
-      if (is.boolean(open)) {
-        forceStatus = open ? STATUS.RENDER : STATUS.CLOSING;
-      }
-
-      this.toggle(forceStatus);
-    }
-
-    if (changedProps('wrapperOptions.position') || changedProps('target')) {
-      this.changeWrapperPosition(this.props);
-    }
-
-    if (changedProps('styles') || changed('status') || changed('statusWrapper')) {
-      this.cachedStyles = undefined;
-    }
-
-    if (
-      (changed('status', STATUS.IDLE) && open) ||
-      (changedFrom('status', STATUS.INIT, STATUS.IDLE) && autoOpen)
-    ) {
-      this.toggle(STATUS.RENDER);
-    }
-
-    if (changed('status', STATUS.RENDER)) {
-      if (this.popper) {
-        this.popper.forceUpdate();
-      } else {
-        this.initPopper();
+          nextStyles.wrapper = {
+            ...nextStyles.wrapper,
+            ...wrapperStyles.current,
+          };
+        }
       }
     }
 
-    if (this.floaterRef.current && changed('status', [STATUS.RENDER, STATUS.CLOSING])) {
-      once(this.floaterRef.current, 'transitionend', this.handleTransitionEnd);
+    return nextStyles as Styles;
+  }, [positionWrapper, status, statusWrapper, styles]);
+
+  const cleanUp = React.useRef(() => {
+    if (popperRef.current) {
+      popperRef.current.destroy();
     }
 
-    if (changedFrom('status', STATUS.CLOSING, STATUS.IDLE) && this.popper) {
-      this.popper.destroy();
-      this.popper = undefined;
-
-      if (this.wrapperPopper) {
-        this.wrapperPopper.forceUpdate();
-      }
+    if (wrapperPopper.current) {
+      wrapperPopper.current.destroy();
     }
-  }
+  });
 
-  componentWillUnmount(): void {
-    if (!canUseDOM) return;
-
-    this.isActive = false;
-
-    if (this.popper) {
-      this.popper.destroy();
-    }
-
-    if (this.wrapperPopper) {
-      this.wrapperPopper.destroy();
-    }
-
-    window.removeEventListener('load', this.handleLoad);
-  }
-
-  private initPopper() {
-    const { positionWrapper, status } = this.state;
-    const {
-      disableFlip,
-      getPopper,
-      hideArrow,
-      offset,
-      modifiers,
-      placement,
-      wrapperOptions,
-    } = this.props;
-    const nextStatus = status === STATUS.RENDER ? STATUS.OPENING : STATUS.IDLE;
+  const initPopper = React.useRef(() => {
+    const nextStatus = stateRef.current.status === STATUS.RENDER ? STATUS.OPENING : STATUS.IDLE;
+    const element = targetElement.current();
 
     /* istanbul ignore else */
     if (placement === 'center') {
-      wait(() => {
-        this.updateState({ status: nextStatus });
+      setTimeout(() => {
+        updateState({ status: nextStatus });
       }, 100);
-    } else if (this.target) {
-      if (this.floaterRef.current) {
+    } else if (element) {
+      if (floaterRef.current) {
         const { arrow, flip, offset: offsetModifier, ...rest } = getModifiers(modifiers);
 
-        this.popper = createPopper(this.target, this.floaterRef.current, {
+        popperRef.current = createPopper(element, floaterRef.current, {
           placement,
-          strategy: isFixed(this.childRef.current) ? 'fixed' : 'absolute',
+          strategy: isFixed(childRef.current) ? 'fixed' : 'absolute',
           modifiers: [
             mergeModifier(
               {
                 name: 'arrow',
                 enabled: !hideArrow,
                 options: {
-                  element: this.arrowRef.current,
+                  element: arrowRef.current,
                   padding: 8,
                 },
               },
@@ -239,12 +249,10 @@ export default class ReactFloater extends React.PureComponent<Props, State> {
               name: 'updatePlacement',
               enabled: true,
               phase: 'afterWrite',
-              fn: ({ instance, state }: ModifierArguments<PlainObject>) => {
-                const { currentPlacement } = this.state;
-
-                if (state.placement !== currentPlacement) {
-                  this.popper = instance;
-                  this.updateState({ currentPlacement: state.placement });
+              fn: ({ instance, state: popperState }: ModifierArguments<PlainObject>) => {
+                if (popperState.placement !== stateRef.current.currentPlacement) {
+                  popperRef.current = instance;
+                  updateState({ currentPlacement: popperState.placement });
                 }
               },
             },
@@ -252,11 +260,11 @@ export default class ReactFloater extends React.PureComponent<Props, State> {
               name: 'applyArrowStyle',
               enabled: true,
               phase: 'write',
-              fn: ({ state }: ModifierArguments<PlainObject>) => {
+              fn: ({ state: popperState }: ModifierArguments<PlainObject>) => {
                 const {
-                  placement: statePlacement,
                   elements: { arrow: stateArrow },
-                } = state;
+                  placement: statePlacement,
+                } = popperState;
 
                 if (stateArrow) {
                   if (statePlacement.startsWith('top')) {
@@ -275,42 +283,42 @@ export default class ReactFloater extends React.PureComponent<Props, State> {
                 }
               },
             },
-            ...(rest ? Object.values(rest) : []),
+            ...Object.values(rest),
           ],
-          onFirstUpdate: state => {
-            this.updateState({
-              currentPlacement: state.placement,
+          onFirstUpdate: popperState => {
+            updateState({
+              currentPlacement: popperState.placement,
               status: nextStatus,
             });
 
-            if (placement !== state.placement) {
-              wait(() => {
-                this.popper?.forceUpdate();
+            if (placement !== popperState.placement) {
+              setTimeout(() => {
+                popperRef.current?.forceUpdate();
               });
             }
           },
         });
 
-        if (getPopper) {
-          getPopper(this.popper, 'floater');
+        if (getPopper && popperRef.current) {
+          getPopper(popperRef.current, 'floater');
         }
       } else {
-        this.updateState({
+        updateState({
           status: STATUS.IDLE,
         });
       }
     }
 
     if (
-      !this.wrapperPopper &&
-      positionWrapper &&
-      this.target &&
-      this.wrapperRef.current &&
+      !wrapperPopper.current &&
+      stateRef.current.positionWrapper &&
+      element &&
+      wrapperRef.current &&
       placement !== 'center'
     ) {
       const wrapperOffset = wrapperOptions?.offset ? wrapperOptions.offset : 0;
 
-      this.wrapperPopper = createPopper(this.target, this.wrapperRef.current, {
+      wrapperPopper.current = createPopper(element, wrapperRef.current, {
         placement: wrapperOptions?.placement || placement,
         modifiers: [
           {
@@ -328,304 +336,244 @@ export default class ReactFloater extends React.PureComponent<Props, State> {
             enabled: false,
           },
         ],
-        onFirstUpdate: state => {
-          this.updateState({ statusWrapper: STATUS.RENDER });
+        onFirstUpdate: popperState => {
+          updateState({ statusWrapper: STATUS.RENDER });
 
-          if (placement !== state.placement) {
-            wait(() => {
-              this.wrapperPopper?.forceUpdate();
+          if (placement !== popperState.placement) {
+            setTimeout(() => {
+              wrapperPopper.current?.forceUpdate();
             });
           }
         },
       });
 
       if (getPopper) {
-        getPopper(this.wrapperPopper, 'wrapper');
+        getPopper(wrapperPopper.current, 'wrapper');
       }
     }
-  }
+  });
 
-  private changeWrapperPosition({ target, wrapperOptions }: Props) {
-    this.updateState({
-      positionWrapper: !!wrapperOptions?.position && !!target,
-    });
-  }
-
-  private toggle(forceStatus?: Statuses) {
-    const { status } = this.state;
-    let nextStatus: Statuses = status === STATUS.OPEN ? STATUS.CLOSING : STATUS.RENDER;
-
-    if (!is.undefined(forceStatus)) {
-      nextStatus = forceStatus;
+  const handleLoad = React.useRef(() => {
+    if (popperRef.current) {
+      popperRef.current.forceUpdate();
     }
 
-    this.updateState({
-      status: nextStatus,
-      statusWrapper: nextStatus === STATUS.CLOSING ? STATUS.RENDER : STATUS.IDLE,
-    });
-  }
-
-  private updateState(nextState: Partial<State>, callback?: () => void) {
-    if (this.isActive) {
-      this.setState(nextState as State, callback);
+    if (wrapperPopper.current) {
+      wrapperPopper.current.forceUpdate();
     }
-  }
+  });
 
-  private handleClick = () => {
-    const { positionWrapper, status } = this.state;
-    const { event, open } = this.props;
+  const handleTransitionEnd = React.useRef(() => {
+    /* istanbul ignore else */
+    if (wrapperPopper.current) {
+      wrapperPopper.current.forceUpdate();
+    }
 
-    if (is.boolean(open)) return;
+    updateState(
+      {
+        status: stateRef.current.status === STATUS.OPENING ? STATUS.OPEN : STATUS.IDLE,
+      },
+      () => {
+        if (callback) {
+          callback(stateRef.current.status === STATUS.OPEN ? 'open' : 'close', enhanceProps(props));
+        }
+      },
+    );
+  });
+
+  const handleClick = React.useCallback(() => {
+    if (is.boolean(open)) {
+      return;
+    }
 
     /* istanbul ignore else */
-    if (this.event === 'click' || (this.event === 'hover' && positionWrapper)) {
+    if (currentEvent === 'click' || (currentEvent === 'hover' && positionWrapper)) {
       log({
         title: 'click',
         data: [{ event, status: status === STATUS.OPEN ? 'closing' : 'opening' }],
-        debug: this.debug,
+        debug: currentDebug,
       });
 
-      this.toggle(status === 'idle' ? STATUS.RENDER : undefined);
+      toggle(status === 'idle' ? STATUS.RENDER : undefined);
     }
-  };
+  }, [currentDebug, currentEvent, event, open, positionWrapper, status, toggle]);
 
-  private handleLoad = () => {
-    if (this.popper) {
-      this.popper.forceUpdate();
+  const handleMouseEnter = React.useCallback(() => {
+    if (is.boolean(open) || isMobile() || currentEvent !== 'hover') {
+      return;
     }
 
-    if (this.wrapperPopper) {
-      this.wrapperPopper.forceUpdate();
+    log({
+      title: 'mouseEnter',
+      data: [{ key: 'originalEvent', value: event }],
+      debug: currentDebug,
+    });
+
+    if (status === STATUS.IDLE) {
+      clearTimeout(eventDelayTimer.current);
+      eventDelayTimer.current = undefined;
+      toggle(STATUS.RENDER);
     }
-  };
+  }, [currentDebug, currentEvent, event, open, status, toggle]);
 
-  private handleMouseEnter = () => {
-    const { status } = this.state;
-    const { event, open } = this.props;
-
-    if (is.boolean(open) || isMobile()) return;
+  const handleMouseLeave = React.useCallback(() => {
+    if (is.boolean(open) || isMobile()) {
+      return;
+    }
 
     /* istanbul ignore else */
-    if (this.event === 'hover' && status === STATUS.IDLE) {
-      log({
-        title: 'mouseEnter',
-        data: [{ key: 'originalEvent', value: event }],
-        debug: this.debug,
-      });
-
-      clearTimeout(this.eventDelayTimer);
-      this.toggle(status === 'idle' ? STATUS.RENDER : undefined);
-    }
-  };
-
-  private handleMouseLeave = () => {
-    const { event, eventDelay, open } = this.props;
-    const { positionWrapper, status } = this.state;
-
-    if (is.boolean(open) || isMobile()) return;
-
-    /* istanbul ignore else */
-    if (this.event === 'hover') {
+    if (currentEvent === 'hover') {
       log({
         title: 'mouseLeave',
         data: [{ key: 'originalEvent', value: event }],
-        debug: this.debug,
+        debug: currentDebug,
       });
 
-      const hasOpenStatus = status === STATUS.OPENING || status === STATUS.OPEN;
+      const hasOpenStatus = ([STATUS.OPENING, STATUS.OPEN] as Statuses[]).includes(status);
 
       if (!eventDelay) {
-        this.toggle(STATUS.CLOSING);
-      } else if (hasOpenStatus && !positionWrapper && !this.eventDelayTimer) {
-        this.eventDelayTimer = window.setTimeout(() => {
-          delete this.eventDelayTimer;
-
-          this.toggle();
-        }, eventDelay * 1000);
+        toggle(status === STATUS.CLOSING ? STATUS.IDLE : STATUS.CLOSING);
+      } else if (!positionWrapper) {
+        if (hasOpenStatus) {
+          clearTimeout(eventDelayTimer.current);
+          eventDelayTimer.current = window.setTimeout(() => {
+            toggle();
+            eventDelayTimer.current = undefined;
+          }, eventDelay * 1000);
+        }
       }
     }
-  };
+  }, [currentDebug, currentEvent, event, eventDelay, open, positionWrapper, status, toggle]);
 
-  private handleTransitionEnd = () => {
-    const { status } = this.state;
-    const { callback } = this.props;
-
-    /* istanbul ignore else */
-    if (this.wrapperPopper) {
-      this.wrapperPopper.forceUpdate();
+  useSingleton(() => {
+    if (canUseDOM) {
+      window.addEventListener('load', handleLoad.current);
     }
+  });
 
-    this.updateState(
-      {
-        status: status === STATUS.OPENING ? STATUS.OPEN : STATUS.IDLE,
+  useMount(() => {
+    isMounted.current = true;
+
+    log({
+      title: 'init',
+      data: {
+        hasChildren: !!children,
+        hasTarget: !!target,
+        isControlled: is.boolean(open),
+        positionWrapper,
+        target: targetElement.current(),
+        floater: floaterRef.current,
       },
-      () => {
-        const { status: newStatus } = this.state;
-        if (callback) {
-          callback(newStatus === STATUS.OPEN ? 'open' : 'close', this.props);
-        }
-      },
-    );
-  };
+      debug: currentDebug,
+    });
 
-  private get debug() {
-    const { debug } = this.props;
+    initPopper.current();
+  });
 
-    return debug || canUseDOM ? !!window.ReactFloaterDebug : false;
-  }
+  useUnmount(() => {
+    isMounted.current = false;
 
-  private get event() {
-    const { disableHoverToClick, event } = this.props;
+    cleanUp.current();
+    window.removeEventListener('load', handleLoad.current);
+  });
 
-    if (event === 'hover' && isMobile() && !disableHoverToClick) {
-      return 'click';
+  // handle changes
+  useUpdateEffect(() => {
+    if (!canUseDOM) {
+      return;
     }
 
-    return event;
-  }
+    if (changedProps('open')) {
+      let forceStatus;
 
-  private get styles() {
-    if (!this.cachedStyles) {
-      const { status, positionWrapper, statusWrapper } = this.state;
-      const { styles } = this.props;
-
-      const nextStyles: Styles = getStyles(styles);
-
-      if (positionWrapper) {
-        let wrapperStyles: PlainObject | undefined;
-
-        if (status !== STATUS.IDLE) {
-          wrapperStyles = nextStyles.wrapperPosition;
-        } else if (statusWrapper === STATUS.RENDER) {
-          wrapperStyles = this.wrapperPopper?.state.styles;
-        }
-
-        nextStyles.wrapper = {
-          ...nextStyles.wrapper,
-          ...wrapperStyles,
-        };
+      // always follow `open` in controlled mode
+      if (is.boolean(open)) {
+        forceStatus = open ? STATUS.RENDER : STATUS.CLOSING;
       }
 
-      /* istanbul ignore else */
-      if (this.target) {
-        const targetStyles = window.getComputedStyle(this.target);
-
-        /* istanbul ignore else */
-        if (this.wrapperStyles) {
-          nextStyles.wrapper = {
-            ...nextStyles.wrapper,
-            ...this.wrapperStyles,
-          };
-        } else if (!['relative', 'static'].includes(targetStyles.position)) {
-          this.wrapperStyles = {};
-
-          if (!positionWrapper) {
-            POSITIONING_PROPS.forEach(d => {
-              if (d === 'position') {
-                this.wrapperStyles[d] = targetStyles[d] as React.CSSProperties['position'];
-              } else {
-                this.wrapperStyles[d] = targetStyles[d];
-              }
-            });
-
-            nextStyles.wrapper = {
-              ...nextStyles.wrapper,
-              ...this.wrapperStyles,
-            };
-
-            this.target.style.position = 'relative';
-            this.target.style.top = 'auto';
-            this.target.style.right = 'auto';
-            this.target.style.bottom = 'auto';
-            this.target.style.left = 'auto';
-          }
-        }
-      }
-
-      this.cachedStyles = nextStyles as Styles;
+      toggle(forceStatus);
     }
 
-    return this.cachedStyles;
-  }
-
-  private get target() {
-    if (!canUseDOM) return null;
-
-    const { target } = this.props;
-
-    if (target) {
-      if (is.domElement(target)) {
-        return target;
-      }
-
-      return document.querySelector(target) as HTMLElement;
+    if (changedProps('wrapperOptions.position') || changedProps('target')) {
+      updateState({
+        positionWrapper: !!wrapperOptions?.position && !!target,
+      });
     }
 
-    return this.childRef.current || this.wrapperRef.current;
-  }
+    if (
+      (changed('status', STATUS.IDLE) && open) ||
+      (changed('status', STATUS.IDLE, STATUS.INIT) && autoOpen)
+    ) {
+      toggle(STATUS.RENDER);
+    }
 
-  render(): JSX.Element {
-    const { currentPlacement, positionWrapper, status } = this.state;
-    const {
-      children,
-      component,
-      content,
-      footer,
-      hideArrow,
-      id = this.id,
-      open,
-      portalElement,
-      showCloseButton,
-      style,
-      target,
-      title,
-    } = this.props;
-    const wrapper = (
-      <Wrapper
-        childRef={this.childRef}
-        id={id}
-        isControlled={is.boolean(open)}
-        onClick={this.handleClick}
-        onMouseEnter={this.handleMouseEnter}
-        onMouseLeave={this.handleMouseLeave}
-        status={status}
-        style={style}
-        styles={this.styles.wrapper}
-        wrapperRef={this.wrapperRef}
+    if (changed('status', STATUS.RENDER)) {
+      if (popperRef.current) {
+        popperRef.current.destroy();
+      }
+
+      initPopper.current();
+    }
+
+    if (floaterRef.current && changed('status', [STATUS.RENDER, STATUS.CLOSING])) {
+      once(floaterRef.current, 'transitionend', handleTransitionEnd.current);
+    }
+
+    if (changed('status', STATUS.IDLE, STATUS.CLOSING) && popperRef.current) {
+      popperRef.current.destroy();
+      popperRef.current = undefined;
+
+      if (wrapperPopper.current) {
+        wrapperPopper.current.forceUpdate();
+      }
+    }
+  });
+
+  const wrapper = (
+    <Wrapper
+      childRef={childRef}
+      id={id || internalId.current}
+      isControlled={is.boolean(open)}
+      onClick={handleClick}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      status={status}
+      style={style}
+      styles={currentStyles.wrapper}
+      wrapperRef={wrapperRef}
+    >
+      {children}
+    </Wrapper>
+  );
+
+  return (
+    <>
+      <Portal
+        hasChildren={!!children}
+        placement={currentPlacement}
+        portalElement={portalElement}
+        target={target}
+        zIndex={currentStyles.options.zIndex}
       >
-        {children}
-      </Wrapper>
-    );
-
-    return (
-      <React.Fragment>
-        <Portal
-          hasChildren={!!children}
+        <Floater
+          arrowRef={arrowRef}
+          component={component}
+          content={content}
+          floaterRef={floaterRef}
+          footer={footer}
+          hideArrow={hideArrow || currentPlacement === 'center'}
+          id={id || internalId.current}
+          onClick={handleClick}
           placement={currentPlacement}
-          portalElement={portalElement}
-          target={target}
-          zIndex={this.styles.options.zIndex}
-        >
-          <Floater
-            arrowRef={this.arrowRef}
-            component={component}
-            content={content}
-            floaterRef={this.floaterRef}
-            footer={footer}
-            hideArrow={hideArrow || currentPlacement === 'center'}
-            id={id}
-            onClick={this.handleClick}
-            placement={currentPlacement}
-            positionWrapper={positionWrapper}
-            showCloseButton={showCloseButton}
-            status={status}
-            styles={this.styles}
-            title={title}
-          />
-          {positionWrapper && wrapper}
-        </Portal>
-        {!positionWrapper && wrapper}
-      </React.Fragment>
-    );
-  }
+          positionWrapper={positionWrapper}
+          showCloseButton={showCloseButton}
+          status={status}
+          styles={currentStyles}
+          title={title}
+        />
+        {positionWrapper && wrapper}
+      </Portal>
+      {!positionWrapper && wrapper}
+    </>
+  );
 }

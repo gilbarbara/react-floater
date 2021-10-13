@@ -1,11 +1,10 @@
 import * as React from 'react';
 
-import { STATUS } from '../../literals';
-
-import { HandlerFunction, PlainObject, RenderProps, Statuses, Styles } from '../../types';
-
 import Arrow from './Arrow';
 import Container from './Container';
+
+import { STATUS } from '../../literals';
+import { HandlerFunction, PlainObject, RenderProps, Statuses, Styles } from '../../types';
 
 interface Props {
   arrowRef: React.Ref<HTMLSpanElement>;
@@ -79,7 +78,7 @@ function Floater(props: Props): JSX.Element | null {
     return element;
   }, [component, hideArrow, placement, status, styles]);
 
-  const shouldRender = ['render', 'open', 'opening', 'closing'].some(d => d === status);
+  const shouldRender = ['render', 'open', 'opening', 'closing'].includes(status);
 
   const output: PlainObject = {};
   const classes = ['__floater'];
@@ -88,11 +87,9 @@ function Floater(props: Props): JSX.Element | null {
   if (component) {
     const componentProps = { closeFn, ...baseProps };
 
-    if (React.isValidElement(component)) {
-      output.content = React.cloneElement(component, componentProps);
-    } else {
-      output.content = component(componentProps);
-    }
+    output.content = React.isValidElement(component)
+      ? React.cloneElement(component, componentProps)
+      : component(componentProps);
   } else {
     output.content = <Container {...props} content={content} />;
   }

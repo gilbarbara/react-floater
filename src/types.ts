@@ -1,7 +1,5 @@
 import * as React from 'react';
 import { Instance, Placement } from '@popperjs/core';
-import { PartialDeep, RequireExactlyOne, ValueOf } from 'type-fest';
-
 import { ApplyStylesModifier } from '@popperjs/core/lib/modifiers/applyStyles';
 import { ArrowModifier } from '@popperjs/core/lib/modifiers/arrow';
 import { ComputeStylesModifier } from '@popperjs/core/lib/modifiers/computeStyles';
@@ -11,6 +9,8 @@ import { HideModifier } from '@popperjs/core/lib/modifiers/hide';
 import { OffsetModifier } from '@popperjs/core/lib/modifiers/offset';
 import { PopperOffsetsModifier } from '@popperjs/core/lib/modifiers/popperOffsets';
 import { PreventOverflowModifier } from '@popperjs/core/lib/modifiers/preventOverflow';
+import { PartialDeep, RequireExactlyOne, ValueOf } from 'type-fest';
+
 import { STATUS } from './literals';
 
 export type Action = 'open' | 'close';
@@ -56,12 +56,12 @@ export interface BaseProps {
   hideArrow?: boolean;
   /* Used for the accessibility logic. Defaults to a randomly generated id. */
   id?: string;
+  /* Customize popper.js modifiers. */
+  modifiers?: PopperModifiers;
   /* The distance between the target and the Floater in pixels. */
   offset?: number;
   /* Controlled mode. */
   open?: boolean;
-  /* Customize popper.js modifiers. */
-  modifiers?: PopperModifiers;
   /* The placement of the Floater. This will be updated automatically if there's no space available unless the "disableFlip" is set to true */
   placement?: PlacementOptions;
   /* A custom element to render the tooltip */
@@ -118,11 +118,11 @@ export interface Styles {
   container: React.CSSProperties;
   content: React.CSSProperties;
   floater: React.CSSProperties;
+  floaterCentered: React.CSSProperties;
+  floaterClosing: React.CSSProperties;
   floaterOpening: React.CSSProperties;
   floaterWithAnimation: React.CSSProperties;
   floaterWithComponent: React.CSSProperties;
-  floaterClosing: React.CSSProperties;
-  floaterCentered: React.CSSProperties;
   footer: React.CSSProperties;
   options: {
     zIndex: number;
