@@ -1,4 +1,5 @@
 import * as React from 'react';
+
 import { HandlerFunction } from '../../types';
 
 interface Props {
@@ -6,18 +7,18 @@ interface Props {
   styles: React.CSSProperties;
 }
 
-function FloaterCloseBtn({ onClick, styles }: Props): JSX.Element {
+function FloaterCloseButton({ onClick, styles }: Props): JSX.Element {
   const { color, height, width, ...style } = styles;
 
   return (
     <button aria-label="close" onClick={onClick} style={style} type="button">
       <svg
-        width={`${width}px`}
         height={`${height}px`}
-        viewBox="0 0 18 18"
-        version="1.1"
-        xmlns="http://www.w3.org/2000/svg"
         preserveAspectRatio="xMidYMid"
+        version="1.1"
+        viewBox="0 0 18 18"
+        width={`${width}px`}
+        xmlns="http://www.w3.org/2000/svg"
       >
         <g>
           <path
@@ -30,4 +31,4 @@ function FloaterCloseBtn({ onClick, styles }: Props): JSX.Element {
   );
 }
 
-export default FloaterCloseBtn;
+export default FloaterCloseButton;

@@ -1,4 +1,5 @@
 import * as React from 'react';
+
 import { Styles } from '../../types';
 
 interface Props {
@@ -35,9 +36,9 @@ function FloaterArrow(props: Props): JSX.Element {
   }
 
   return (
-    <span className="__floater__arrow" ref={arrowRef} style={arrowStyles}>
-      <svg width={x} height={y} version="1.1" xmlns="http://www.w3.org/2000/svg">
-        <polygon points={points} fill={color} />
+    <span ref={arrowRef} className="__floater__arrow" style={arrowStyles}>
+      <svg height={y} version="1.1" width={x} xmlns="http://www.w3.org/2000/svg">
+        <polygon fill={color} points={points} />
       </svg>
     </span>
   );

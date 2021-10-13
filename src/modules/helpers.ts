@@ -1,13 +1,33 @@
-import { useRef } from 'react';
+import { Modifier, Placement } from '@popperjs/core';
 import * as deepmerge from 'deepmerge';
 import * as ExecutionEnvironment from 'exenv';
 import is from 'is-lite';
 
-import { Modifier, Placement } from '@popperjs/core';
-import { PlainObject, PopperModifiers } from './types';
+import { PlainObject, PopperModifiers, Props } from '../types';
 
 export const { canUseDOM } = ExecutionEnvironment;
 export const portalId = 'react-floater-portal';
+
+export function enhanceProps(props: Props): Props {
+  return {
+    autoOpen: false,
+    debug: false,
+    disableFlip: false,
+    disableHoverToClick: false,
+    event: 'click',
+    eventDelay: 0.4,
+    hideArrow: false,
+    offset: 15,
+    placement: 'bottom',
+    showCloseButton: false,
+    styles: {},
+    target: null,
+    wrapperOptions: {
+      position: false,
+    },
+    ...props,
+  };
+}
 
 export function getFallbackPlacements(placement: Placement): Placement[] | undefined {
   if (placement.startsWith('left')) {
@@ -24,11 +44,15 @@ export function getFallbackPlacements(placement: Placement): Placement[] | undef
 export function getModifiers(modifiers?: PopperModifiers): PopperModifiers {
   const defaultOptions = {
     flip: {
+      name: 'flip',
+      enabled: true,
       options: {
         padding: 20,
       },
     },
     preventOverflow: {
+      name: 'preventOverflow',
+      enabled: true,
       options: {
         padding: 10,
       },
@@ -70,7 +94,7 @@ export function isMobile(): boolean {
  * @param {boolean}      [arg.warn]  - If true, the message will be a warning
  * @param {boolean}      [arg.debug] - Nothing will be logged unless debug is true
  */
-export function log({ title, data, warn = false, debug = false }: PlainObject): void {
+export function log({ data, debug = false, title, warn = false }: PlainObject): void {
   /* eslint-disable no-console */
   const logFn = warn ? console.warn || console.error : console.log;
 
@@ -102,7 +126,7 @@ export function mergeModifier(
   customModifier?: Partial<Modifier<any, any>>,
 ): Modifier<any, any> {
   return deepmerge(modifier, customModifier || {}, {
-    arrayMerge: (_dest, source) => source,
+    arrayMerge: (_destination, source) => source,
     isMergeableObject: is.plainObject,
   });
 }
@@ -137,8 +161,8 @@ export function once(
   let nextCB: EventListener;
 
   // eslint-disable-next-line prefer-const
-  nextCB = e => {
-    handler(e);
+  nextCB = event => {
+    handler(event);
     off(element, eventType, nextCB);
   };
 
@@ -147,19 +171,4 @@ export function once(
 
 export function randomId(): string {
   return `rf-${Math.round(Math.random() * 1e5)}`;
-}
-
-export function useSingleton(cb: () => void): void {
-  const hasBeenCalled = useRef(false);
-
-  if (hasBeenCalled.current) {
-    return;
-  }
-
-  cb();
-  hasBeenCalled.current = true;
-}
-
-export function wait(cb: () => void, amount = 1): number {
-  return window.setTimeout(cb, amount);
 }

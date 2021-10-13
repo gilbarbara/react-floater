@@ -1,7 +1,7 @@
 import * as deepmerge from 'deepmerge';
 import { PartialDeep } from 'type-fest';
 
-import { Styles } from './types';
+import { Styles } from '../types';
 
 const defaultOptions = {
   zIndex: 100,

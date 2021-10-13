@@ -1,9 +1,9 @@
 import * as React from 'react';
 import is from 'is-lite';
 
-import { HandlerFunction, PlainObject, Styles } from '../../types';
+import CloseButton from './CloseButton';
 
-import CloseBtn from './CloseBtn';
+import { HandlerFunction, PlainObject, Styles } from '../../types';
 
 interface Props {
   content: React.ReactNode;
@@ -17,7 +17,7 @@ interface Props {
 }
 
 function FloaterContainer(props: Props): JSX.Element {
-  const { content, footer, onClick, open, positionWrapper, showCloseButton, title, styles } = props;
+  const { content, footer, onClick, open, positionWrapper, showCloseButton, styles, title } = props;
 
   const output: PlainObject = {
     content: React.isValidElement(content) ? (
@@ -50,8 +50,9 @@ function FloaterContainer(props: Props): JSX.Element {
   }
 
   if ((showCloseButton || positionWrapper) && !is.boolean(open)) {
-    output.close = <CloseBtn onClick={onClick} styles={styles.close} />;
+    output.close = <CloseButton onClick={onClick} styles={styles.close} />;
   }
+
   return (
     <div className="__floater__container" style={styles.container}>
       {output.close}
