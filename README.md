@@ -1,10 +1,10 @@
 # React Floater
 
-[![NPM version](https://badge.fury.io/js/react-floater.svg)](https://www.npmjs.com/package/react-floater) [![Build Status](https://travis-ci.com/gilbarbara/react-floater.svg?branch=master)](https://travis-ci.com/gilbarbara/react-floater) [![Maintainability](https://api.codeclimate.com/v1/badges/a3457f536c0915c0935b/maintainability)](https://codeclimate.com/github/gilbarbara/react-floater/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/a3457f536c0915c0935b/test_coverage)](https://codeclimate.com/github/gilbarbara/react-floater/test_coverage)
+[![NPM version](https://badge.fury.io/js/react-floater.svg)](https://www.npmjs.com/package/react-floater) [![Build Status](https://travis-ci.com/gilbarbara/react-floater.svg?branch=main)](https://travis-ci.com/gilbarbara/react-floater) [![Maintainability](https://api.codeclimate.com/v1/badges/a3457f536c0915c0935b/maintainability)](https://codeclimate.com/github/gilbarbara/react-floater/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/a3457f536c0915c0935b/test_coverage)](https://codeclimate.com/github/gilbarbara/react-floater/test_coverage)
 
 Advanced tooltips for React!
 
-View the [demo](https://codesandbox.io/s/github/gilbarbara/react-floater/tree/master/demo)
+View the [demo](https://codesandbox.io/s/github/gilbarbara/react-floater/tree/main/demo)
 
 ## Highlights
 
