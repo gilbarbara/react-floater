@@ -38,20 +38,17 @@ Check `WithStyledComponents.js` in the [demo](https://84vn36m178.codesandbox.io/
 If you use your own components as `children` it will receive an `innerRef` prop that you must set in your HTMLElement:  
 _Stateless components don't accept refs..._
 
-```jsx
-const Button = ({ innerRef, ...rest }) => (
-  <button ref={innerRef} {...rest} />
-);
+```typescript jsx
+const Button = ({ innerRef, ...rest }) => <button ref={innerRef} {...rest} />;
 
-...
 <Floater content="This is the Floater content">
-    <Button>click me</Button>
-</Floater>
+  <Button>click me</Button>
+</Floater>;
 ```
 
 This works transparently with styled-components (and possible other modules):
 
-```jsx
+```typescript jsx
 const Wrapper = styled.div`
   margin: 0 auto;
   max-width: 500px;
@@ -153,31 +150,31 @@ The target used to calculate the Floater position. If it's not set, it will use 
 **title** {node}  
 It can be anything that can be rendered.
 
-**wrapperOptions** {object}  
+**wrapperOptions** {WrapperOptions}  
 Position the wrapper relative to the target.  
 _You need to set a `target` for this to work._
 
-```js
-{
-    offset: number, // The distance between the wrapper and the target. It can be negative.
-    placement: string, // the same options as above, except center
-    position: bool, // Set to true to position the wrapper
+```typescript
+interface WrapperOptions {
+  offset: number; // The distance between the wrapper and the target. It can be negative.
+  placement: string; // the same options as above, except center
+  position: bool; // Set to true to position the wrapper
 }
 ```
 
 ## Styling
 
 You can customize everything with the `styles` prop.  
-Only set the properties you want to change and the default [styles](./src/styles.js) will be merged.
+Only set the properties you want to change and the default styles will be merged.
 
-Check it [styles.js](./src/styles.js) for the syntax.
+Check the [styles.ts](./src/modules/styles.ts) for the syntax.
 
 ## Modes
 
 **Default**  
 The wrapper will trigger the events and use itself as the Floater's target.
 
-```jsx
+```typescript jsx
 <Floater content="This is the Floater content">
   <span>click me</span>
 </Floater>
@@ -186,7 +183,7 @@ The wrapper will trigger the events and use itself as the Floater's target.
 **Proxy**  
 The wrapper will trigger the events but the Floater will use the **target** prop to position itself.
 
-```jsx
+```typescript jsx
 <div className="App">
   <img src="some-path" />
 
@@ -199,7 +196,7 @@ The wrapper will trigger the events but the Floater will use the **target** prop
 **Beacon**  
 The same as the **proxy mode** but the wrapper will be positioned relative to the `target`.
 
-```jsx
+```typescript jsx
 <div className="App">
   <img
     src="https://upload.wikimedia.org/wikipedia/commons/2/2d/Google-favicon-2015.png"
@@ -225,7 +222,7 @@ The same as the **proxy mode** but the wrapper will be positioned relative to th
 When you set a boolean to the `open` prop it will enter the controlled mode and it will not respond to events.  
 In this mode you don't even need to have `children`
 
-```jsx
+```typescript jsx
 <div className="App">
   <img src="some-path" />
   <Floater content="This is the Floater content" open={true} target=".App img" />
