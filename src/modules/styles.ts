@@ -1,4 +1,4 @@
-import * as deepmerge from 'deepmerge';
+import { deepmerge } from 'deepmerge-ts';
 import { PartialDeep } from 'type-fest';
 
 import { Styles } from '../types';

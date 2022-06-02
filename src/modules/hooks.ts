@@ -1,6 +1,5 @@
 import { DependencyList, EffectCallback, useCallback, useEffect, useRef, useState } from 'react';
-
-import { PlainObject } from '../types';
+import { AnyObject } from '@gilbarbara/types';
 
 function useEffectOnce(effect: EffectCallback) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -11,12 +10,13 @@ export function useMount(effect: EffectCallback) {
   useEffectOnce(effect);
 }
 
-export function useSetState<T extends PlainObject>(
+export function useSetState<T extends AnyObject>(
   initialState: T = {} as T,
 ): [T, (patch: Partial<T> | ((previousState: T) => Partial<T>)) => void] {
   const [state, set] = useState<T>(initialState);
+
   const setState = useCallback(
-    patch => {
+    (patch: Partial<T> | ((previousState: T) => Partial<T>)) => {
       set(previousState => ({
         ...previousState,
         ...(patch instanceof Function ? patch(previousState) : patch),

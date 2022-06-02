@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { AnyObject } from '@gilbarbara/types';
 import { createPopper, Instance, ModifierArguments } from '@popperjs/core';
 import is from 'is-lite';
 import useTreeChanges from 'tree-changes-hook';
@@ -21,7 +22,7 @@ import {
 } from './modules/helpers';
 import { useMount, useSetState, useSingleton, useUnmount, useUpdateEffect } from './modules/hooks';
 import getStyles from './modules/styles';
-import { PlainObject, Props, State, Statuses, Styles } from './types';
+import { Props, State, Statuses, Styles } from './types';
 
 export default function ReactFloater(props: Props): JSX.Element {
   const {
@@ -124,7 +125,7 @@ export default function ReactFloater(props: Props): JSX.Element {
   });
 
   const currentDebug = React.useMemo(() => {
-    return debug || canUseDOM ? !!window.ReactFloaterDebug : false;
+    return canUseDOM && (debug || !!window.ReactFloaterDebug);
   }, [debug]);
 
   const currentEvent = React.useMemo(() => {
@@ -140,7 +141,7 @@ export default function ReactFloater(props: Props): JSX.Element {
     const element = targetElement.current();
 
     if (positionWrapper) {
-      let wrapperCurrentStyles: PlainObject | undefined;
+      let wrapperCurrentStyles: AnyObject | undefined;
 
       if (status !== STATUS.IDLE) {
         wrapperCurrentStyles = nextStyles.wrapperPosition;
@@ -239,6 +240,7 @@ export default function ReactFloater(props: Props): JSX.Element {
             mergeModifier(
               {
                 name: 'offset',
+                enabled: true,
                 options: {
                   offset: [0, offset],
                 },
@@ -249,7 +251,7 @@ export default function ReactFloater(props: Props): JSX.Element {
               name: 'updatePlacement',
               enabled: true,
               phase: 'afterWrite',
-              fn: ({ instance, state: popperState }: ModifierArguments<PlainObject>) => {
+              fn: ({ instance, state: popperState }: ModifierArguments<AnyObject>) => {
                 if (popperState.placement !== stateRef.current.currentPlacement) {
                   popperRef.current = instance;
                   updateState({ currentPlacement: popperState.placement });
@@ -260,7 +262,7 @@ export default function ReactFloater(props: Props): JSX.Element {
               name: 'applyArrowStyle',
               enabled: true,
               phase: 'write',
-              fn: ({ state: popperState }: ModifierArguments<PlainObject>) => {
+              fn: ({ state: popperState }: ModifierArguments<AnyObject>) => {
                 const {
                   elements: { arrow: stateArrow },
                   placement: statePlacement,

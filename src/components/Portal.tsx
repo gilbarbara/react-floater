@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import { createPortal } from 'react-dom';
 import is from 'is-lite';
 
 import { canUseDOM, portalId } from '../modules/helpers';
@@ -79,7 +79,7 @@ function ReactFloaterPortal(props: Props): JSX.Element | null {
       return null;
     }
 
-    return ReactDOM.createPortal(children, node.current);
+    return createPortal(children, node.current);
   }
 
   return null;

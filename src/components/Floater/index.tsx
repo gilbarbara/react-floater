@@ -1,10 +1,11 @@
 import * as React from 'react';
+import { AnyObject } from '@gilbarbara/types';
 
 import Arrow from './Arrow';
 import Container from './Container';
 
 import { STATUS } from '../../literals';
-import { HandlerFunction, PlainObject, RenderProps, Statuses, Styles } from '../../types';
+import { HandlerFunction, RenderProps, Statuses, Styles } from '../../types';
 
 interface Props {
   arrowRef: React.Ref<HTMLSpanElement>;
@@ -80,7 +81,7 @@ function Floater(props: Props): JSX.Element | null {
 
   const shouldRender = ['render', 'open', 'opening', 'closing'].includes(status);
 
-  const output: PlainObject = {};
+  const output: AnyObject = {};
   const classes = ['__floater'];
   const baseProps = { id, role: 'tooltip' };
 

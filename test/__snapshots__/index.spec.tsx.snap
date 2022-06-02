@@ -11,7 +11,7 @@ exports[`ReactFloater with \`component\` as element should show the floater with
     class="__floater__body"
   >
     <div
-      class="sc-bdvvtL eXvXcQ"
+      class="css-lgzz4i"
     >
       <div>
         Styled
@@ -53,7 +53,7 @@ exports[`ReactFloater with \`component\` as function should show the floater wit
     class="__floater__body"
   >
     <div
-      class="sc-bdvvtL eXvXcQ"
+      class="css-lgzz4i"
     >
       <div>
         Styled
@@ -105,6 +105,88 @@ exports[`ReactFloater with \`placement\` center should show the floater with cli
         Hello! This is my content!
       </div>
     </div>
+  </div>
+</div>
+`;
+
+exports[`ReactFloater with \`placement\` left should show the floater with click 1`] = `
+<div
+  class="__floater"
+  id="test"
+  role="tooltip"
+  style="display: inline-block; filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.3)); max-width: 300px; opacity: 1; position: relative; transition: opacity 0.3s; visibility: visible; padding: 0px 16px 0px 0px;"
+>
+  <div
+    class="__floater__body"
+  >
+    <div
+      class="__floater__container"
+      style="background-color: rgb(255, 255, 255); color: rgb(102, 102, 102); min-height: 60px; min-width: 200px; padding: 20px; position: relative; z-index: 10;"
+    >
+      <div
+        class="__floater__content"
+        style="font-size: 15px;"
+      >
+        Hello! This is my content!
+      </div>
+    </div>
+    <span
+      class="__floater__arrow"
+      style="display: inline-flex; position: absolute; top: 0px; transform: translate(0px, 8px); right: 0px;"
+    >
+      <svg
+        height="32"
+        version="1.1"
+        width="16"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <polygon
+          fill="#fff"
+          points="0,0 16,16 0,32"
+        />
+      </svg>
+    </span>
+  </div>
+</div>
+`;
+
+exports[`ReactFloater with \`placement\` right should show the floater with click 1`] = `
+<div
+  class="__floater"
+  id="test"
+  role="tooltip"
+  style="display: inline-block; filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.3)); max-width: 300px; opacity: 1; position: relative; transition: opacity 0.3s; visibility: visible; padding: 0px 0px 0px 16px;"
+>
+  <div
+    class="__floater__body"
+  >
+    <div
+      class="__floater__container"
+      style="background-color: rgb(255, 255, 255); color: rgb(102, 102, 102); min-height: 60px; min-width: 200px; padding: 20px; position: relative; z-index: 10;"
+    >
+      <div
+        class="__floater__content"
+        style="font-size: 15px;"
+      >
+        Hello! This is my content!
+      </div>
+    </div>
+    <span
+      class="__floater__arrow"
+      style="display: inline-flex; position: absolute; top: 0px; transform: translate(0px, 8px); left: 0px;"
+    >
+      <svg
+        height="32"
+        version="1.1"
+        width="16"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <polygon
+          fill="#fff"
+          points="16,32 16,0 0,16"
+        />
+      </svg>
+    </span>
   </div>
 </div>
 `;

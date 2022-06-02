@@ -1,8 +1,9 @@
 import * as React from 'react';
+import { AnyObject } from '@gilbarbara/types';
 import is from 'is-lite';
 
 import { STATUS } from '../literals';
-import { HandlerFunction, PlainObject, Statuses } from '../types';
+import { HandlerFunction, Statuses } from '../types';
 
 interface Props {
   childRef: React.RefObject<HTMLElement>;
@@ -42,7 +43,7 @@ function FloaterWrapper(props: Props): JSX.Element | null {
     };
   }, [children, style, styles]);
 
-  let wrapperProps: PlainObject = {
+  let wrapperProps: AnyObject = {
     'aria-describedby': ([STATUS.OPENING, STATUS.OPEN, STATUS.CLOSING] as Statuses[]).includes(
       status,
     )
