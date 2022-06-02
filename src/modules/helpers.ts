@@ -1,9 +1,9 @@
 import { Modifier, Placement } from '@popperjs/core';
-import * as deepmerge from 'deepmerge';
+import { deepmerge } from 'deepmerge-ts';
 import * as ExecutionEnvironment from 'exenv';
 import is from 'is-lite';
 
-import { PlainObject, PopperModifiers, Props } from '../types';
+import { LogOptions, PopperModifiers, Props } from '../types';
 
 export const { canUseDOM } = ExecutionEnvironment;
 export const portalId = 'react-floater-portal';
@@ -86,15 +86,8 @@ export function isMobile(): boolean {
 
 /**
  * Log method calls if debug is enabled
- *
- * @private
- * @param {Object}       arg
- * @param {string}       arg.title    - The title the logger was called from
- * @param {Object|Array} [arg.data]   - The data to be logged
- * @param {boolean}      [arg.warn]  - If true, the message will be a warning
- * @param {boolean}      [arg.debug] - Nothing will be logged unless debug is true
  */
-export function log({ data, debug = false, title, warn = false }: PlainObject): void {
+export function log({ data, debug = false, title, warn = false }: LogOptions): void {
   /* eslint-disable no-console */
   const logFn = warn ? console.warn || console.error : console.log;
 
@@ -124,21 +117,15 @@ export function log({ data, debug = false, title, warn = false }: PlainObject): 
 export function mergeModifier(
   modifier: Partial<Modifier<any, any>>,
   customModifier?: Partial<Modifier<any, any>>,
-): Modifier<any, any> {
-  return deepmerge(modifier, customModifier || {}, {
-    arrayMerge: (_destination, source) => source,
-    isMergeableObject: is.plainObject,
-  });
+): Partial<Modifier<any, any>> {
+  return deepmerge(modifier, customModifier || {});
 }
-
-// eslint-disable-next-line @typescript-eslint/no-empty-function
-export function noop(): void {}
 
 export function off(
   element: Element,
   eventType: string,
   handler: EventListener,
-  options: boolean | PlainObject = false,
+  options: boolean | EventListenerOptions = false,
 ): void {
   element.removeEventListener(eventType, handler, options);
 }
@@ -147,7 +134,7 @@ export function on(
   element: HTMLElement,
   eventType: string,
   handler: EventListener,
-  options: boolean | PlainObject = false,
+  options: boolean | EventListenerOptions = false,
 ): void {
   element.addEventListener(eventType, handler, options);
 }
@@ -156,7 +143,7 @@ export function once(
   element: HTMLElement,
   eventType: string,
   handler: EventListener,
-  options: boolean | PlainObject = false,
+  options: boolean | EventListenerOptions = false,
 ): void {
   let nextCB: EventListener;
 

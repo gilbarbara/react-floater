@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { AnyObject } from '@gilbarbara/types';
 import { Instance, Placement } from '@popperjs/core';
 import { ApplyStylesModifier } from '@popperjs/core/lib/modifiers/applyStyles';
 import { ArrowModifier } from '@popperjs/core/lib/modifiers/arrow';
@@ -16,9 +17,15 @@ import { STATUS } from './literals';
 export type Action = 'open' | 'close';
 export type HandlerFunction<T = HTMLElement> = (event: React.SyntheticEvent<T>) => void;
 export type PlacementOptions = Placement | 'center';
-export type PlainObject<T = any> = Record<string, T>;
 export type SelectorOrElement = string | null | HTMLElement;
 export type Statuses = ValueOf<typeof STATUS>;
+
+export interface LogOptions {
+  data: AnyObject | any[];
+  debug?: boolean;
+  title: string;
+  warn?: boolean;
+}
 
 export interface RenderProps {
   closeFn: HandlerFunction;

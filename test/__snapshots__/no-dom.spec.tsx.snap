@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`without dom should render 1`] = `
+<span data-id="r1tc2"
+      style="cursor:help"
+>
+  Hey
+</span>
+`;

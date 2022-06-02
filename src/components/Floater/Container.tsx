@@ -1,9 +1,10 @@
 import * as React from 'react';
+import { AnyObject } from '@gilbarbara/types';
 import is from 'is-lite';
 
 import CloseButton from './CloseButton';
 
-import { HandlerFunction, PlainObject, Styles } from '../../types';
+import { HandlerFunction, Styles } from '../../types';
 
 interface Props {
   content: React.ReactNode;
@@ -19,7 +20,7 @@ interface Props {
 function FloaterContainer(props: Props): JSX.Element {
   const { content, footer, onClick, open, positionWrapper, showCloseButton, styles, title } = props;
 
-  const output: PlainObject = {
+  const output: AnyObject = {
     content: React.isValidElement(content) ? (
       content
     ) : (

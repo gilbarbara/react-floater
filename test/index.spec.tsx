@@ -54,23 +54,19 @@ describe('ReactFloater', () => {
   });
 
   describe('basic usage', () => {
-    beforeAll(() => {
-      view = setup(props, 'Places');
-    });
-
     afterAll(() => {
       mockGetPopper.mockClear();
       unmountView();
     });
 
     it('should render the element', () => {
+      view = setup(props, 'Places');
+
       expect(getByDataId()).toBeInTheDocument();
     });
 
     it('should render the floater', async () => {
-      await act(async () => {
-        fireEvent.click(getByDataId());
-      });
+      fireEvent.click(getByDataId());
 
       expect(screen.getByTestId('test')).toHaveClass('__floater');
       expect(screen.getByTestId('test')).not.toHaveClass('__floater__open');
@@ -86,9 +82,7 @@ describe('ReactFloater', () => {
     });
 
     it('should hide the floater', async () => {
-      await act(async () => {
-        fireEvent.click(getByDataId());
-      });
+      fireEvent.click(getByDataId());
 
       fireEvent.transitionEnd(screen.getByTestId('test'));
 
@@ -97,32 +91,27 @@ describe('ReactFloater', () => {
   });
 
   describe('with multiple children', () => {
-    beforeAll(() => {
+    afterAll(unmountView);
+
+    it('should render the element', () => {
       view = setup(
         props,
         <>
           <span>Hello</span> <span>world</span>
         </>,
       );
-    });
-    afterAll(unmountView);
 
-    it('should render the element', () => {
       expect(getByDataId()).toBeInTheDocument();
     });
 
     it('should render the floater', async () => {
-      await act(async () => {
-        fireEvent.click(getByDataId());
-      });
+      fireEvent.click(getByDataId());
 
       expect(screen.getByTestId('test')).toBeInTheDocument();
     });
 
     it('should hide the floater', async () => {
-      await act(async () => {
-        fireEvent.click(getByDataId());
-      });
+      fireEvent.click(getByDataId());
 
       fireEvent.transitionEnd(screen.getByTestId('test'));
 
@@ -131,31 +120,26 @@ describe('ReactFloater', () => {
   });
 
   describe('with multiple instances', () => {
-    beforeAll(() => {
-      view = render(<Floaters />);
-    });
     afterAll(unmountView);
 
     it('should render the elements', () => {
+      view = render(<Floaters />);
+
       expect(getByDataId('president')).toBeInTheDocument();
       expect(getByDataId('republic')).toBeInTheDocument();
     });
 
     it('should render the floaters', async () => {
-      await act(async () => {
-        fireEvent.click(getByDataId('president'));
-        fireEvent.click(getByDataId('republic'));
-      });
+      fireEvent.click(getByDataId('president'));
+      fireEvent.click(getByDataId('republic'));
 
       expect(screen.getByTestId('president')).toHaveTextContent('It was that bearded guy!');
       expect(screen.getByTestId('republic')).toHaveTextContent('You know what I mean');
     });
 
     it('should hide the floaters', async () => {
-      await act(async () => {
-        fireEvent.click(getByDataId('president'));
-        fireEvent.click(getByDataId('republic'));
-      });
+      fireEvent.click(getByDataId('president'));
+      fireEvent.click(getByDataId('republic'));
 
       fireEvent.transitionEnd(screen.getByTestId('president'));
       fireEvent.transitionEnd(screen.getByTestId('republic'));
@@ -172,7 +156,6 @@ describe('ReactFloater', () => {
       element.id = 'floaters';
 
       document.body.appendChild(element);
-      view = render(<Floaters portalElement={element} />);
     });
 
     afterAll(() => {
@@ -181,13 +164,13 @@ describe('ReactFloater', () => {
     });
 
     it('should render in the "portalElement"', async () => {
+      view = render(<Floaters portalElement={element} />);
+
       expect(screen.queryByTestId(portalId)).not.toBeInTheDocument();
       expect(screen.getByTestId('floaters')).toBeInTheDocument();
 
-      await act(async () => {
-        fireEvent.click(getByDataId('president'));
-        fireEvent.click(getByDataId('republic'));
-      });
+      fireEvent.click(getByDataId('president'));
+      fireEvent.click(getByDataId('republic'));
 
       expect(screen.getByTestId('president')).toHaveTextContent('It was that bearded guy!');
       expect(screen.getByTestId('republic')).toHaveTextContent('You know what I mean');
@@ -195,26 +178,24 @@ describe('ReactFloater', () => {
   });
 
   describe('with `autoOpen`', () => {
-    beforeAll(async () => {
-      await act(async () => {
-        view = setup({
-          ...props,
-          autoOpen: true,
-        });
-      });
-    });
-
     afterAll(unmountView);
 
-    it('should have rendered the Floater initially open', () => {
+    it('should have rendered the Floater initially open', async () => {
+      view = setup({
+        ...props,
+        autoOpen: true,
+      });
+
+      await act(async () => {
+        jest.runOnlyPendingTimers();
+      });
+
       fireEvent.transitionEnd(screen.getByTestId('test'));
       expect(screen.getByTestId('test')).toHaveClass('__floater__open');
     });
 
     it('should hide the floater', async () => {
-      await act(async () => {
-        fireEvent.click(getByDataId());
-      });
+      fireEvent.click(getByDataId());
 
       fireEvent.transitionEnd(screen.getByTestId('test'));
 
@@ -222,8 +203,10 @@ describe('ReactFloater', () => {
     });
 
     it('should show the floater again', async () => {
+      fireEvent.click(getByDataId());
+
       await act(async () => {
-        fireEvent.click(getByDataId());
+        jest.runOnlyPendingTimers();
       });
 
       fireEvent.transitionEnd(screen.getByTestId('test'));
@@ -233,18 +216,18 @@ describe('ReactFloater', () => {
   });
 
   describe('with `callback`', () => {
-    beforeAll(() => {
+    afterAll(unmountView);
+
+    it('should call the callback function on open', async () => {
       view = setup({
         ...props,
         callback: mockCallback,
       });
-    });
 
-    afterAll(unmountView);
+      fireEvent.click(getByDataId());
 
-    it('should call the callback function on open', async () => {
       await act(async () => {
-        fireEvent.click(getByDataId());
+        jest.runOnlyPendingTimers();
       });
 
       fireEvent.transitionEnd(screen.getByTestId('test'));
@@ -272,9 +255,7 @@ describe('ReactFloater', () => {
     });
 
     it('should call the callback function on close', async () => {
-      await act(async () => {
-        fireEvent.click(getByDataId());
-      });
+      fireEvent.click(getByDataId());
 
       fireEvent.transitionEnd(screen.getByTestId('test'));
 
@@ -301,19 +282,80 @@ describe('ReactFloater', () => {
     });
   });
 
-  describe('with `event` hover', () => {
+  describe('with `debug`', () => {
+    let consoleGroupCollapsed: jest.SpyInstance;
+    let consoleLog: jest.SpyInstance;
+
     beforeAll(() => {
-      view = setup({
-        ...props,
-        event: 'hover',
-      });
+      consoleGroupCollapsed = jest
+        .spyOn(console, 'groupCollapsed')
+        .mockImplementation(() => undefined);
+      consoleLog = jest.spyOn(console, 'log').mockImplementation(() => undefined);
     });
 
+    afterAll(() => {
+      consoleGroupCollapsed.mockRestore();
+      consoleLog.mockRestore();
+      unmountView();
+    });
+
+    it('should be able to show and hide the floater', async () => {
+      view = setup({
+        ...props,
+        debug: true,
+      });
+
+      expect(consoleGroupCollapsed).toHaveBeenCalledWith(
+        '%creact-floater: init',
+        'color: #9b00ff; font-weight: bold; font-size: 12px;',
+      );
+
+      expect(consoleLog).toHaveBeenCalledWith(
+        expect.objectContaining({
+          floater: null,
+          hasChildren: true,
+          hasTarget: false,
+          isControlled: false,
+          positionWrapper: false,
+          target: expect.anything(),
+        }),
+      );
+
+      fireEvent.click(getByDataId());
+
+      expect(consoleGroupCollapsed).toHaveBeenCalledWith(
+        '%creact-floater: click',
+        'color: #9b00ff; font-weight: bold; font-size: 12px;',
+      );
+      expect(consoleLog).toHaveBeenCalledWith({ event: 'click', status: 'opening' });
+
+      await act(async () => {
+        jest.runOnlyPendingTimers();
+      });
+
+      fireEvent.transitionEnd(screen.getByTestId('test'));
+
+      expect(screen.getByTestId('test')).toHaveClass('__floater__open');
+
+      expect(consoleGroupCollapsed).toHaveBeenCalledTimes(2);
+      expect(consoleLog).toHaveBeenCalledTimes(2);
+    });
+  });
+
+  describe('with `event` hover', () => {
     afterAll(unmountView);
 
     it('should be able to show the floater', async () => {
+      view = setup({
+        ...props,
+        event: 'hover',
+        disableHoverToClick: true,
+      });
+
+      fireEvent.mouseEnter(getByDataId());
+
       await act(async () => {
-        fireEvent.mouseEnter(getByDataId());
+        jest.runOnlyPendingTimers();
       });
 
       fireEvent.transitionEnd(screen.getByTestId('test'));
@@ -322,9 +364,7 @@ describe('ReactFloater', () => {
     });
 
     it('should close itself after `eventDelay`', async () => {
-      await act(async () => {
-        fireEvent.mouseLeave(getByDataId());
-      });
+      fireEvent.mouseLeave(getByDataId());
 
       act(() => {
         jest.advanceTimersByTime(1000);
@@ -339,19 +379,19 @@ describe('ReactFloater', () => {
   });
 
   describe('with `event` hover and `eventDelay` set to 0', () => {
-    beforeAll(() => {
+    afterAll(unmountView);
+
+    it('should be able to show the floater', async () => {
       view = setup({
         ...props,
         event: 'hover',
         eventDelay: 0,
       });
-    });
 
-    afterAll(unmountView);
+      fireEvent.mouseEnter(getByDataId());
 
-    it('should be able to show the floater', async () => {
       await act(async () => {
-        fireEvent.mouseEnter(getByDataId());
+        jest.runOnlyPendingTimers();
       });
 
       fireEvent.transitionEnd(screen.getByTestId('test'));
@@ -360,9 +400,7 @@ describe('ReactFloater', () => {
     });
 
     it('should have close itself immediately', async () => {
-      await act(async () => {
-        fireEvent.mouseLeave(getByDataId());
-      });
+      fireEvent.mouseLeave(getByDataId());
 
       fireEvent.transitionEnd(screen.getByTestId('test'));
 
@@ -371,22 +409,20 @@ describe('ReactFloater', () => {
   });
 
   describe('with `title`, `footer` and `closeBtn`', () => {
-    beforeAll(async () => {
-      await act(async () => {
-        view = setup({
-          ...props,
-          footer: 'Footer',
-          showCloseButton: true,
-          title: 'Title',
-        });
-      });
-    });
-
     afterAll(unmountView);
 
     it('should render the floater', async () => {
+      view = setup({
+        ...props,
+        footer: 'Footer',
+        showCloseButton: true,
+        title: 'Title',
+      });
+
+      fireEvent.click(getByDataId());
+
       await act(async () => {
-        fireEvent.click(getByDataId());
+        jest.runOnlyPendingTimers();
       });
 
       fireEvent.transitionEnd(screen.getByTestId('test'));
@@ -401,16 +437,12 @@ describe('ReactFloater', () => {
       open: false,
     };
 
-    beforeAll(() => {
-      view = setup(localProps);
-    });
-
     afterAll(unmountView);
 
     it('should not be able to show the floater with click', async () => {
-      await act(async () => {
-        fireEvent.click(getByDataId());
-      });
+      view = setup(localProps);
+
+      fireEvent.click(getByDataId());
 
       expect(screen.queryByTestId('test')).not.toBeInTheDocument();
     });
@@ -418,20 +450,20 @@ describe('ReactFloater', () => {
     it('should not be able to show the floater with hover', async () => {
       view = setup({ ...localProps, event: 'hover' });
 
-      await act(async () => {
-        fireEvent.mouseEnter(getByDataId());
-      });
+      fireEvent.mouseEnter(getByDataId());
 
       expect(screen.queryByTestId('test')).not.toBeInTheDocument();
     });
 
     it('should show the floater when `open` is true', async () => {
+      view.rerender(
+        <ReactFloater {...localProps} open>
+          {content}
+        </ReactFloater>,
+      );
+
       await act(async () => {
-        view.rerender(
-          <ReactFloater {...localProps} open>
-            {content}
-          </ReactFloater>,
-        );
+        jest.runOnlyPendingTimers();
       });
 
       fireEvent.transitionEnd(screen.getByTestId('test'));
@@ -440,13 +472,11 @@ describe('ReactFloater', () => {
     });
 
     it('should close the floater when `open` is false', async () => {
-      await act(async () => {
-        view.rerender(
-          <ReactFloater {...localProps} open={false}>
-            {content}
-          </ReactFloater>,
-        );
-      });
+      view.rerender(
+        <ReactFloater {...localProps} open={false}>
+          {content}
+        </ReactFloater>,
+      );
 
       fireEvent.transitionEnd(screen.getByTestId('test'));
 
@@ -455,7 +485,9 @@ describe('ReactFloater', () => {
   });
 
   describe('with `component` as function', () => {
-    beforeAll(() => {
+    afterAll(unmountView);
+
+    it('should show the floater with click', async () => {
       view = setup(
         {
           ...props,
@@ -464,22 +496,18 @@ describe('ReactFloater', () => {
         },
         <Button />,
       );
-    });
 
-    afterAll(unmountView);
+      fireEvent.click(getByDataId());
 
-    it('should show the floater with click', async () => {
       await act(async () => {
-        fireEvent.click(getByDataId());
+        jest.runOnlyPendingTimers();
       });
 
       expect(screen.getByTestId('test')).toMatchSnapshot();
     });
 
     it('should close the floater with `closeFn` prop', async () => {
-      await act(async () => {
-        fireEvent.click(screen.getByRole('button', { name: /close/i }));
-      });
+      fireEvent.click(screen.getByRole('button', { name: /close/i }));
 
       fireEvent.transitionEnd(screen.getByTestId('test'));
 
@@ -488,7 +516,9 @@ describe('ReactFloater', () => {
   });
 
   describe('with `component` as element', () => {
-    beforeAll(() => {
+    afterAll(unmountView);
+
+    it('should show the floater with click', async () => {
       view = setup(
         {
           ...props,
@@ -502,22 +532,18 @@ describe('ReactFloater', () => {
         },
         <span>Places</span>,
       );
-    });
 
-    afterAll(unmountView);
+      fireEvent.click(getByDataId());
 
-    it('should show the floater with click', async () => {
       await act(async () => {
-        fireEvent.click(getByDataId());
+        jest.runOnlyPendingTimers();
       });
 
       expect(screen.getByTestId('test')).toMatchSnapshot();
     });
 
     it('should close the floater with `closeFn` prop', async () => {
-      await act(async () => {
-        fireEvent.click(screen.getByRole('button', { name: /close/i }));
-      });
+      fireEvent.click(screen.getByRole('button', { name: /close/i }));
 
       fireEvent.transitionEnd(screen.getByTestId('test'));
 
@@ -526,18 +552,56 @@ describe('ReactFloater', () => {
   });
 
   describe('with `placement` top', () => {
-    beforeAll(() => {
+    afterAll(unmountView);
+
+    it('should show the floater with click', async () => {
       view = setup({
         ...props,
         placement: 'top',
       });
-    });
 
+      fireEvent.click(getByDataId());
+
+      await act(async () => {
+        jest.runOnlyPendingTimers();
+      });
+
+      expect(screen.getByTestId('test')).toMatchSnapshot();
+    });
+  });
+
+  describe('with `placement` left', () => {
     afterAll(unmountView);
 
     it('should show the floater with click', async () => {
+      view = setup({
+        ...props,
+        placement: 'left',
+      });
+
+      fireEvent.click(getByDataId());
+
       await act(async () => {
-        fireEvent.click(getByDataId());
+        jest.runOnlyPendingTimers();
+      });
+
+      expect(screen.getByTestId('test')).toMatchSnapshot();
+    });
+  });
+
+  describe('with `placement` right', () => {
+    afterAll(unmountView);
+
+    it('should show the floater with click', async () => {
+      view = setup({
+        ...props,
+        placement: 'right',
+      });
+
+      fireEvent.click(getByDataId());
+
+      await act(async () => {
+        jest.runOnlyPendingTimers();
       });
 
       expect(screen.getByTestId('test')).toMatchSnapshot();
@@ -545,18 +609,16 @@ describe('ReactFloater', () => {
   });
 
   describe('with `placement` center', () => {
-    beforeAll(() => {
+    afterAll(unmountView);
+
+    it('should show the floater with click', async () => {
       view = setup({
         ...props,
         placement: 'center',
       });
-    });
+      fireEvent.click(getByDataId());
 
-    afterAll(unmountView);
-
-    it('should show the floater with click', async () => {
       await act(async () => {
-        fireEvent.click(getByDataId());
         jest.runOnlyPendingTimers();
       });
 
@@ -565,47 +627,36 @@ describe('ReactFloater', () => {
   });
 
   describe('with `wrapperOptions`', () => {
-    beforeAll(async () => {
-      await act(async () => {
-        view = render(
-          <>
-            <span className="external" data-id="external">
-              external
-            </span>
-            <ReactFloater
-              content={
-                <div style={{ fontSize: 32 }}>
-                  Yeah, this is how we use to look back in the day!
-                </div>
-              }
-              disableFlip
-              event="hover"
-              id={id}
-              placement="top"
-              target=".external"
-              wrapperOptions={{
-                offset: -20,
-                placement: 'bottom',
-                position: true,
-              }}
-            >
-              <span data-id="beacon" />
-            </ReactFloater>
-          </>,
-        );
-      });
-    });
-
     afterAll(unmountView);
 
-    it('should render the element', () => {
-      expect(getByDataId('external')).toBeInTheDocument();
-    });
+    it('should render properly', () => {
+      view = render(
+        <>
+          <span className="external" data-id="external">
+            external
+          </span>
+          <ReactFloater
+            content={
+              <div style={{ fontSize: 32 }}>Yeah, this is how we use to look back in the day!</div>
+            }
+            disableFlip
+            id={id}
+            placement="top"
+            target=".external"
+            wrapperOptions={{
+              offset: -20,
+              placement: 'bottom',
+              position: true,
+            }}
+          >
+            <span data-id="beacon" />
+          </ReactFloater>
+        </>,
+      );
 
-    it('should render the floater', async () => {
-      await act(async () => {
-        fireEvent.mouseEnter(document.querySelector('[data-id="test"]') || document);
-      });
+      expect(getByDataId('external')).toBeInTheDocument();
+
+      fireEvent.click(document.querySelector('[data-id="test"]') || document);
 
       expect(screen.getByTestId('test')).toHaveTextContent(
         'Yeah, this is how we use to look back in the day!',
