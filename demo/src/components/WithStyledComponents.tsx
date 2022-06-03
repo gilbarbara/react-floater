@@ -1,6 +1,6 @@
 import React from 'react';
 import Floater from 'react-floater';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 
 const Wrapper = styled.div`
   background: linear-gradient(to bottom right, #9ec2ff 50%, #6ba2ff 50%, #6ba2ff 60%, #3882ff 60%);
@@ -18,7 +18,7 @@ const Button = styled.span`
   border-radius: 4px;
 `;
 
-function CustomFloater({ closeFn, status }: any) {
+function CustomFloater({ closeFn }: any) {
   return (
     <Wrapper>
       <span aria-label="styled" role="img" style={{ fontSize: 60 }}>

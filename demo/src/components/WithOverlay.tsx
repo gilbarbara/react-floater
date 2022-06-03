@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Floater from 'react-floater';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 
 function Button({ innerRef, ...rest }: any) {
   return <button ref={innerRef} type="button" {...rest} />;

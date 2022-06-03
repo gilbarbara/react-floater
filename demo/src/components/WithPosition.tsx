@@ -7,7 +7,6 @@ export default function WithPosition({ cb }: any) {
       <Floater
         callback={cb}
         content={<div>I live up here on large screens!</div>}
-        disableAnimation
         placement="bottom-end"
         styles={{
           container: {
