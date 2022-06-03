@@ -108,7 +108,7 @@ function Floater(props: Props): JSX.Element | null {
   }
 
   return (
-    <div ref={floaterRef}>
+    <div ref={floaterRef} style={{ zIndex: styles.options.zIndex }}>
       <div className={classes.join(' ')} style={style} {...baseProps}>
         <div className="__floater__body">
           {output.content}

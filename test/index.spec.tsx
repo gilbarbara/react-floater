@@ -65,8 +65,14 @@ describe('ReactFloater', () => {
       expect(getByDataId()).toBeInTheDocument();
     });
 
-    it('should render the floater', async () => {
+    it('should render the portal, popper and floater', async () => {
       fireEvent.click(getByDataId());
+      const portal = document.getElementById('react-floater-portal');
+      const popper = portal?.firstChild;
+
+      expect(portal).toBeInTheDocument();
+      expect(portal).toHaveStyle({ zIndex: 100 });
+      expect(popper).toHaveStyle({ zIndex: 100 });
 
       expect(screen.getByTestId('test')).toHaveClass('__floater');
       expect(screen.getByTestId('test')).not.toHaveClass('__floater__open');
@@ -81,10 +87,16 @@ describe('ReactFloater', () => {
       expect(screen.getByTestId('test')).toHaveClass('__floater__open');
     });
 
-    it('should hide the floater', async () => {
+    it('should hide the floater and remove the popper', async () => {
       fireEvent.click(getByDataId());
 
       fireEvent.transitionEnd(screen.getByTestId('test'));
+
+      const portal = document.getElementById('react-floater-portal');
+      const popper = portal?.firstChild;
+
+      expect(portal).toBeInTheDocument();
+      expect(popper).toBeNull();
 
       expect(screen.getByTestId('react-floater-portal')).toBeEmptyDOMElement();
     });
