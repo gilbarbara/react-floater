@@ -1,6 +1,6 @@
 import React from 'react';
 import Floater from 'react-floater';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 
 const Wrapper = styled.div`
   padding: 2rem;
@@ -37,9 +37,7 @@ const Label = styled.label`
   margin-bottom: 5px;
 `;
 
-const Input = styled.input.attrs({
-  required: true,
-})`
+const Input = styled.input`
   border-radius: 3px;
   border: 2px solid palevioletred;
   color: palevioletred;
@@ -50,6 +48,10 @@ const Input = styled.input.attrs({
   padding: 10px;
   width: 100%;
 `;
+
+Input.defaultProps = {
+  required: true,
+};
 
 function Content({ closeFn }: any) {
   return (
