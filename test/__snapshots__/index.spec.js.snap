@@ -8,47 +8,19 @@ exports[`ReactFloater with \`component\` as element should have rendered the com
     closeFn={[Function]}
   >
     <styled.div>
-      <StyledComponent
-        forwardedComponent={
-          Object {
-            "$$typeof": Symbol(react.forward_ref),
-            "attrs": Array [],
-            "componentStyle": ComponentStyle {
-              "componentId": "sc-bdVaJa",
-              "isStatic": false,
-              "lastClassName": "cCXpfk",
-              "rules": Array [
-                "
-  background-color: #cce8ff;
-",
-              ],
-            },
-            "displayName": "styled.div",
-            "foldedComponentIds": Array [],
-            "render": [Function],
-            "styledComponentId": "sc-bdVaJa",
-            "target": "div",
-            "toString": [Function],
-            "warnTooManyClasses": [Function],
-            "withComponent": [Function],
-          }
-        }
-        forwardedRef={null}
+      <div
+        className="sc-bczRLJ jcNdTb"
       >
-        <div
-          className="sc-bdVaJa cCXpfk"
-        >
-          <div>
-            Styled
-          </div>
-          <button
-            onClick={[Function]}
-            type="button"
-          >
-            close
-          </button>
+        <div>
+          Styled
         </div>
-      </StyledComponent>
+        <button
+          onClick={[Function]}
+          type="button"
+        >
+          close
+        </button>
+      </div>
     </styled.div>
   </Styled>
   <FloaterArrow
@@ -215,47 +187,19 @@ exports[`ReactFloater with \`component\` as function should have rendered the co
   className="__floater__body"
 >
   <styled.div>
-    <StyledComponent
-      forwardedComponent={
-        Object {
-          "$$typeof": Symbol(react.forward_ref),
-          "attrs": Array [],
-          "componentStyle": ComponentStyle {
-            "componentId": "sc-bdVaJa",
-            "isStatic": false,
-            "lastClassName": "cCXpfk",
-            "rules": Array [
-              "
-  background-color: #cce8ff;
-",
-            ],
-          },
-          "displayName": "styled.div",
-          "foldedComponentIds": Array [],
-          "render": [Function],
-          "styledComponentId": "sc-bdVaJa",
-          "target": "div",
-          "toString": [Function],
-          "warnTooManyClasses": [Function],
-          "withComponent": [Function],
-        }
-      }
-      forwardedRef={null}
+    <div
+      className="sc-bczRLJ jcNdTb"
     >
-      <div
-        className="sc-bdVaJa cCXpfk"
-      >
-        <div>
-          Styled
-        </div>
-        <button
-          onClick={[Function]}
-          type="button"
-        >
-          close
-        </button>
+      <div>
+        Styled
       </div>
-    </StyledComponent>
+      <button
+        onClick={[Function]}
+        type="button"
+      >
+        close
+      </button>
+    </div>
   </styled.div>
   <FloaterArrow
     component={[Function]}

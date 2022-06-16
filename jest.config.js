@@ -2,8 +2,7 @@ module.exports = {
   transform: {
     '^.+\\.jsx?$': 'babel-jest',
   },
-  moduleFileExtensions: ['js', 'jsx', 'json'],
-  moduleDirectories: ['node_modules', 'src', './'],
+  moduleDirectories: ['node_modules', 'src'],
   moduleNameMapper: {
     '^.+\\.(css|scss)$': '<rootDir>/test/__setup__/styleMock.js',
     '^.+\\.(jpe?g|png|gif|ttf|eot|svg|md)$': '<rootDir>/test/__setup__/fileMock.js',
@@ -12,9 +11,11 @@ module.exports = {
   setupFilesAfterEnv: ['<rootDir>/test/__setup__/setupTests.js'],
   snapshotSerializers: ['enzyme-to-json/serializer'],
   testEnvironment: 'jsdom',
-  testEnvironmentOptions: { resources: 'usable' },
+  testEnvironmentOptions: {
+    resources: 'usable',
+    url: 'http://localhost:3000',
+  },
   testRegex: '/test/.*?\\.(test|spec)\\.js$',
-  testURL: 'http://localhost:3000',
   watchPlugins: ['jest-watch-typeahead/filename', 'jest-watch-typeahead/testname'],
   collectCoverage: false,
   collectCoverageFrom: ['src/**/*.js'],

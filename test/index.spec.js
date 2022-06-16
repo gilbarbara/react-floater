@@ -25,10 +25,7 @@ describe('ReactFloater', () => {
 
   const updateTooltip = (event = 'click') => {
     if (event) {
-      floater
-        .find('ReactFloaterWrapper')
-        .childAt(0)
-        .simulate(event);
+      floater.find('ReactFloaterWrapper').childAt(0).simulate(event);
 
       if (['click', 'mouseEnter'].includes(event)) {
         floater.instance().handleTransitionEnd(); // mock transitionend
@@ -109,10 +106,7 @@ describe('ReactFloater', () => {
     });
 
     it('should render properly', () => {
-      const content = floater
-        .find('ReactFloaterWrapper')
-        .childAt(0)
-        .find('div');
+      const content = floater.find('ReactFloaterWrapper').childAt(0).find('div');
 
       expect(floater.find('ReactFloater')).toExist();
       expect(floater.find('ReactFloaterPortal')).toExist();
