@@ -37,12 +37,14 @@ export default class ReactFloater extends React.Component {
 
     this.state = {
       currentPlacement: props.placement,
+      needsUpdate: false,
       positionWrapper: props.wrapperOptions.position && !!props.target,
       status: STATUS.INIT,
       statusWrapper: STATUS.INIT,
     };
 
     this._isMounted = false;
+    this.hasMounted = false;
 
     if (canUseDOM) {
       window.addEventListener('load', () => {
@@ -144,6 +146,7 @@ export default class ReactFloater extends React.Component {
 
   componentDidMount() {
     if (!canUseDOM) return;
+
     const { positionWrapper } = this.state;
     const { children, open, target } = this.props;
 
@@ -162,7 +165,10 @@ export default class ReactFloater extends React.Component {
       debug: this.debug,
     });
 
-    this.initPopper();
+    if (!this.hasMounted) {
+      this.initPopper();
+      this.hasMounted = true;
+    }
 
     if (!children && target && !is.boolean(open)) {
       // add event listener based on event,
@@ -173,7 +179,7 @@ export default class ReactFloater extends React.Component {
     if (!canUseDOM) return;
 
     const { autoOpen, open, target, wrapperOptions } = this.props;
-    const { changedFrom, changedTo } = treeChanges(prevState, this.state);
+    const { changedFrom, changed } = treeChanges(prevState, this.state);
 
     if (prevProps.open !== open) {
       let forceStatus;
@@ -193,21 +199,25 @@ export default class ReactFloater extends React.Component {
       this.changeWrapperPosition(this.props);
     }
 
-    if (changedTo('status', STATUS.IDLE) && open) {
+    if (changed('status', STATUS.IDLE) && open) {
       this.toggle(STATUS.OPEN);
     } else if (changedFrom('status', STATUS.INIT, STATUS.IDLE) && autoOpen) {
       this.toggle(STATUS.OPEN);
     }
 
-    if (this.popper && changedTo('status', STATUS.OPENING)) {
+    if (this.popper && changed('status', STATUS.OPENING)) {
       this.popper.instance.update();
     }
 
     if (
       this.floaterRef &&
-      (changedTo('status', STATUS.OPENING) || changedTo('status', STATUS.CLOSING))
+      (changed('status', STATUS.OPENING) || changed('status', STATUS.CLOSING))
     ) {
       once(this.floaterRef, 'transitionend', this.handleTransitionEnd);
+    }
+
+    if (changed('needsUpdate', true)) {
+      this.rebuildPopper();
     }
   }
 
@@ -260,6 +270,11 @@ export default class ReactFloater extends React.Component {
         },
         onCreate: data => {
           this.popper = data;
+
+          if (!this.floaterRef.isConnected) {
+            this.setState({ needsUpdate: true });
+            return;
+          }
 
           getPopper(data, 'floater');
 
@@ -322,6 +337,16 @@ export default class ReactFloater extends React.Component {
     }
   }
 
+  rebuildPopper() {
+    this.floaterRefInterval = setInterval(() => {
+      if (this.floaterRef.isConnected) {
+        clearInterval(this.floaterRefInterval);
+        this.setState({ needsUpdate: false });
+        this.initPopper();
+      }
+    }, 50);
+  }
+
   changeWrapperPosition({ target, wrapperOptions }) {
     this.setState({
       positionWrapper: wrapperOptions.position && !!target,
@@ -348,9 +373,7 @@ export default class ReactFloater extends React.Component {
   };
 
   setFloaterRef = ref => {
-    if (!this.floaterRef) {
-      this.floaterRef = ref;
-    }
+    this.floaterRef = ref;
   };
 
   setWrapperRef = ref => {

@@ -4,22 +4,6 @@ import PropTypes from 'prop-types';
 import { canUseDOM, isReact16 } from '../utils';
 
 export default class ReactFloaterPortal extends React.Component {
-  constructor(props) {
-    super(props);
-
-    if (!canUseDOM) return;
-
-    this.node = document.createElement('div');
-    if (props.id) {
-      this.node.id = props.id;
-    }
-    if (props.zIndex) {
-      this.node.style.zIndex = props.zIndex;
-    }
-
-    document.body.appendChild(this.node);
-  }
-
   static propTypes = {
     children: PropTypes.oneOfType([PropTypes.element, PropTypes.array]),
     hasChildren: PropTypes.bool,
@@ -32,6 +16,10 @@ export default class ReactFloaterPortal extends React.Component {
 
   componentDidMount() {
     if (!canUseDOM) return;
+
+    if (!this.node) {
+      this.appendNode();
+    }
 
     if (!isReact16) {
       this.renderPortal();
@@ -53,13 +41,39 @@ export default class ReactFloaterPortal extends React.Component {
       ReactDOM.unmountComponentAtNode(this.node);
     }
 
-    document.body.removeChild(this.node);
+    if (this.node && this.node.parentNode === document.body) {
+      document.body.removeChild(this.node);
+      this.node = undefined;
+    }
+  }
+
+  appendNode() {
+    const { id, zIndex } = this.props;
+
+    if (!this.node) {
+      this.node = document.createElement('div');
+
+      /* istanbul ignore else */
+      if (id) {
+        this.node.id = id;
+      }
+
+      if (zIndex) {
+        this.node.style.zIndex = zIndex;
+      }
+
+      document.body.appendChild(this.node);
+    }
   }
 
   renderPortal() {
     if (!canUseDOM) return null;
 
     const { children, setRef } = this.props;
+
+    if (!this.node) {
+      this.appendNode();
+    }
 
     /* istanbul ignore else */
     if (isReact16) {
