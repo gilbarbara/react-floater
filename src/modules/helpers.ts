@@ -87,9 +87,9 @@ export function isMobile(): boolean {
 /**
  * Log method calls if debug is enabled
  */
-export function log({ data, debug = false, title, warn = false }: LogOptions): void {
+export function log({ data, debug = false, title }: LogOptions): void {
   /* eslint-disable no-console */
-  const logFn = warn ? console.warn || console.error : console.log;
+  const logFn = console.log;
 
   if (debug && title && data) {
     console.groupCollapsed(

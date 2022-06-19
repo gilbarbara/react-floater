@@ -24,7 +24,7 @@ import { useMount, useSetState, useSingleton, useUnmount, useUpdateEffect } from
 import getStyles from './modules/styles';
 import { Props, State, Statuses, Styles } from './types';
 
-export default function ReactFloater(props: Props): JSX.Element {
+function ReactFloater(props: Props): JSX.Element {
   const {
     autoOpen,
     callback,
@@ -43,7 +43,7 @@ export default function ReactFloater(props: Props): JSX.Element {
     modifiers,
     offset,
     open,
-    placement,
+    placement = 'bottom',
     portalElement,
     showCloseButton,
     style,
@@ -54,7 +54,7 @@ export default function ReactFloater(props: Props): JSX.Element {
   } = enhanceProps(props);
 
   const [state, setState] = useSetState<State>({
-    currentPlacement: placement || 'bottom',
+    currentPlacement: placement,
     positionWrapper: !!wrapperOptions?.position && !!target,
     status: STATUS.INIT,
     statusWrapper: STATUS.INIT,
@@ -191,10 +191,12 @@ export default function ReactFloater(props: Props): JSX.Element {
   const cleanUp = React.useRef(() => {
     if (popperRef.current) {
       popperRef.current.destroy();
+      popperRef.current = undefined;
     }
 
     if (wrapperPopper.current) {
       wrapperPopper.current.destroy();
+      wrapperPopper.current = undefined;
     }
   });
 
@@ -312,9 +314,9 @@ export default function ReactFloater(props: Props): JSX.Element {
     }
 
     if (
+      element &&
       !wrapperPopper.current &&
       stateRef.current.positionWrapper &&
-      element &&
       wrapperRef.current &&
       placement !== 'center'
     ) {
@@ -579,3 +581,18 @@ export default function ReactFloater(props: Props): JSX.Element {
     </>
   );
 }
+
+ReactFloater.defaultProps = {
+  autoOpen: false,
+  debug: false,
+  disableFlip: false,
+  disableHoverToClick: false,
+  event: 'click',
+  eventDelay: 0.4,
+  hideArrow: false,
+  offset: 15,
+  placement: 'bottom',
+  showCloseButton: false,
+};
+
+export default ReactFloater;
