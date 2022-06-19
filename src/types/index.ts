@@ -1,30 +1,21 @@
 import * as React from 'react';
-import { AnyObject } from '@gilbarbara/types';
-import { Instance, Placement } from '@popperjs/core';
-import { ApplyStylesModifier } from '@popperjs/core/lib/modifiers/applyStyles';
-import { ArrowModifier } from '@popperjs/core/lib/modifiers/arrow';
-import { ComputeStylesModifier } from '@popperjs/core/lib/modifiers/computeStyles';
-import { EventListenersModifier } from '@popperjs/core/lib/modifiers/eventListeners';
-import { FlipModifier } from '@popperjs/core/lib/modifiers/flip';
-import { HideModifier } from '@popperjs/core/lib/modifiers/hide';
-import { OffsetModifier } from '@popperjs/core/lib/modifiers/offset';
-import { PopperOffsetsModifier } from '@popperjs/core/lib/modifiers/popperOffsets';
-import { PreventOverflowModifier } from '@popperjs/core/lib/modifiers/preventOverflow';
 import { PartialDeep, RequireExactlyOne, ValueOf } from 'type-fest';
 
-import { STATUS } from './literals';
+import { PopperInstance, PopperModifiers, PopperPlacement } from './popper';
+
+import { STATUS } from '../literals';
 
 export type Action = 'open' | 'close';
 export type HandlerFunction<T = HTMLElement> = (event: React.SyntheticEvent<T>) => void;
-export type PlacementOptions = Placement | 'center';
+export type PlacementOptions = PopperPlacement | 'center';
+export type PlainObject<T = any> = Record<string, T>;
 export type SelectorOrElement = string | null | HTMLElement;
 export type Statuses = ValueOf<typeof STATUS>;
 
 export interface LogOptions {
-  data: AnyObject | any[];
+  data: any;
   debug?: boolean;
   title: string;
-  warn?: boolean;
 }
 
 export interface RenderProps {
@@ -32,7 +23,10 @@ export interface RenderProps {
 }
 
 export interface BaseProps {
-  /* Open the Floater automatically. */
+  /**
+   * Open the Floater automatically.
+   * @default false
+   */
   autoOpen?: boolean;
   /* It will be called when the Floater change state */
   callback?: (action: Action, props: Props) => void;
@@ -45,35 +39,65 @@ export interface BaseProps {
   component: React.FunctionComponent<RenderProps> | React.ReactElement;
   /* Anything that can be rendered. */
   content: React.ReactNode;
-  /* Log some actions. */
+  /**
+   * Log some actions.
+   * @default false
+   */
   debug?: boolean;
-  /* Disable placement adjustments on scroll/resize. */
+  /**
+   * Disable placement adjustments on scroll/resize.
+   * @default false
+   */
   disableFlip?: boolean;
-  /* Disable the conversion of hover to click on mobile. */
+  /**
+   * Disable the conversion of hover to click on mobile.
+   * @default false
+   */
   disableHoverToClick?: boolean;
-  /* The event that will trigger the Floater. Unused in controlled mode. */
+  /**
+   * The event type that will trigger the Floater.
+   * Unused in controlled mode.
+   * @default click
+   */
   event?: 'click' | 'hover';
-  /* The amount of time (in seconds) that the floater should wait after a mouseLeave event before hiding. Only valid for event type hover  */
+  /**
+   *  The amount of time (in seconds) that the floater should wait after a mouseLeave event before hiding.
+   *  Only valid for event type hover.
+   *  @default 0.4
+   *  */
   eventDelay?: number;
   /* Anything that can be rendered. */
   footer?: React.ReactNode;
   /* The popper.js instance */
-  getPopper?: (popper: Instance, origin: 'floater' | 'wrapper') => void;
-  /* Hide the arrow. */
+  getPopper?: (popper: PopperInstance, origin: 'floater' | 'wrapper') => void;
+  /**
+   * Hide the arrow.
+   * @default false
+   */
   hideArrow?: boolean;
   /* Used for the accessibility logic. Defaults to a randomly generated id. */
   id?: string;
   /* Customize popper.js modifiers. */
   modifiers?: PopperModifiers;
-  /* The distance between the target and the Floater in pixels. */
+  /**
+   * The distance between the target and the Floater in pixels.
+   * @default 15
+   */
   offset?: number;
   /* Controlled mode. */
   open?: boolean;
-  /* The placement of the Floater. This will be updated automatically if there's no space available unless the "disableFlip" is set to true */
+  /**
+   * The placement of the Floater
+   * This will be updated automatically if there's no space available unless the "disableFlip" is set to true
+   * @default bottom
+   */
   placement?: PlacementOptions;
   /* A custom element to render the tooltip */
   portalElement?: SelectorOrElement;
-  /* It will show a button to close the Floater. */
+  /**
+   * Show a button to close the Floater.
+   * @default false
+   */
   showCloseButton?: boolean;
   style?: React.CSSProperties;
   /* Customize the UI. */
@@ -85,7 +109,7 @@ export interface BaseProps {
   /* Position the wrapper relative to the target. */
   wrapperOptions?: {
     offset?: number;
-    placement?: Placement;
+    placement?: PopperPlacement;
     position?: boolean;
   };
 }
@@ -102,18 +126,6 @@ export interface State {
 export interface CustomComponent {
   children?: React.ReactNode;
   closeFn: HandlerFunction;
-}
-
-export interface PopperModifiers {
-  applyStyles?: Partial<ApplyStylesModifier>;
-  arrow?: Partial<ArrowModifier>;
-  computeStyles?: Partial<ComputeStylesModifier>;
-  eventListeners?: Partial<EventListenersModifier>;
-  flip?: Partial<FlipModifier>;
-  hide?: Partial<HideModifier>;
-  offset?: Partial<OffsetModifier>;
-  popperOffsets?: Partial<PopperOffsetsModifier>;
-  preventOverflow?: Partial<PreventOverflowModifier>;
 }
 
 export interface Styles {
@@ -144,3 +156,5 @@ declare global {
     ReactFloaterDebug?: boolean;
   }
 }
+
+export * from './popper';

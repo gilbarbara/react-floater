@@ -58,12 +58,12 @@ function ReactFloaterPortal(props: Props): JSX.Element | null {
   });
 
   useUnmount(() => {
-    if (!canUseDOM || !node) {
+    if (!canUseDOM || !node.current) {
       return;
     }
 
     try {
-      if (node.current && node.current.id === portalId && node.current.childElementCount === 0) {
+      if (node.current.id === portalId && node.current.childElementCount === 0) {
         if (document.body.contains(node.current)) {
           document.body.removeChild(node.current);
           node.current = null;
