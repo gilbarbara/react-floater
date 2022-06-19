@@ -1,5 +1,5 @@
-import React from 'react';
 import Floater from 'react-floater';
+import { Button } from '@gilbarbara/components';
 
 export default function WithPosition({ cb }: any) {
   return (
@@ -20,9 +20,9 @@ export default function WithPosition({ cb }: any) {
           },
         }}
       >
-        <button style={{ position: 'fixed', top: 15, right: 15, width: 75 }} type="button">
+        <Button size="sm" style={{ position: 'fixed', top: 15, right: 15, width: 75 }}>
           {'  ☗  '}︎
-        </button>
+        </Button>
       </Floater>
     </div>
   );

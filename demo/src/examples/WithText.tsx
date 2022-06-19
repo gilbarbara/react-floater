@@ -1,6 +1,6 @@
-import React from 'react';
 import Floater from 'react-floater';
 import styled from '@emotion/styled';
+import { Paragraph } from '@gilbarbara/components';
 
 const Wrapper = styled.div`
   margin: 0 auto;
@@ -38,13 +38,11 @@ export default function WithText({ cb }: any) {
     <FloaterFactory
       cb={cb}
       content={
-        <div>
-          <p>
-            Semantics (from Ancient Greek: σημαντικός sēmantikos, "significant")[1][2] is the
-            linguistic and philosophical study of meaning, in language, programming languages,
-            formal logics, and semiotics.
-          </p>
-        </div>
+        <Paragraph>
+          Semantics (from Ancient Greek: σημαντικός sēmantikos, "significant")[1][2] is the
+          linguistic and philosophical study of meaning, in language, programming languages, formal
+          logics, and semiotics.
+        </Paragraph>
       }
       text="Semantics"
     />

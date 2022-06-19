@@ -1,6 +1,6 @@
-import React from 'react';
 import Floater from 'react-floater';
 import styled from '@emotion/styled';
+import { Button } from '@gilbarbara/components';
 
 const Wrapper = styled.div`
   background: linear-gradient(to bottom right, #9ec2ff 50%, #6ba2ff 50%, #6ba2ff 60%, #3882ff 60%);
@@ -10,14 +10,6 @@ const Wrapper = styled.div`
   text-align: right;
 `;
 
-const Button = styled.span`
-  background-color: #000;
-  color: #fff;
-  display: inline-block;
-  padding: 10px;
-  border-radius: 4px;
-`;
-
 function CustomFloater({ closeFn }: any) {
   return (
     <Wrapper>
@@ -25,19 +17,15 @@ function CustomFloater({ closeFn }: any) {
         💅
       </span>
       <div>
-        I'm a{' '}
-        <a
-          href="https://github.com/styled-components/styled-components"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          <b>styled-component</b>
+        I'm a floater with a custom component using{' '}
+        <a href="https://emotion.sh/docs/introduction" rel="noopener noreferrer" target="_blank">
+          <b>emotion</b>
         </a>{' '}
-        with the <strong>component</strong> and <strong>disableFlip</strong> props
+        and <strong>bottom-start</strong> placement.
       </div>
-      <button onClick={closeFn} style={{ marginTop: 10 }} type="button">
+      <Button onClick={closeFn} size="sm" style={{ marginTop: 10 }} variant="white">
         Close
-      </button>
+      </Button>
     </Wrapper>
   );
 }
@@ -54,12 +42,9 @@ export default function WithStyledComponents({ cb }: any) {
           arrow: {
             color: '#9ec2ff',
           },
-          floater: {
-            filter: 'none',
-          },
         }}
       >
-        <Button>BOTTOM</Button>
+        <Button size="sm">BOTTOM</Button>
       </Floater>
     </div>
   );

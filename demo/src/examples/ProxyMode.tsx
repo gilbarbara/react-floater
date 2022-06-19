@@ -1,6 +1,7 @@
-import React, { useCallback, useRef } from 'react';
+import { useCallback, useRef } from 'react';
 import Floater from 'react-floater';
 import { useUpdate } from 'react-use';
+import { Box } from '@gilbarbara/components';
 
 import Target from './Target';
 
@@ -13,7 +14,7 @@ export default function ProxyMode({ cb }: any) {
   }, [update]);
 
   return (
-    <div>
+    <Box flex>
       <Target ref={target} onMount={handleTargetMount} />
       {target.current && (
         <Floater
@@ -34,12 +35,16 @@ export default function ProxyMode({ cb }: any) {
           }
           event="hover"
           placement="auto"
-          style={{ marginTop: 20 }}
+          styles={{
+            options: {
+              zIndex: 1000,
+            },
+          }}
           target={target.current}
         >
           <span style={{ textDecoration: 'underline' }}>Proxy mode</span>
         </Floater>
       )}
-    </div>
+    </Box>
   );
 }

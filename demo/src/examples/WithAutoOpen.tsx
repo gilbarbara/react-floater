@@ -1,5 +1,5 @@
-import React from 'react';
 import Floater from 'react-floater';
+import { Box, Button, Paragraph } from '@gilbarbara/components';
 
 export default function AutoOpen({ cb }: any) {
   return (
@@ -8,22 +8,22 @@ export default function AutoOpen({ cb }: any) {
         autoOpen
         callback={cb}
         content={
-          <div>
-            <p>React Floater is super easy to use and customize.</p>
-            <p>
+          <Box>
+            <Paragraph>React Floater is super easy to use and customize.</Paragraph>
+            <Paragraph>
               It's powered by{' '}
               <a href="https://popper.js.org/" rel="noopener noreferrer" target="_blank">
                 popper.js
               </a>{' '}
               to position the elements
-            </p>
-          </div>
+            </Paragraph>
+          </Box>
         }
         placement="top"
       >
-        <button type="button">TOP</button>
+        <Button size="sm">TOP</Button>
       </Floater>
-      <p>autoOpen</p>
+      <Paragraph mt="xxs">autoOpen</Paragraph>
     </div>
   );
 }

@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Floater from 'react-floater';
+import { Box, Button, Paragraph } from '@gilbarbara/components';
 
 export default function ControlledMode({ cb }: any) {
   const [isOpen, setOpen] = useState(false);
@@ -9,15 +10,16 @@ export default function ControlledMode({ cb }: any) {
   };
 
   return (
-    <div>
+    <Box flex>
       <Floater
         callback={cb}
         content={
-          <div style={{ fontSize: 22, textAlign: 'center' }}>
-            I'm a controlled and centered tooltip.
-            <br />
-            My parent control my status
-          </div>
+          <Box>
+            <Paragraph align="center" bold size="large">
+              I'm a controlled and centered tooltip
+            </Paragraph>
+            <Paragraph align="center">The parent control my status</Paragraph>
+          </Box>
         }
         footer={
           <footer
@@ -28,23 +30,26 @@ export default function ControlledMode({ cb }: any) {
               textAlign: 'right',
             }}
           >
-            <button onClick={handleClick} type="button">
+            <Button onClick={handleClick} size="sm" variant="black">
               Close
-            </button>
+            </Button>
           </footer>
         }
         open={isOpen}
         placement="center"
         styles={{
+          options: {
+            zIndex: 1000,
+          },
           floater: {
             maxWidth: 500,
             width: '100%',
           },
         }}
       />
-      <button onClick={handleClick} type="button">
+      <Button onClick={handleClick} size="sm">
         Controlled floater
-      </button>
-    </div>
+      </Button>
+    </Box>
   );
 }

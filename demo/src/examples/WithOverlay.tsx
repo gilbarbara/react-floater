@@ -1,10 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Floater from 'react-floater';
 import styled from '@emotion/styled';
-
-function Button({ innerRef, ...rest }: any) {
-  return <button ref={innerRef} type="button" {...rest} />;
-}
+import { Button, Paragraph } from '@gilbarbara/components';
 
 const Overlay = styled.div`
   position: fixed;
@@ -32,16 +29,14 @@ export default function FloaterOverlay({ cb }: any) {
     <div>
       <Floater
         callback={callback}
-        content={
-          <div>
-            <p>I have an invisible overlay that will close the floater</p>
-          </div>
-        }
+        content={<Paragraph>I have an invisible overlay that will close the floater</Paragraph>}
         open={isOpen}
         placement="top"
         styles={{ options: { zIndex: 250 } }}
       >
-        <Button onClick={handleClick}>Click me</Button>
+        <Button onClick={handleClick} size="sm">
+          Click me
+        </Button>
       </Floater>
       {isOpen && <Overlay onClick={handleClick} />}
     </div>
