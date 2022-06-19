@@ -18,7 +18,7 @@ View the [demo](https://codesandbox.io/s/github/gilbarbara/react-floater/tree/ma
 npm install --save react-floater
 ```
 
-And import it into your code:
+Import it in your app:
 
 ```jsx
 import Floater from 'react-floater';
@@ -33,10 +33,9 @@ And voíla!
 ## Customization
 
 You can use your own components to render the Floater with the prop `component`.  
-Check `WithStyledComponents.js` in the [demo](https://84vn36m178.codesandbox.io/) for an example.
+Check `WithStyledComponents.js` in the [demo](https://codesandbox.io/s/github/gilbarbara/react-floater/tree/main/demo) for an example.
 
-If you use your own components as `children` it will receive an `innerRef` prop that you must set in your HTMLElement:  
-_Stateless components don't accept refs..._
+If you use your own components as `children` it will receive an `innerRef` prop that you must set in your HTMLElement:
 
 ```typescript jsx
 const Button = ({ innerRef, ...rest }) => <button ref={innerRef} {...rest} />;
@@ -46,7 +45,7 @@ const Button = ({ innerRef, ...rest }) => <button ref={innerRef} {...rest} />;
 </Floater>;
 ```
 
-This works transparently with styled-components (and possible other modules):
+This works with styled-components (and other css-in-js libraries):
 
 ```typescript jsx
 const Wrapper = styled.div`
@@ -62,16 +61,13 @@ const Wrapper = styled.div`
 
 ## Props
 
-**autoOpen** {bool} ▶︎ `false`  
+**autoOpen?: boolean = `false`**  
 Open the Floater automatically.
 
-**callback** {func}  
-It will be called when the Floater change state with 2 parameters:
+**callback?: (action: 'open' | 'close', props: Props)**  
+It will be called when the Floater change state.
 
-- **action** {string} `open` or `close`
-- **props** {object} the props you passed.
-
-**children** {node}  
+**children: React.ReactNode**  
 An element to trigger the Floater.
 
 **component** {element|function}  
@@ -114,7 +110,7 @@ Don't show the arrow. Useful for centered or modal layout.
 **offset** {number} ▶︎ `15`  
 The distance between the Floater and its target in pixels.
 
-**open** {bool} ▶︎ `false`  
+**open** {bool}
 The switch between normal and controlled modes.  
 _Setting this prop will disabled the normal behavior._
 
@@ -167,7 +163,7 @@ interface WrapperOptions {
 You can customize everything with the `styles` prop.  
 Only set the properties you want to change and the default styles will be merged.
 
-Check the [styles.ts](./src/modules/styles.ts) for the syntax.
+Check the [styles.ts](src/modules/styles.ts) for the syntax.
 
 ## Modes
 
