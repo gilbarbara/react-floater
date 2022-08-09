@@ -271,7 +271,7 @@ export default class ReactFloater extends React.Component {
         onCreate: data => {
           this.popper = data;
 
-          if (!this.floaterRef.isConnected) {
+          if (!this.floaterRef?.isConnected) {
             this.setState({ needsUpdate: true });
             return;
           }
@@ -339,7 +339,7 @@ export default class ReactFloater extends React.Component {
 
   rebuildPopper() {
     this.floaterRefInterval = setInterval(() => {
-      if (this.floaterRef.isConnected) {
+      if (this.floaterRef?.isConnected) {
         clearInterval(this.floaterRefInterval);
         this.setState({ needsUpdate: false });
         this.initPopper();
