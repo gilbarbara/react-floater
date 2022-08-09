@@ -31,7 +31,6 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "prop-types": "^15.7.2",
     "react": "15 - 18",
     "react-dom": "15 - 18"
   },
@@ -40,6 +39,7 @@
     "exenv": "^1.2.2",
     "is-lite": "^0.8.2",
     "popper.js": "^1.16.0",
+    "prop-types": "^15.8.1",
     "react-proptype-conditional-require": "^1.0.4",
     "tree-changes": "^0.9.1"
   },
