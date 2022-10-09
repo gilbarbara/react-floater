@@ -8,15 +8,7 @@ interface Props extends BoxProps {
 
 export default function Block({ children, gray, ...rest }: Props) {
   return (
-    <Box
-      pb="xl"
-      pt="xl"
-      px="xl"
-      shade="lightest"
-      textAlign="center"
-      variant={gray ? 'gray' : 'white'}
-      {...rest}
-    >
+    <Box bg={gray ? 'gray.100' : 'white'} pb="xl" pt="xl" px="xl" textAlign="center" {...rest}>
       {children}
     </Box>
   );

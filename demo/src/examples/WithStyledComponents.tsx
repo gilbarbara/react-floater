@@ -23,7 +23,7 @@ function CustomFloater({ closeFn }: any) {
         </a>{' '}
         and <strong>bottom-start</strong> placement.
       </div>
-      <Button onClick={closeFn} size="sm" style={{ marginTop: 10 }} variant="white">
+      <Button bg="white" onClick={closeFn} size="sm" style={{ marginTop: 10 }}>
         Close
       </Button>
     </Wrapper>
@@ -38,6 +38,7 @@ export default function WithStyledComponents({ cb }: any) {
         component={CustomFloater}
         disableFlip
         placement="bottom-start"
+        portalElement="#portalElement"
         styles={{
           arrow: {
             color: '#9ec2ff',
