@@ -6,7 +6,7 @@ export default function ControlledMode({ cb }: any) {
   const [isOpen, setOpen] = useState(false);
 
   const handleClick = () => {
-    setOpen((s) => !s);
+    setOpen(s => !s);
   };
 
   return (
@@ -30,7 +30,7 @@ export default function ControlledMode({ cb }: any) {
               textAlign: 'right',
             }}
           >
-            <Button onClick={handleClick} size="sm" variant="black">
+            <Button bg="black" onClick={handleClick} size="sm">
               Close
             </Button>
           </footer>

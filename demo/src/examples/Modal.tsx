@@ -3,7 +3,7 @@ import { Box, Button, ButtonUnstyled, FormGroup, H4, Icon, Input } from '@gilbar
 
 function Content({ closeFn }: any) {
   return (
-    <Box height="90vh" padding="xl" position="relative" radius="md" variant="white" width="90vw">
+    <Box bg="white" height="90vh" padding="xl" position="relative" radius="md" width="90vw">
       <H4 align="center" mb="xxl">
         I'm a custom component acting as modal. No arrow and centered
       </H4>
@@ -18,7 +18,7 @@ function Content({ closeFn }: any) {
         as="form"
         maxWidth={640}
         mx="auto"
-        onSubmit={(event) => {
+        onSubmit={event => {
           event.preventDefault();
           closeFn();
         }}
@@ -46,7 +46,7 @@ export default function Modal({ cb }: any) {
         placement="center"
         styles={{
           options: {
-            zIndex: 1000,
+            zIndex: 50,
           },
         }}
       >

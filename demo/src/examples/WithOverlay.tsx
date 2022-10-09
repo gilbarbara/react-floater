@@ -4,6 +4,7 @@ import styled from '@emotion/styled';
 import { Button, Paragraph } from '@gilbarbara/components';
 
 const Overlay = styled.div`
+  background-color: rgba(0, 0, 0, 0.2);
   position: fixed;
   bottom: 0;
   left: 0;
@@ -22,7 +23,7 @@ export default function FloaterOverlay({ cb }: any) {
   };
 
   const handleClick = () => {
-    setOpen((s) => !s);
+    setOpen(s => !s);
   };
 
   return (

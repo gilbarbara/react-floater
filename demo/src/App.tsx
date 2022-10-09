@@ -21,6 +21,8 @@ import WithStyledComponents from './examples/WithStyledComponents';
 import WithText from './examples/WithText';
 import WithTitleAndFooter from './examples/WithTitleAndFooter';
 
+const { NODE_ENV } = process.env;
+
 function callback(action: any, data: any) {
   // eslint-disable-next-line no-console
   console.log(action, data);
@@ -59,8 +61,7 @@ export default function App() {
       </Block>
       <Block>
         <H2>Hover</H2>
-
-        <Paragraph size="mid" variant="gray">
+        <Paragraph color="gray" size="mid">
           It will switch to click on mobile.
           <br />
           (can be disabled with <b>disableHoverToClick</b> prop)
@@ -91,7 +92,8 @@ export default function App() {
           <Modal cb={callback} />
         </Content>
       </Block>
-      {process.env.NODE_ENV === 'production' && <Badges />}
+      <div id="portalElement" />
+      {NODE_ENV === 'production' && <Badges />}
     </Box>
   );
 }

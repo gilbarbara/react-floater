@@ -37,7 +37,13 @@ const Beacon = styled.span`
 export default function BeaconMode({ cb }: any) {
   return (
     <Box flex>
-      <img alt="Microsoft Popup" className="old-tooltip" src={`${PUBLIC_URL}/windows-popup.png`} />
+      <img
+        alt="Microsoft Popup"
+        className="old-tooltip"
+        height="200"
+        src={`${PUBLIC_URL}/windows-popup.png`}
+        width="320"
+      />
       <Floater
         callback={cb}
         content={
