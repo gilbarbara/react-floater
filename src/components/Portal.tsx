@@ -3,12 +3,13 @@ import { createPortal } from 'react-dom';
 import is from 'is-lite';
 
 import { canUseDOM, portalId } from '../modules/helpers';
-import { useMount, useSingleton, useUnmount } from '../modules/hooks';
+import { useMount, useUnmount } from '../modules/hooks';
 import { PlacementOptions, SelectorOrElement } from '../types';
 
 interface Props {
   children: React.ReactNode;
   hasChildren: boolean;
+  internalId: string;
   placement: PlacementOptions;
   portalElement?: SelectorOrElement;
   target?: SelectorOrElement;
@@ -16,7 +17,7 @@ interface Props {
 }
 
 function ReactFloaterPortal(props: Props) {
-  const { children, hasChildren, placement, portalElement, target, zIndex } = props;
+  const { children, hasChildren, internalId, placement, portalElement, target, zIndex } = props;
   const node = React.useRef<HTMLElement | null>(null);
 
   const initialize = React.useCallback(() => {
@@ -31,31 +32,45 @@ function ReactFloaterPortal(props: Props) {
     }
 
     if (!portalElement || !node.current) {
-      const portal = document.getElementById('react-floater-portal');
+      const portal = document.getElementById(portalId);
 
       if (portal) {
+        const ids: string[] = portal.dataset.ids?.split(',').filter(Boolean) || [];
+
+        if (!ids.includes(internalId) && internalId) {
+          ids.push(internalId);
+        }
+
+        portal.dataset.ids = ids.join(',');
         node.current = portal;
       } else {
         node.current = document.createElement('div');
         node.current.id = portalId;
+        node.current.dataset.ids = internalId;
         node.current.style.zIndex = `${zIndex}`;
 
         document.body.appendChild(node.current);
       }
     }
-  }, [portalElement, zIndex]);
 
-  useSingleton(initialize);
-
-  useMount(() => {
     if (!portalElement && !document.getElementById(portalId)) {
       if (node.current) {
         document.body.appendChild(node.current);
-      } else {
-        initialize();
       }
     }
+  }, [internalId, portalElement, zIndex]);
+
+  useMount(() => {
+    if (!canUseDOM) {
+      return;
+    }
+
+    initialize();
   });
+
+  React.useEffect(() => {
+    initialize();
+  }, [initialize]);
 
   useUnmount(() => {
     if (!canUseDOM() || !node.current) {
@@ -63,8 +78,14 @@ function ReactFloaterPortal(props: Props) {
     }
 
     try {
-      if (node.current.id === portalId && node.current.childElementCount === 0) {
-        if (document.body.contains(node.current)) {
+      if (node.current.id === portalId) {
+        const ids: string[] = node.current.dataset.ids?.split(',') || [];
+
+        if (ids.includes(internalId)) {
+          node.current.dataset.ids = ids.filter(id => id !== internalId).join(',');
+        }
+
+        if (ids.length <= 1) {
           document.body.removeChild(node.current);
           node.current = null;
         }

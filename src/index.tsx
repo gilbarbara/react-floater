@@ -561,6 +561,7 @@ function ReactFloater(props: Props) {
     <>
       <Portal
         hasChildren={!!children}
+        internalId={internalId.current}
         placement={currentPlacement}
         portalElement={portalElement}
         target={target}
