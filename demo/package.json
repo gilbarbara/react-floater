@@ -2,25 +2,25 @@
   "name": "react-floater-demo",
   "version": "0.8.2",
   "dependencies": {
-    "@emotion/react": "^11.9.3",
-    "@emotion/styled": "^11.9.3",
-    "@gilbarbara/components": "^0.4.1",
+    "@emotion/react": "^11.11.0",
+    "@emotion/styled": "^11.11.0",
+    "@gilbarbara/components": "^0.9.5",
     "disable-scroll": "^0.6.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-floater": "^0.8.2",
+    "react-floater": "latest",
     "react-scripts": "5.0.1",
     "react-use": "^17.4.0"
   },
   "devDependencies": {
-    "@gilbarbara/prettier-config": "^0.1.0",
+    "@gilbarbara/prettier-config": "^0.1.1",
     "@gilbarbara/tsconfig": "^0.1.1",
-    "@types/jest": "^28.1.2",
-    "@types/node": "^18.0.0",
-    "@types/react": "^18.0.14",
-    "@types/react-dom": "^18.0.5",
-    "prettier": "^2.7.1",
-    "typescript": "^4.7.4"
+    "@types/jest": "^29.5.1",
+    "@types/node": "^18.16.8",
+    "@types/react": "^18.2.6",
+    "@types/react-dom": "^18.2.4",
+    "prettier": "^2.8.8",
+    "typescript": "^4.9.5"
   },
   "scripts": {
     "start": "react-scripts start",

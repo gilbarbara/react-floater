@@ -1,5 +1,5 @@
 import Floater from 'react-floater';
-import { Box, Button, ButtonBase, FormGroup, H4, Icon, Input } from '@gilbarbara/components';
+import { Box, Button, ButtonUnstyled, FormGroup, H4, Icon, Input } from '@gilbarbara/components';
 
 function Content({ closeFn }: any) {
   return (
@@ -7,13 +7,13 @@ function Content({ closeFn }: any) {
       <H4 align="center" mb="xxl">
         I'm a custom component acting as modal. No arrow and centered
       </H4>
-      <ButtonBase
+      <ButtonUnstyled
         onClick={closeFn}
         padding="sm"
         style={{ position: 'absolute', right: 16, top: 16 }}
       >
         <Icon name="close" size={24} />
-      </ButtonBase>
+      </ButtonUnstyled>
       <Box
         as="form"
         maxWidth={640}
