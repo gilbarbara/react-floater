@@ -6,7 +6,7 @@ interface Props extends BoxProps {
   spaced?: boolean;
 }
 
-export default function Content({ children, spaced, ...rest }: Props): JSX.Element {
+export default function Content({ children, spaced, ...rest }: Props) {
   if (spaced) {
     return (
       <Box

@@ -1,15 +1,16 @@
 import * as React from 'react';
-import { AnyObject } from '@gilbarbara/types';
+import { PlainObject } from '@gilbarbara/types';
 
 import Arrow from './Arrow';
 import Container from './Container';
 
 import { STATUS } from '../../literals';
-import { HandlerFunction, RenderProps, Statuses, Styles } from '../../types';
+import { isValidElement } from '../../modules/helpers';
+import { FloaterComponent, HandlerFunction, Statuses, Styles } from '../../types';
 
 interface Props {
   arrowRef: React.Ref<HTMLSpanElement>;
-  component?: React.FunctionComponent<RenderProps> | React.ReactElement;
+  component?: FloaterComponent;
   content?: React.ReactNode;
   floaterRef: React.Ref<HTMLDivElement>;
   footer?: React.ReactNode;
@@ -24,7 +25,7 @@ interface Props {
   title?: React.ReactNode;
 }
 
-function Floater(props: Props): JSX.Element | null {
+function Floater(props: Props) {
   const {
     component,
     content,
@@ -81,14 +82,14 @@ function Floater(props: Props): JSX.Element | null {
 
   const shouldRender = ['render', 'open', 'opening', 'closing'].includes(status);
 
-  const output: AnyObject = {};
+  const output: PlainObject<React.ReactNode> = {};
   const classes = ['__floater'];
   const baseProps = { id, role: 'tooltip' };
 
   if (component) {
     const componentProps = { closeFn, ...baseProps };
 
-    output.content = React.isValidElement(component)
+    output.content = isValidElement(component)
       ? React.cloneElement(component, componentProps)
       : component(componentProps);
   } else {

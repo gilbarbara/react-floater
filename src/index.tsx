@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { AnyObject } from '@gilbarbara/types';
+import { PlainObject } from '@gilbarbara/types';
 import { createPopper, Instance, ModifierArguments } from '@popperjs/core';
 import is from 'is-lite';
 import useTreeChanges from 'tree-changes-hook';
@@ -20,11 +20,11 @@ import {
   once,
   randomId,
 } from './modules/helpers';
-import { useMount, useSetState, useSingleton, useUnmount, useUpdateEffect } from './modules/hooks';
+import { useMount, useSingleton, useUnmount, useUpdateEffect } from './modules/hooks';
 import getStyles from './modules/styles';
 import { Props, State, Statuses, Styles } from './types';
 
-function ReactFloater(props: Props): JSX.Element {
+function ReactFloater(props: Props) {
   const {
     autoOpen,
     callback,
@@ -53,12 +53,18 @@ function ReactFloater(props: Props): JSX.Element {
     wrapperOptions,
   } = enhanceProps(props);
 
-  const [state, setState] = useSetState<State>({
-    currentPlacement: placement,
-    positionWrapper: !!wrapperOptions?.position && !!target,
-    status: STATUS.INIT,
-    statusWrapper: STATUS.INIT,
-  });
+  const [state, setState] = React.useReducer(
+    (previousState: State, nextState: Partial<State>) => ({
+      ...previousState,
+      ...nextState,
+    }),
+    {
+      currentPlacement: placement,
+      positionWrapper: !!wrapperOptions?.position && !!target,
+      status: STATUS.INIT,
+      statusWrapper: STATUS.INIT,
+    },
+  );
 
   const arrowRef = React.useRef<HTMLSpanElement>(null);
   const childRef = React.useRef<HTMLElement>(null);
@@ -109,7 +115,7 @@ function ReactFloater(props: Props): JSX.Element {
   );
 
   const targetElement = React.useRef(() => {
-    if (!canUseDOM) {
+    if (!canUseDOM()) {
       return null;
     }
 
@@ -125,7 +131,7 @@ function ReactFloater(props: Props): JSX.Element {
   });
 
   const currentDebug = React.useMemo(() => {
-    return canUseDOM && (debug || !!window.ReactFloaterDebug);
+    return canUseDOM() && (debug || !!window.ReactFloaterDebug);
   }, [debug]);
 
   const currentEvent = React.useMemo(() => {
@@ -141,7 +147,7 @@ function ReactFloater(props: Props): JSX.Element {
     const element = targetElement.current();
 
     if (positionWrapper) {
-      let wrapperCurrentStyles: AnyObject | undefined;
+      let wrapperCurrentStyles: React.CSSProperties | undefined;
 
       if (status !== STATUS.IDLE) {
         wrapperCurrentStyles = nextStyles.wrapperPosition;
@@ -170,6 +176,7 @@ function ReactFloater(props: Props): JSX.Element {
 
         if (!positionWrapper) {
           POSITIONING_PROPS.forEach(d => {
+            // eslint-disable-next-line unicorn/prefer-ternary
             if (d === 'position') {
               wrapperStyles.current[d] = targetStyles[d] as React.CSSProperties['position'];
             } else {
@@ -253,7 +260,7 @@ function ReactFloater(props: Props): JSX.Element {
               name: 'updatePlacement',
               enabled: true,
               phase: 'afterWrite',
-              fn: ({ instance, state: popperState }: ModifierArguments<AnyObject>) => {
+              fn: ({ instance, state: popperState }: ModifierArguments<PlainObject>) => {
                 if (popperState.placement !== stateRef.current.currentPlacement) {
                   popperRef.current = instance;
                   updateState({ currentPlacement: popperState.placement });
@@ -264,7 +271,7 @@ function ReactFloater(props: Props): JSX.Element {
               name: 'applyArrowStyle',
               enabled: true,
               phase: 'write',
-              fn: ({ state: popperState }: ModifierArguments<AnyObject>) => {
+              fn: ({ state: popperState }: ModifierArguments<PlainObject>) => {
                 const {
                   elements: { arrow: stateArrow },
                   placement: statePlacement,
@@ -450,7 +457,7 @@ function ReactFloater(props: Props): JSX.Element {
   }, [currentDebug, currentEvent, event, eventDelay, open, positionWrapper, status, toggle]);
 
   useSingleton(() => {
-    if (canUseDOM) {
+    if (canUseDOM()) {
       window.addEventListener('load', handleLoad.current);
     }
   });
@@ -483,7 +490,7 @@ function ReactFloater(props: Props): JSX.Element {
 
   // handle changes
   useUpdateEffect(() => {
-    if (!canUseDOM) {
+    if (!canUseDOM()) {
       return;
     }
 

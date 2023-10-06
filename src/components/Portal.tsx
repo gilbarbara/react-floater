@@ -15,12 +15,12 @@ interface Props {
   zIndex: string | number;
 }
 
-function ReactFloaterPortal(props: Props): JSX.Element | null {
+function ReactFloaterPortal(props: Props) {
   const { children, hasChildren, placement, portalElement, target, zIndex } = props;
   const node = React.useRef<HTMLElement | null>(null);
 
   const initialize = React.useCallback(() => {
-    if (!canUseDOM) {
+    if (!canUseDOM()) {
       return;
     }
 
@@ -58,7 +58,7 @@ function ReactFloaterPortal(props: Props): JSX.Element | null {
   });
 
   useUnmount(() => {
-    if (!canUseDOM || !node.current) {
+    if (!canUseDOM() || !node.current) {
       return;
     }
 

@@ -8,7 +8,7 @@ interface Props {
   styles: Styles;
 }
 
-function FloaterArrow(props: Props): JSX.Element {
+function FloaterArrow(props: Props) {
   const { arrowRef, placement, styles } = props;
 
   const {

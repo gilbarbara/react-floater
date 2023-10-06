@@ -1,12 +1,15 @@
+import * as React from 'react';
 import { Modifier, Placement } from '@popperjs/core';
 import { deepmerge } from 'deepmerge-ts';
-import * as ExecutionEnvironment from 'exenv';
 import is from 'is-lite';
 
 import { LogOptions, PopperModifiers, Props } from '../types';
 
-export const { canUseDOM } = ExecutionEnvironment;
 export const portalId = 'react-floater-portal';
+
+export function canUseDOM(): boolean {
+  return !!(typeof window !== 'undefined' && window.document && window.document.createElement);
+}
 
 export function enhanceProps(props: Props): Props {
   return {
@@ -59,7 +62,7 @@ export function getModifiers(modifiers?: PopperModifiers): PopperModifiers {
     },
   };
 
-  return deepmerge(defaultOptions, modifiers || {}) as PopperModifiers;
+  return deepmerge(defaultOptions, modifiers ?? {});
 }
 
 export function isFixed(el: HTMLElement | null): boolean {
@@ -82,6 +85,10 @@ export function isFixed(el: HTMLElement | null): boolean {
 
 export function isMobile(): boolean {
   return 'ontouchstart' in window && /Mobi/.test(navigator.userAgent);
+}
+
+export function isValidElement(object: unknown): object is React.ReactElement {
+  return React.isValidElement(object);
 }
 
 /**
@@ -118,7 +125,7 @@ export function mergeModifier(
   modifier: Partial<Modifier<any, any>>,
   customModifier?: Partial<Modifier<any, any>>,
 ): Partial<Modifier<any, any>> {
-  return deepmerge(modifier, customModifier || {});
+  return deepmerge(modifier, customModifier ?? {});
 }
 
 export function off(

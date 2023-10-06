@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { AnyObject } from '@gilbarbara/types';
+import { PlainObject } from '@gilbarbara/types';
 import is from 'is-lite';
 
 import { STATUS } from '../literals';
@@ -19,7 +19,7 @@ interface Props {
   wrapperRef: React.RefObject<HTMLElement>;
 }
 
-function FloaterWrapper(props: Props): JSX.Element | null {
+function FloaterWrapper(props: Props) {
   const {
     childRef,
     children,
@@ -35,15 +35,13 @@ function FloaterWrapper(props: Props): JSX.Element | null {
   } = props;
   let element;
 
-  const mergedStyles = React.useMemo(() => {
-    return {
-      ...styles,
-      ...style,
-      ...(React.isValidElement(children) ? children.props.style : undefined),
-    };
-  }, [children, style, styles]);
+  const mergedStyles = {
+    ...styles,
+    ...style,
+    ...(React.isValidElement(children) ? children.props.style : undefined),
+  };
 
-  let wrapperProps: AnyObject = {
+  let wrapperProps: PlainObject = {
     'aria-describedby': ([STATUS.OPENING, STATUS.OPEN, STATUS.CLOSING] as Statuses[]).includes(
       status,
     )
@@ -73,14 +71,14 @@ function FloaterWrapper(props: Props): JSX.Element | null {
       if (is.function(children.type)) {
         element = (
           <span ref={wrapperRef}>
-            {React.cloneElement(React.Children.only(children), {
+            {React.cloneElement(React.Children.only(children) as React.ReactElement, {
               innerRef: childRef,
               ...wrapperProps,
             })}
           </span>
         );
       } else {
-        element = React.cloneElement(React.Children.only(children), {
+        element = React.cloneElement(React.Children.only(children) as React.ReactElement, {
           ref: wrapperRef,
           ...wrapperProps,
         });
