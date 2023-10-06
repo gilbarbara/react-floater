@@ -1,3 +1,4 @@
+/* eslint-disable testing-library/no-manual-cleanup */
 import * as React from 'react';
 import {
   act,

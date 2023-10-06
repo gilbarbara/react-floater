@@ -6,7 +6,7 @@ interface Props extends BoxProps {
   gray?: boolean;
 }
 
-export default function Block({ children, gray, ...rest }: Props): JSX.Element {
+export default function Block({ children, gray, ...rest }: Props) {
   return (
     <Box
       pb="xl"

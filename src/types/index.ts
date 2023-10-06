@@ -8,7 +8,6 @@ import { STATUS } from '../literals';
 export type Action = 'open' | 'close';
 export type HandlerFunction<T = HTMLElement> = (event: React.SyntheticEvent<T>) => void;
 export type PlacementOptions = PopperPlacement | 'center';
-export type PlainObject<T = any> = Record<string, T>;
 export type SelectorOrElement = string | null | HTMLElement;
 export type Statuses = ValueOf<typeof STATUS>;
 
@@ -17,6 +16,8 @@ export interface LogOptions {
   debug?: boolean;
   title: string;
 }
+
+export type FloaterComponent<T = RenderProps> = React.FunctionComponent<T> | React.ReactElement;
 
 export interface RenderProps {
   closeFn: HandlerFunction;
@@ -36,7 +37,7 @@ export interface BaseProps {
    * A React element or function to be used as the custom UI for the Floater.
    * The prop closeFloater will be available in your component.
    */
-  component: React.FunctionComponent<RenderProps> | React.ReactElement;
+  component: FloaterComponent;
   /* Anything that can be rendered. */
   content: React.ReactNode;
   /**

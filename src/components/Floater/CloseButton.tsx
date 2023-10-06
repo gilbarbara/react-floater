@@ -7,7 +7,7 @@ interface Props {
   styles: React.CSSProperties;
 }
 
-function FloaterCloseButton({ onClick, styles }: Props): JSX.Element {
+function FloaterCloseButton({ onClick, styles }: Props) {
   const { color, height, width, ...style } = styles;
 
   return (
