@@ -1,7 +1,5 @@
 .tmp
 coverage
 dist
-esm
-lib
 node_modules
 reports
