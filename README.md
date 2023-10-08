@@ -14,13 +14,13 @@ View the [demo](https://codesandbox.io/s/github/gilbarbara/react-floater/tree/ma
 
 ## Usage
 
-```bash
-npm install --save react-floater
+```shell
+npm install react-floater
 ```
 
 Import it in your app:
 
-```jsx
+```tsx
 import Floater from 'react-floater';
 
 <Floater content="This is the Floater content">
@@ -32,136 +32,172 @@ And voíla!
 
 ## Customization
 
-You can use your own components to render the Floater with the prop `component`.  
-Check `WithStyledComponents.js` in the [demo](https://codesandbox.io/s/github/gilbarbara/react-floater/tree/main/demo) for an example.
-
-If you use your own components as `children` it will receive an `innerRef` prop that you must set in your HTMLElement:
-
-```typescript jsx
-const Button = ({ innerRef, ...rest }) => <button ref={innerRef} {...rest} />;
-
-<Floater content="This is the Floater content">
-  <Button>click me</Button>
-</Floater>;
-```
-
-This works with styled-components (and other css-in-js libraries):
-
-```typescript jsx
-const Wrapper = styled.div`
-  margin: 0 auto;
-  max-width: 500px;
-  line-height: 1.5;
-`;
-
-<Floater content="This is the Floater content">
-  <Wrapper>click me</Wrapper>
-</Floater>;
-```
+You can use a custom component to render the Floater with the `component` prop.  
+Check `WithStyledComponents.ts` in the [demo](https://codesandbox.io/s/github/gilbarbara/react-floater/tree/main/demo) for an example.
 
 ## Props
 
-**autoOpen?: boolean = `false`**  
+**autoOpen**  `boolean` ▶︎ false  
 Open the Floater automatically.
 
-**callback?: (action: 'open' | 'close', props: Props)**  
-It will be called when the Floater change state.
+**callback** `(action: 'open' | 'close', props: Props) => void`  
+It will be called when the Floater changes state.
 
-**children: React.ReactNode**  
+**children** `ReactNode`  
 An element to trigger the Floater.
 
-**component** {element|function}  
-A React component or function to as a custom UI for the Floater.  
-The prop `closeFloater` will be available in your component.
+**component** `ComponentType | ReactElement`  
+A React element or function to use as a custom UI for the Floater.  
+The prop `closeFn` will be available in your component.
 
-**content** {node}  
+**content** `ReactNode`  
 The Floater content. It can be anything that can be rendered.  
-_This is the only required props, unless you pass a_ `component`.
+_This is required unless you pass a_ `component`.
 
-**debug** {bool} ▶︎ `false`  
+**debug** `boolean` ▶︎ false  
 Log some basic actions.  
 _You can also set a global variable_ `ReactFloaterDebug = true;`
 
-**disableFlip** {bool} ▶︎ `false`  
+**disableFlip** `boolean` ▶︎ false  
 Disable changes in the Floater position on scroll/resize.
 
-**disableHoverToClick** {bool} ▶︎ `false`  
-Don't convert _hover_ event to _click_ on mobile.
+**disableHoverToClick** `boolean` ▶︎ false  
+Don't convert the _hover_ event to _click_ on mobile.
 
-**event** {string} ▶︎ `click`  
-The event that will trigger the Floater. It can be `hover | click`.  
-_These won't work in controlled mode._
+**event** `'hover' | 'click'` ▶︎ click  
+The event that will trigger the Floater.
 
-**eventDelay** {number} ▶︎ `0.4`  
-The amount of time (in seconds) that the floater should wait after a `mouseLeave` event before hiding.  
-Only valid for event type `hover`.
+> This won't work in a controlled mode.
 
-**footer** {node}  
+**eventDelay** `number` ▶︎ 0.4  
+The amount of time (in seconds) the floater should wait after a `mouseLeave` event before hiding.  
+> Only valid for event type `hover`.
+
+**footer** `ReactNode`  
 It can be anything that can be rendered.
 
-**getPopper** {function} Get the popper.js instance. It receives with 2 parameters:
+**getPopper** `(popper: PopperInstance, origin: 'floater' | 'wrapper') => void`  
+Get the popper.js instance.
 
-- **popper** {object} the popper object
-- **origin** {object} `floater` or `wrapper`
-
-**hideArrow** {bool} ▶︎ `false`  
+**hideArrow** `boolean` ▶︎ false  
 Don't show the arrow. Useful for centered or modal layout.
 
-**offset** {number} ▶︎ `15`  
+**offset** `number` ▶︎ 15  
 The distance between the Floater and its target in pixels.
 
-**open** {bool}
+**open** `boolean`  
 The switch between normal and controlled modes.  
-_Setting this prop will disabled the normal behavior._
+> Setting this prop will disable normal behavior.
 
-**options** {object}  
+**modifiers** `PopperModifiers`  
 Customize popper.js modifiers.  
-_Don't use it unless you know what you're doing_
 
-**placement** {string} ▶︎ `bottom`  
+<details>
+  <summary>Type Definition</summary>
+
+```typescript
+interface PopperModifiers {
+  applyStyles?: Partial<ApplyStylesModifier>;
+  arrow?: Partial<ArrowModifier>;
+  computeStyles?: Partial<ComputeStylesModifier>;
+  eventListeners?: Partial<EventListenersModifier>;
+  flip?: Partial<FlipModifier>;
+  hide?: Partial<HideModifier>;
+  offset?: Partial<OffsetModifier>;
+  popperOffsets?: Partial<PopperOffsetsModifier>;
+  preventOverflow?: Partial<PreventOverflowModifier>;
+}
+```
+
+</details>
+
+> Don't use it unless you know what you're doing
+
+**placement** `Placement` ▶︎ `bottom`  
 The placement of the Floater. It will update the position if there's no space available.
 
-It can be:
+<details>
+  <summary>Type Definition</summary>
 
-- top (top-start, top-end)
-- bottom (bottom-start, bottom-end)
-- left (left-start, left-end)
-- right (right-start, right-end)
-- auto
-- center
+```typescript
+type Placement = 
+| "auto" | "auto-start" | "auto-end"
+| "top" | "top-start" | "top-end"
+| "bottom" | "bottom-start" | "bottom-end"
+| "right"| "right-start" | "right-end"
+| "left" | "left-start" | "left-end"
+| "center"
+```
 
-**portalElement** {string|null|HTMLElement}  
+</details>
+
+**portalElement** `string|HTMLElement`  
 A css selector or element to render the tooltips
 
-**showCloseButton** {bool} ▶︎ `false`  
+**showCloseButton** `boolean` ▶︎ false  
 It will show a ⨉ button to close the Floater.  
-This will be `true` when you change `wrapperOptions` position.
+This will be `true` when you change the `wrapperOptions` position.
 
-**styles** {object} ▶︎ `defaultStyles`  
-Customize the default UI.
+**styles** `Styles`  
+Customize the UI.
 
-**target** {object|string}  
-The target used to calculate the Floater position. If it's not set, it will use the `children` as the target.
+<details>
+  <summary>Type Definition</summary>
 
-**title** {node}  
+```typescript
+interface Styles {
+  arrow: CSSProperties & {
+    length: number;
+    spread: number;
+  };
+  close: CSSProperties;
+  container: CSSProperties;
+  content: CSSProperties;
+  floater: CSSProperties;
+  floaterCentered: CSSProperties;
+  floaterClosing: CSSProperties;
+  floaterOpening: CSSProperties;
+  floaterWithAnimation: CSSProperties;
+  floaterWithComponent: CSSProperties;
+  footer: CSSProperties;
+  options: {
+    zIndex: number;
+  };
+  title: CSSProperties;
+  wrapper: CSSProperties;
+  wrapperPosition: CSSProperties;
+}
+```
+
+</details>
+
+**target** `string | HTMLElement`  
+The target element to calculate the Floater position. It will use the children as the target if it's not set.
+
+**title** `ReactNode`  
 It can be anything that can be rendered.
 
-**wrapperOptions** {WrapperOptions}  
+**wrapperOptions** `WrapperOptions`  
 Position the wrapper relative to the target.  
 _You need to set a `target` for this to work._
 
+<details>
+  <summary>Type Definition</summary>
+
 ```typescript
 interface WrapperOptions {
-  offset: number; // The distance between the wrapper and the target. It can be negative.
+  offset: number; // The distance between the wrapper and the target. It can be a negative value.
   placement: string; // the same options as above, except center
   position: bool; // Set to true to position the wrapper
 }
 ```
 
+</details>
+
 ## Styling
 
 You can customize everything with the `styles` prop.  
-Only set the properties you want to change and the default styles will be merged.
+Only set the properties you want to change, and the default styles will be merged.
 
 Check the [styles.ts](src/modules/styles.ts) for the syntax.
 
@@ -170,16 +206,16 @@ Check the [styles.ts](src/modules/styles.ts) for the syntax.
 **Default**  
 The wrapper will trigger the events and use itself as the Floater's target.
 
-```typescript jsx
+```tsx
 <Floater content="This is the Floater content">
   <span>click me</span>
 </Floater>
 ```
 
 **Proxy**  
-The wrapper will trigger the events but the Floater will use the **target** prop to position itself.
+The wrapper will trigger the events, but the Floater will use the **target** prop to position itself.
 
-```typescript jsx
+```tsx
 <div className="App">
   <img src="some-path" />
 
@@ -190,9 +226,9 @@ The wrapper will trigger the events but the Floater will use the **target** prop
 ```
 
 **Beacon**  
-The same as the **proxy mode** but the wrapper will be positioned relative to the `target`.
+It is the same as the **proxy mode,** but the wrapper will be positioned relative to the `target`.
 
-```typescript jsx
+```tsx
 <div className="App">
   <img
     src="https://upload.wikimedia.org/wikipedia/commons/2/2d/Google-favicon-2015.png"
@@ -215,10 +251,10 @@ The same as the **proxy mode** but the wrapper will be positioned relative to th
 ```
 
 **Controlled**  
-When you set a boolean to the `open` prop it will enter the controlled mode and it will not respond to events.  
-In this mode you don't even need to have `children`
+Setting a boolean to the open prop will enter the controlled mode and not respond to events.  
+In this mode, you don't even need to have `children`
 
-```typescript jsx
+```tsx
 <div className="App">
   <img src="some-path" />
   <Floater content="This is the Floater content" open={true} target=".App img" />
