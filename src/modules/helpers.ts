@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Modifier, Placement } from '@popperjs/core';
 import { deepmerge } from 'deepmerge-ts';
 import is from 'is-lite';
+import { SetRequired } from 'type-fest';
 
 import { LogOptions, PopperModifiers, Props } from '../types';
 
@@ -11,7 +12,7 @@ export function canUseDOM(): boolean {
   return !!(typeof window !== 'undefined' && window.document && window.document.createElement);
 }
 
-export function enhanceProps(props: Props): Props {
+export function enhanceProps(props: Props): SetRequired<Props, 'wrapperOptions'> {
   return {
     autoOpen: false,
     debug: false,
