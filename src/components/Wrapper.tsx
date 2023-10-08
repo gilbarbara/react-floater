@@ -3,6 +3,7 @@ import { PlainObject } from '@gilbarbara/types';
 import is from 'is-lite';
 
 import { STATUS } from '../literals';
+import { useMount } from '../modules/hooks';
 import { HandlerFunction, Statuses } from '../types';
 
 interface Props {
@@ -11,6 +12,7 @@ interface Props {
   id: string;
   isControlled: boolean;
   onClick: HandlerFunction<HTMLSpanElement>;
+  onMount: () => void;
   onMouseEnter: HandlerFunction<HTMLSpanElement>;
   onMouseLeave: HandlerFunction<HTMLSpanElement>;
   status: Statuses;
@@ -26,6 +28,7 @@ function FloaterWrapper(props: Props) {
     id,
     isControlled,
     onClick,
+    onMount,
     onMouseEnter,
     onMouseLeave,
     status,
@@ -33,6 +36,11 @@ function FloaterWrapper(props: Props) {
     styles,
     wrapperRef,
   } = props;
+
+  useMount(() => {
+    onMount();
+  });
+
   let element;
 
   const mergedStyles = {

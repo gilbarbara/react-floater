@@ -322,10 +322,10 @@ function ReactFloater(props: Props) {
 
     if (
       element &&
-      !wrapperPopper.current &&
-      stateRef.current.positionWrapper &&
+      placement !== 'center' &&
       wrapperRef.current &&
-      placement !== 'center'
+      !wrapperPopper.current &&
+      stateRef.current.positionWrapper
     ) {
       const wrapperOffset = wrapperOptions?.offset ? wrapperOptions.offset : 0;
 
@@ -456,6 +456,12 @@ function ReactFloater(props: Props) {
     }
   }, [currentDebug, currentEvent, event, eventDelay, open, positionWrapper, status, toggle]);
 
+  const handleWrapperMount = React.useCallback(() => {
+    if (positionWrapper) {
+      initPopper.current();
+    }
+  }, [positionWrapper]);
+
   useSingleton(() => {
     if (canUseDOM()) {
       window.addEventListener('load', handleLoad.current);
@@ -546,6 +552,7 @@ function ReactFloater(props: Props) {
       id={id || internalId.current}
       isControlled={is.boolean(open)}
       onClick={handleClick}
+      onMount={handleWrapperMount}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       status={status}
