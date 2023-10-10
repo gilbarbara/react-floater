@@ -1,9 +1,9 @@
 import * as React from 'react';
 
-import { HandlerFunction } from '../../types';
+import { CloseFunction } from '../../types';
 
 interface Props {
-  onClick: HandlerFunction<HTMLButtonElement>;
+  onClick: CloseFunction<HTMLButtonElement>;
   styles: React.CSSProperties;
 }
 

@@ -12,7 +12,7 @@ export function canUseDOM(): boolean {
   return !!(typeof window !== 'undefined' && window.document && window.document.createElement);
 }
 
-export function enhanceProps(props: Props): SetRequired<Props, 'wrapperOptions'> {
+export function enhanceProps(props: Props) {
   return {
     autoOpen: false,
     debug: false,
@@ -30,7 +30,7 @@ export function enhanceProps(props: Props): SetRequired<Props, 'wrapperOptions'>
       position: false,
     },
     ...props,
-  };
+  } satisfies SetRequired<Props, 'wrapperOptions'>;
 }
 
 export function getFallbackPlacements(placement: Placement): Placement[] | undefined {

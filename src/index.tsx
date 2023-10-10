@@ -127,7 +127,7 @@ function ReactFloater(props: Props) {
       return document.querySelector(target) as HTMLElement;
     }
 
-    return childRef.current || wrapperRef.current;
+    return childRef.current ?? wrapperRef.current;
   });
 
   const currentDebug = React.useMemo(() => {
@@ -192,20 +192,8 @@ function ReactFloater(props: Props) {
       }
     }
 
-    return nextStyles as Styles;
+    return nextStyles;
   }, [positionWrapper, status, statusWrapper, styles]);
-
-  const cleanUp = React.useRef(() => {
-    if (popperRef.current) {
-      popperRef.current.destroy();
-      popperRef.current = undefined;
-    }
-
-    if (wrapperPopper.current) {
-      wrapperPopper.current.destroy();
-      wrapperPopper.current = undefined;
-    }
-  });
 
   const initPopper = React.useRef(() => {
     const nextStatus = stateRef.current.status === STATUS.RENDER ? STATUS.OPENING : STATUS.IDLE;
@@ -222,7 +210,7 @@ function ReactFloater(props: Props) {
 
         popperRef.current = createPopper(element, floaterRef.current, {
           placement,
-          strategy: isFixed(childRef.current) ? 'fixed' : 'absolute',
+          strategy: isFixed(targetElement.current()) ? 'fixed' : 'absolute',
           modifiers: [
             mergeModifier(
               {
@@ -318,48 +306,42 @@ function ReactFloater(props: Props) {
           status: STATUS.IDLE,
         });
       }
-    }
 
-    if (
-      element &&
-      placement !== 'center' &&
-      wrapperRef.current &&
-      !wrapperPopper.current &&
-      stateRef.current.positionWrapper
-    ) {
-      const wrapperOffset = wrapperOptions?.offset ? wrapperOptions.offset : 0;
+      if (wrapperRef.current && !wrapperPopper.current && stateRef.current.positionWrapper) {
+        const wrapperOffset = wrapperOptions?.offset ? wrapperOptions.offset : 0;
 
-      wrapperPopper.current = createPopper(element, wrapperRef.current, {
-        placement: wrapperOptions?.placement || placement,
-        modifiers: [
-          {
-            name: 'arrow',
-            enabled: false,
-          },
-          {
-            name: 'offset',
-            options: {
-              offset: [0, wrapperOffset],
+        wrapperPopper.current = createPopper(element, wrapperRef.current, {
+          placement: wrapperOptions?.placement ?? placement,
+          modifiers: [
+            {
+              name: 'arrow',
+              enabled: false,
             },
-          },
-          {
-            name: 'flip',
-            enabled: false,
-          },
-        ],
-        onFirstUpdate: popperState => {
-          updateState({ statusWrapper: STATUS.RENDER });
+            {
+              name: 'offset',
+              options: {
+                offset: [0, wrapperOffset],
+              },
+            },
+            {
+              name: 'flip',
+              enabled: false,
+            },
+          ],
+          onFirstUpdate: popperState => {
+            updateState({ statusWrapper: STATUS.RENDER });
 
-          if (placement !== popperState.placement) {
-            setTimeout(() => {
-              wrapperPopper.current?.forceUpdate();
-            });
-          }
-        },
-      });
+            if (placement !== popperState.placement) {
+              setTimeout(() => {
+                wrapperPopper.current?.forceUpdate();
+              });
+            }
+          },
+        });
 
-      if (getPopper) {
-        getPopper(wrapperPopper.current, 'wrapper');
+        if (getPopper) {
+          getPopper(wrapperPopper.current, 'wrapper');
+        }
       }
     }
   });
@@ -462,6 +444,18 @@ function ReactFloater(props: Props) {
     }
   }, [positionWrapper]);
 
+  const cleanUp = () => {
+    if (popperRef.current) {
+      popperRef.current.destroy();
+      popperRef.current = undefined;
+    }
+
+    if (wrapperPopper.current) {
+      wrapperPopper.current.destroy();
+      wrapperPopper.current = undefined;
+    }
+  };
+
   useSingleton(() => {
     if (canUseDOM()) {
       window.addEventListener('load', handleLoad.current);
@@ -490,7 +484,7 @@ function ReactFloater(props: Props) {
   useUnmount(() => {
     isMounted.current = false;
 
-    cleanUp.current();
+    cleanUp();
     window.removeEventListener('load', handleLoad.current);
   });
 
@@ -549,7 +543,7 @@ function ReactFloater(props: Props) {
   const wrapper = (
     <Wrapper
       childRef={childRef}
-      id={id || internalId.current}
+      id={id ?? internalId.current}
       isControlled={is.boolean(open)}
       onClick={handleClick}
       onMount={handleWrapperMount}
@@ -581,7 +575,7 @@ function ReactFloater(props: Props) {
           floaterRef={floaterRef}
           footer={footer}
           hideArrow={hideArrow || currentPlacement === 'center'}
-          id={id || internalId.current}
+          id={id ?? internalId.current}
           onClick={handleClick}
           placement={currentPlacement}
           positionWrapper={positionWrapper}
@@ -609,5 +603,14 @@ ReactFloater.defaultProps = {
   placement: 'bottom',
   showCloseButton: false,
 };
+
+export type {
+  Action,
+  CustomComponentProps,
+  Placement,
+  PopperInstance,
+  Props,
+  Styles,
+} from './types';
 
 export default ReactFloater;

@@ -3,12 +3,12 @@ import is from 'is-lite';
 
 import CloseButton from './CloseButton';
 
-import { HandlerFunction, Styles } from '../../types';
+import { CloseFunction, Styles } from '../../types';
 
 interface Props {
   content: React.ReactNode;
   footer?: React.ReactNode;
-  onClick: HandlerFunction<HTMLButtonElement>;
+  onClick: CloseFunction<HTMLButtonElement>;
   open?: boolean;
   positionWrapper: boolean;
   showCloseButton?: boolean;

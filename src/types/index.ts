@@ -1,4 +1,10 @@
-import * as React from 'react';
+import {
+  CSSProperties,
+  FunctionComponent,
+  MouseEventHandler,
+  ReactElement,
+  ReactNode,
+} from 'react';
 import { PartialDeep, RequireExactlyOne, ValueOf } from 'type-fest';
 
 import { PopperInstance, PopperModifiers, PopperPlacement } from './popper';
@@ -6,10 +12,14 @@ import { PopperInstance, PopperModifiers, PopperPlacement } from './popper';
 import { STATUS } from '../literals';
 
 export type Action = 'open' | 'close';
-export type HandlerFunction<T = HTMLElement> = (event: React.SyntheticEvent<T>) => void;
-export type PlacementOptions = PopperPlacement | 'center';
+export type CloseFunction<T = HTMLElement> = MouseEventHandler<T>;
+export type Placement = PopperPlacement | 'center';
 export type SelectorOrElement = string | null | HTMLElement;
 export type Statuses = ValueOf<typeof STATUS>;
+
+export interface CustomComponentProps {
+  closeFn: CloseFunction;
+}
 
 export interface LogOptions {
   data: any;
@@ -17,11 +27,7 @@ export interface LogOptions {
   title: string;
 }
 
-export type FloaterComponent<T = RenderProps> = React.FunctionComponent<T> | React.ReactElement;
-
-export interface RenderProps {
-  closeFn: HandlerFunction;
-}
+export type FloaterComponent<T = CustomComponentProps> = FunctionComponent<T> | ReactElement<T>;
 
 export interface BaseProps {
   /**
@@ -32,14 +38,14 @@ export interface BaseProps {
   /* It will be called when the Floater change state */
   callback?: (action: Action, props: Props) => void;
   /* The element to have the Floater. */
-  children?: React.ReactNode;
+  children?: ReactNode;
   /**
    * A React element or function to be used as the custom UI for the Floater.
    * The prop closeFloater will be available in your component.
    */
   component: FloaterComponent;
   /* Anything that can be rendered. */
-  content: React.ReactNode;
+  content: ReactNode;
   /**
    * Log some actions.
    * @default false
@@ -68,7 +74,7 @@ export interface BaseProps {
    *  */
   eventDelay?: number;
   /* Anything that can be rendered. */
-  footer?: React.ReactNode;
+  footer?: ReactNode;
   /* The popper.js instance */
   getPopper?: (popper: PopperInstance, origin: 'floater' | 'wrapper') => void;
   /**
@@ -92,7 +98,7 @@ export interface BaseProps {
    * This will be updated automatically if there's no space available unless the "disableFlip" is set to true
    * @default bottom
    */
-  placement?: PlacementOptions;
+  placement?: Placement;
   /* A custom element to render the tooltip */
   portalElement?: SelectorOrElement;
   /**
@@ -100,13 +106,13 @@ export interface BaseProps {
    * @default false
    */
   showCloseButton?: boolean;
-  style?: React.CSSProperties;
+  style?: CSSProperties;
   /* Customize the UI. */
   styles?: PartialDeep<Styles>;
   /* The target for the Floater positioning. If it's not set, it will use the `children` as the target. */
   target?: SelectorOrElement;
   /* Anything that can be rendered. */
-  title?: React.ReactNode;
+  title?: ReactNode;
   /* Position the wrapper relative to the target. */
   wrapperOptions?: {
     offset?: number;
@@ -118,38 +124,33 @@ export interface BaseProps {
 export type Props = RequireExactlyOne<BaseProps, 'content' | 'component'>;
 
 export interface State {
-  currentPlacement: PlacementOptions;
+  currentPlacement: Placement;
   positionWrapper: boolean;
   status: Statuses;
   statusWrapper: Statuses;
 }
 
-export interface CustomComponent {
-  children?: React.ReactNode;
-  closeFn: HandlerFunction;
-}
-
 export interface Styles {
-  arrow: React.CSSProperties & {
+  arrow: CSSProperties & {
     length: number;
     spread: number;
   };
-  close: React.CSSProperties;
-  container: React.CSSProperties;
-  content: React.CSSProperties;
-  floater: React.CSSProperties;
-  floaterCentered: React.CSSProperties;
-  floaterClosing: React.CSSProperties;
-  floaterOpening: React.CSSProperties;
-  floaterWithAnimation: React.CSSProperties;
-  floaterWithComponent: React.CSSProperties;
-  footer: React.CSSProperties;
+  close: CSSProperties;
+  container: CSSProperties;
+  content: CSSProperties;
+  floater: CSSProperties;
+  floaterCentered: CSSProperties;
+  floaterClosing: CSSProperties;
+  floaterOpening: CSSProperties;
+  floaterWithAnimation: CSSProperties;
+  floaterWithComponent: CSSProperties;
+  footer: CSSProperties;
   options: {
     zIndex: number;
   };
-  title: React.CSSProperties;
-  wrapper: React.CSSProperties;
-  wrapperPosition: React.CSSProperties;
+  title: CSSProperties;
+  wrapper: CSSProperties;
+  wrapperPosition: CSSProperties;
 }
 
 declare global {
