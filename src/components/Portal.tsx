@@ -4,13 +4,13 @@ import is from 'is-lite';
 
 import { canUseDOM, portalId } from '../modules/helpers';
 import { useMount, useUnmount } from '../modules/hooks';
-import { PlacementOptions, SelectorOrElement } from '../types';
+import { Placement, SelectorOrElement } from '../types';
 
 interface Props {
   children: React.ReactNode;
   hasChildren: boolean;
   internalId: string;
-  placement: PlacementOptions;
+  placement: Placement;
   portalElement?: SelectorOrElement;
   target?: SelectorOrElement;
   zIndex: string | number;
@@ -35,7 +35,7 @@ function ReactFloaterPortal(props: Props) {
       const portal = document.getElementById(portalId);
 
       if (portal) {
-        const ids: string[] = portal.dataset.ids?.split(',').filter(Boolean) || [];
+        const ids: string[] = portal.dataset.ids?.split(',').filter(Boolean) ?? [];
 
         if (!ids.includes(internalId) && internalId) {
           ids.push(internalId);
@@ -79,7 +79,7 @@ function ReactFloaterPortal(props: Props) {
 
     try {
       if (node.current.id === portalId) {
-        const ids: string[] = node.current.dataset.ids?.split(',') || [];
+        const ids: string[] = node.current.dataset.ids?.split(',') ?? [];
 
         if (ids.includes(internalId)) {
           node.current.dataset.ids = ids.filter(id => id !== internalId).join(',');

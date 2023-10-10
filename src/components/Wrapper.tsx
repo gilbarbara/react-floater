@@ -4,17 +4,17 @@ import is from 'is-lite';
 
 import { STATUS } from '../literals';
 import { useMount } from '../modules/hooks';
-import { HandlerFunction, Statuses } from '../types';
+import { CloseFunction, Statuses } from '../types';
 
 interface Props {
   childRef: React.RefObject<HTMLElement>;
   children: React.ReactNode;
   id: string;
   isControlled: boolean;
-  onClick: HandlerFunction<HTMLSpanElement>;
+  onClick: CloseFunction<HTMLSpanElement>;
   onMount: () => void;
-  onMouseEnter: HandlerFunction<HTMLSpanElement>;
-  onMouseLeave: HandlerFunction<HTMLSpanElement>;
+  onMouseEnter: CloseFunction<HTMLSpanElement>;
+  onMouseLeave: CloseFunction<HTMLSpanElement>;
   status: Statuses;
   style?: React.CSSProperties;
   styles: React.CSSProperties;
@@ -100,7 +100,7 @@ function FloaterWrapper(props: Props) {
     }
   }
 
-  return element || null;
+  return element ?? null;
 }
 
 export default React.memo(FloaterWrapper);

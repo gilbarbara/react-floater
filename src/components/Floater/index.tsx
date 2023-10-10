@@ -6,7 +6,7 @@ import Container from './Container';
 
 import { STATUS } from '../../literals';
 import { isValidElement } from '../../modules/helpers';
-import { FloaterComponent, HandlerFunction, Statuses, Styles } from '../../types';
+import { CloseFunction, FloaterComponent, Statuses, Styles } from '../../types';
 
 interface Props {
   arrowRef: React.Ref<HTMLSpanElement>;
@@ -16,7 +16,7 @@ interface Props {
   footer?: React.ReactNode;
   hideArrow: boolean;
   id: string;
-  onClick: HandlerFunction;
+  onClick: CloseFunction;
   placement: string;
   positionWrapper: boolean;
   showCloseButton?: boolean;

@@ -8,7 +8,7 @@ const defaultOptions = {
 };
 
 export default function getStyles(styles?: PartialDeep<Styles>): Styles {
-  const { options = {}, ...rest } = styles || {};
+  const { options = {}, ...rest } = styles ?? {};
 
   return deepmerge(
     {
