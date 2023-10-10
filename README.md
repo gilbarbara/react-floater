@@ -1,6 +1,6 @@
 # React Floater
 
-[![NPM version](https://badge.fury.io/js/react-floater.svg)](https://www.npmjs.com/package/react-floater) [![CI](https://github.com/gilbarbara/react-floater/actions/workflows/main.yml/badge.svg)](https://github.com/gilbarbara/react-floater/actions/workflows/main.yml) [![Maintainability](https://api.codeclimate.com/v1/badges/a3457f536c0915c0935b/maintainability)](https://codeclimate.com/github/gilbarbara/react-floater/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/a3457f536c0915c0935b/test_coverage)](https://codeclimate.com/github/gilbarbara/react-floater/test_coverage)
+[![NPM version](https://badge.fury.io/js/react-floater.svg)](https://www.npmjs.com/package/react-floater) [![CI](https://github.com/gilbarbara/react-floater/actions/workflows/main.yml/badge.svg)](https://github.com/gilbarbara/react-floater/actions/workflows/main.yml) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=gilbarbara_react-floater&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=gilbarbara_react-floater) [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=gilbarbara_react-floater&metric=coverage)](https://sonarcloud.io/summary/new_code?id=gilbarbara_react-floater)
 
 Advanced tooltips for React!
 
