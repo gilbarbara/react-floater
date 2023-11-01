@@ -23,10 +23,9 @@ export function useSingleton(callback: () => void): void {
 export function useUnmount(fn: () => any): void {
   const fnRef = useRef(fn);
 
-  // update the ref each render so if it change the newest callback will be invoked
+  // update the ref each render so if it changes the newest callback will be invoked
   fnRef.current = fn;
 
-  // eslint-disable-next-line unicorn/consistent-function-scoping
   useEffectOnce(() => () => fnRef.current());
 }
 
