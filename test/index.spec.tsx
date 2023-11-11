@@ -8,7 +8,7 @@ import {
   render,
   RenderResult,
   screen,
-} from '@testing-library/react/pure';
+} from '@testing-library/react';
 
 import { Button, Floaters, Styled } from './__fixtures__/components';
 

@@ -21,15 +21,13 @@ module.exports = {
   testMatch: null,
   testRegex: '/test/.*?\\.(test|spec)\\.tsx?$',
   transform: {
-    // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
-    // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
     '^.+\\.tsx?$': [
       'ts-jest',
       {
-        tsconfig: 'test/tsconfig.json',
         diagnostics: {
           ignoreCodes: ['TS151001'],
         },
+        tsconfig: 'test/tsconfig.json',
       },
     ],
   },
