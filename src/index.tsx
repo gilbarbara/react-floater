@@ -24,7 +24,7 @@ import { useMount, useSingleton, useUnmount, useUpdateEffect } from './modules/h
 import getStyles from './modules/styles';
 import { Props, State, Statuses, Styles } from './types';
 
-function ReactFloater(props: Props) {
+function ReactFloater(props: Props): React.ReactElement {
   const {
     autoOpen,
     callback,
