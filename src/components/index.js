@@ -473,7 +473,7 @@ export default class ReactFloater extends React.Component {
   get debug() {
     const { debug } = this.props;
 
-    return debug || !!global.ReactFloaterDebug;
+    return debug || (canUseDOM && 'ReactFloaterDebug' in window && !!window.ReactFloaterDebug);
   }
 
   get event() {
