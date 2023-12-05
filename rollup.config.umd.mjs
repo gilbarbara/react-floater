@@ -1,6 +1,6 @@
 import resolve from '@rollup/plugin-node-resolve';
-import packageJSON from './package.json';
-import baseConfig from './rollup.config';
+import packageJSON from './package.json' assert { type: 'json' };
+import baseConfig from './rollup.config.mjs';
 
 export default {
   input: 'src/index.js',

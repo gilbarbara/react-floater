@@ -1,6 +1,6 @@
-import babel from 'rollup-plugin-babel';
+import { babel } from '@rollup/plugin-babel';
 import commonjs from '@rollup/plugin-commonjs';
-import packageJSON from './package.json';
+import packageJSON from './package.json' assert { type: 'json' };
 
 const plugins = () => [
   babel({

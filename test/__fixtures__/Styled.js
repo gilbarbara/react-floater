@@ -5,13 +5,15 @@ const Wrapper = styled.div`
   background-color: #cce8ff;
 `;
 
-const Styled = ({ closeFn }) => (
-  <Wrapper>
-    <div>Styled</div>
-    <button onClick={closeFn} type="button">
-      close
-    </button>
-  </Wrapper>
-);
+function Styled({ closeFn }) {
+  return (
+    <Wrapper>
+      <div>Styled</div>
+      <button onClick={closeFn} type="button">
+        close
+      </button>
+    </Wrapper>
+  );
+}
 
 export default Styled;

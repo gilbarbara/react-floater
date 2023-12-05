@@ -9,7 +9,7 @@ exports[`ReactFloater with \`component\` as element should have rendered the com
   >
     <styled.div>
       <div
-        className="sc-bczRLJ jcNdTb"
+        className="sc-bdfCDU kJyuGD"
       >
         <div>
           Styled
@@ -35,8 +35,8 @@ exports[`ReactFloater with \`component\` as element should have rendered the com
     showCloseButton={false}
     status="open"
     styles={
-      Object {
-        "arrow": Object {
+      {
+        "arrow": {
           "color": "#fff",
           "display": "inline-flex",
           "length": 16,
@@ -44,7 +44,7 @@ exports[`ReactFloater with \`component\` as element should have rendered the com
           "position": "absolute",
           "spread": 32,
         },
-        "close": Object {
+        "close": {
           "WebkitAppearance": "none",
           "backgroundColor": "transparent",
           "border": 0,
@@ -59,7 +59,7 @@ exports[`ReactFloater with \`component\` as element should have rendered the com
           "top": 0,
           "width": 15,
         },
-        "container": Object {
+        "container": {
           "backgroundColor": "#fff",
           "color": "#666",
           "minHeight": 60,
@@ -68,10 +68,10 @@ exports[`ReactFloater with \`component\` as element should have rendered the com
           "position": "relative",
           "zIndex": 10,
         },
-        "content": Object {
+        "content": {
           "fontSize": 15,
         },
-        "floater": Object {
+        "floater": {
           "display": "inline-block",
           "filter": "drop-shadow(0 0 3px rgba(0, 0, 0, 0.3))",
           "maxWidth": 300,
@@ -81,38 +81,38 @@ exports[`ReactFloater with \`component\` as element should have rendered the com
           "visibility": "hidden",
           "zIndex": 1000,
         },
-        "floaterCentered": Object {
+        "floaterCentered": {
           "left": "50%",
           "position": "fixed",
           "top": "50%",
           "transform": "translate(-50%, -50%)",
         },
-        "floaterClosing": Object {
+        "floaterClosing": {
           "opacity": 0,
           "visibility": "visible",
         },
-        "floaterOpening": Object {
+        "floaterOpening": {
           "opacity": 1,
           "visibility": "visible",
         },
-        "floaterWithAnimation": Object {
+        "floaterWithAnimation": {
           "opacity": 1,
           "transition": "opacity 0.3s, transform 0.2s",
           "visibility": "visible",
         },
-        "floaterWithComponent": Object {
+        "floaterWithComponent": {
           "maxWidth": "100%",
         },
-        "footer": Object {
+        "footer": {
           "borderTop": "1px solid #ccc",
           "fontSize": 13,
           "marginTop": 10,
           "paddingTop": 5,
         },
-        "options": Object {
+        "options": {
           "zIndex": 1000,
         },
-        "title": Object {
+        "title": {
           "borderBottom": "1px solid #555",
           "color": "#555",
           "fontSize": 18,
@@ -120,7 +120,7 @@ exports[`ReactFloater with \`component\` as element should have rendered the com
           "paddingBottom": 6,
           "paddingRight": 18,
         },
-        "wrapper": Object {
+        "wrapper": {
           "bottom": "",
           "cursor": "help",
           "display": "inline-flex",
@@ -131,7 +131,7 @@ exports[`ReactFloater with \`component\` as element should have rendered the com
           "top": "",
           "zIndex": 1000,
         },
-        "wrapperPosition": Object {
+        "wrapperPosition": {
           "left": -1000,
           "position": "absolute",
           "top": -1000,
@@ -143,7 +143,7 @@ exports[`ReactFloater with \`component\` as element should have rendered the com
     <div
       className="__floater__arrow"
       style={
-        Object {
+        {
           "height": 16,
           "left": 0,
           "pointerEvents": "none",
@@ -156,7 +156,7 @@ exports[`ReactFloater with \`component\` as element should have rendered the com
     >
       <span
         style={
-          Object {
+          {
             "display": "inline-flex",
             "marginLeft": 8,
             "marginRight": 8,
@@ -188,7 +188,7 @@ exports[`ReactFloater with \`component\` as function should have rendered the co
 >
   <styled.div>
     <div
-      className="sc-bczRLJ jcNdTb"
+      className="sc-bdfCDU kJyuGD"
     >
       <div>
         Styled
@@ -213,8 +213,8 @@ exports[`ReactFloater with \`component\` as function should have rendered the co
     showCloseButton={false}
     status="open"
     styles={
-      Object {
-        "arrow": Object {
+      {
+        "arrow": {
           "color": "#fff",
           "display": "inline-flex",
           "length": 16,
@@ -222,7 +222,7 @@ exports[`ReactFloater with \`component\` as function should have rendered the co
           "position": "absolute",
           "spread": 32,
         },
-        "close": Object {
+        "close": {
           "WebkitAppearance": "none",
           "backgroundColor": "transparent",
           "border": 0,
@@ -237,7 +237,7 @@ exports[`ReactFloater with \`component\` as function should have rendered the co
           "top": 0,
           "width": 15,
         },
-        "container": Object {
+        "container": {
           "backgroundColor": "#fff",
           "color": "#666",
           "minHeight": 60,
@@ -246,10 +246,10 @@ exports[`ReactFloater with \`component\` as function should have rendered the co
           "position": "relative",
           "zIndex": 10,
         },
-        "content": Object {
+        "content": {
           "fontSize": 15,
         },
-        "floater": Object {
+        "floater": {
           "display": "inline-block",
           "filter": "drop-shadow(0 0 3px rgba(0, 0, 0, 0.3))",
           "maxWidth": 300,
@@ -259,38 +259,38 @@ exports[`ReactFloater with \`component\` as function should have rendered the co
           "visibility": "hidden",
           "zIndex": 100,
         },
-        "floaterCentered": Object {
+        "floaterCentered": {
           "left": "50%",
           "position": "fixed",
           "top": "50%",
           "transform": "translate(-50%, -50%)",
         },
-        "floaterClosing": Object {
+        "floaterClosing": {
           "opacity": 0,
           "visibility": "visible",
         },
-        "floaterOpening": Object {
+        "floaterOpening": {
           "opacity": 1,
           "visibility": "visible",
         },
-        "floaterWithAnimation": Object {
+        "floaterWithAnimation": {
           "opacity": 1,
           "transition": "opacity 0.3s, transform 0.2s",
           "visibility": "visible",
         },
-        "floaterWithComponent": Object {
+        "floaterWithComponent": {
           "maxWidth": "100%",
         },
-        "footer": Object {
+        "footer": {
           "borderTop": "1px solid #ccc",
           "fontSize": 13,
           "marginTop": 10,
           "paddingTop": 5,
         },
-        "options": Object {
+        "options": {
           "zIndex": 100,
         },
-        "title": Object {
+        "title": {
           "borderBottom": "1px solid #555",
           "color": "#555",
           "fontSize": 18,
@@ -298,7 +298,7 @@ exports[`ReactFloater with \`component\` as function should have rendered the co
           "paddingBottom": 6,
           "paddingRight": 18,
         },
-        "wrapper": Object {
+        "wrapper": {
           "bottom": "",
           "cursor": "help",
           "display": "inline-flex",
@@ -309,7 +309,7 @@ exports[`ReactFloater with \`component\` as function should have rendered the co
           "top": "",
           "zIndex": 100,
         },
-        "wrapperPosition": Object {
+        "wrapperPosition": {
           "left": -1000,
           "position": "absolute",
           "top": -1000,
@@ -321,7 +321,7 @@ exports[`ReactFloater with \`component\` as function should have rendered the co
     <div
       className="__floater__arrow"
       style={
-        Object {
+        {
           "height": 16,
           "left": 0,
           "pointerEvents": "none",
@@ -334,7 +334,7 @@ exports[`ReactFloater with \`component\` as function should have rendered the co
     >
       <span
         style={
-          Object {
+          {
             "display": "inline-flex",
             "marginLeft": 8,
             "marginRight": 8,

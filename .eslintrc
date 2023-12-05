@@ -2,12 +2,12 @@
   "extends": [
     "airbnb",
     "plugin:flowtype/recommended",
-    "plugin:prettier/recommended",
-    "prettier/flowtype",
-    "prettier/react",
-    "prettier/standard"
+    "plugin:prettier/recommended"
   ],
-  "parser": "babel-eslint",
+  "parser": "@babel/eslint-parser",
+  "parserOptions": {
+    "requireConfigFile": false
+  },
   "env": {
     "browser": true,
     "jest": true
@@ -25,6 +25,17 @@
       "onlyFilesWithFlowAnnotation": true
     }
   },
+  "overrides": [
+    {
+      "files": ["test/**/*.js"],
+      "rules": {
+        "no-console": "off",
+        "prefer-destructuring": 0,
+        "react/jsx-filename-extension": 0,
+        "react/prop-types": 0
+      }
+    }
+  ],
   "rules": {
     "arrow-body-style": ["warn", "as-needed"],
     "arrow-parens": "off",

@@ -4,7 +4,7 @@ import is from 'is-lite';
 
 import CloseBtn from './CloseBtn';
 
-const FloaterContainer = ({
+function FloaterContainer({
   content,
   footer,
   handleClick,
@@ -13,7 +13,7 @@ const FloaterContainer = ({
   showCloseButton,
   title,
   styles,
-}) => {
+}) {
   const output = {
     content: React.isValidElement(content) ? (
       content
@@ -55,7 +55,7 @@ const FloaterContainer = ({
       {output.footer}
     </div>
   );
-};
+}
 
 FloaterContainer.propTypes = {
   content: PropTypes.node.isRequired,

@@ -30,9 +30,12 @@ describe('ReactFloater', () => {
       if (['click', 'mouseEnter'].includes(event)) {
         floater.instance().handleTransitionEnd(); // mock transitionend
       } else {
-        setTimeout(() => {
-          floater.instance().handleTransitionEnd();
-        }, floater.prop('eventDelay') * 1100);
+        setTimeout(
+          () => {
+            floater.instance().handleTransitionEnd();
+          },
+          floater.prop('eventDelay') * 1100,
+        );
       }
     }
 
@@ -271,7 +274,9 @@ describe('ReactFloater', () => {
 
   describe('with `title`', () => {
     beforeAll(() => {
-      const Title = () => <h3>My Title</h3>;
+      function Title() {
+        return <h3>My Title</h3>;
+      }
       floater = setup({
         ...props,
         title: <Title />,
@@ -292,11 +297,13 @@ describe('ReactFloater', () => {
 
   describe('with `footer`', () => {
     beforeAll(() => {
-      const Footer = () => (
-        <footer>
-          <button type="button">NEXT</button>
-        </footer>
-      );
+      function Footer() {
+        return (
+          <footer>
+            <button type="button">NEXT</button>
+          </footer>
+        );
+      }
       floater = setup({
         ...props,
         footer: <Footer />,
