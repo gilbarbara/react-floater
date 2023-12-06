@@ -9,7 +9,6 @@ export default {
       file: 'lib/index.umd.js',
       format: 'umd',
       name: 'Floater',
-      intro: 'var global = typeof self !== undefined ? self : this;',
       globals: {
         react: 'React',
         'prop-types': 'PropTypes',
