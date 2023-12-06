@@ -1,10 +1,12 @@
 // @flow
 import ReactDOM from 'react-dom';
-import ExecutionEnvironment from 'exenv';
 import is from 'is-lite';
 
-export const { canUseDOM } = ExecutionEnvironment;
 export const isReact16 = ReactDOM.createPortal !== undefined;
+
+export function canUseDOM(): boolean {
+  return !!(typeof window !== 'undefined' && window.document && window.document.createElement);
+}
 
 export function isMobile(): boolean {
   return 'ontouchstart' in window && /Mobi/.test(navigator.userAgent);

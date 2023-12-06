@@ -15,7 +15,7 @@ export default class ReactFloaterPortal extends React.Component {
   };
 
   componentDidMount() {
-    if (!canUseDOM) return;
+    if (!canUseDOM()) return;
 
     if (!this.node) {
       this.appendNode();
@@ -27,7 +27,7 @@ export default class ReactFloaterPortal extends React.Component {
   }
 
   componentDidUpdate() {
-    if (!canUseDOM) return;
+    if (!canUseDOM()) return;
 
     if (!isReact16) {
       this.renderPortal();
@@ -35,7 +35,7 @@ export default class ReactFloaterPortal extends React.Component {
   }
 
   componentWillUnmount() {
-    if (!canUseDOM || !this.node) return;
+    if (!canUseDOM() || !this.node) return;
 
     if (!isReact16) {
       ReactDOM.unmountComponentAtNode(this.node);
@@ -67,7 +67,7 @@ export default class ReactFloaterPortal extends React.Component {
   }
 
   renderPortal() {
-    if (!canUseDOM) return null;
+    if (!canUseDOM()) return null;
 
     const { children, setRef } = this.props;
 

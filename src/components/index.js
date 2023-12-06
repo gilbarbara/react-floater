@@ -46,7 +46,7 @@ export default class ReactFloater extends React.Component {
     this._isMounted = false;
     this.hasMounted = false;
 
-    if (canUseDOM) {
+    if (canUseDOM()) {
       window.addEventListener('load', () => {
         if (this.popper) {
           this.popper.instance.update();
@@ -145,7 +145,7 @@ export default class ReactFloater extends React.Component {
   };
 
   componentDidMount() {
-    if (!canUseDOM) return;
+    if (!canUseDOM()) return;
 
     const { positionWrapper } = this.state;
     const { children, open, target } = this.props;
@@ -176,7 +176,7 @@ export default class ReactFloater extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (!canUseDOM) return;
+    if (!canUseDOM()) return;
 
     const { autoOpen, open, target, wrapperOptions } = this.props;
     const { changedFrom, changed } = treeChanges(prevState, this.state);
@@ -222,7 +222,7 @@ export default class ReactFloater extends React.Component {
   }
 
   componentWillUnmount() {
-    if (!canUseDOM) return;
+    if (!canUseDOM()) return;
 
     this._isMounted = false;
 
@@ -473,7 +473,7 @@ export default class ReactFloater extends React.Component {
   get debug() {
     const { debug } = this.props;
 
-    return debug || (canUseDOM && 'ReactFloaterDebug' in window && !!window.ReactFloaterDebug);
+    return debug || (canUseDOM() && 'ReactFloaterDebug' in window && !!window.ReactFloaterDebug);
   }
 
   get event() {
@@ -549,7 +549,7 @@ export default class ReactFloater extends React.Component {
   }
 
   get target() {
-    if (!canUseDOM) return null;
+    if (!canUseDOM()) return null;
 
     const { target } = this.props;
 
