@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import isRequiredIf from 'react-proptype-conditional-require';
 import Popper from 'popper.js';
 import deepmerge from 'deepmerge';
 import is from 'is-lite';
 import treeChanges from 'tree-changes';
 
 import DEFAULTS from '../defaults';
+import isRequiredIf from '../isRequiredIf';
 import STATUS from '../status';
 import { canUseDOM, isMobile, log, noop, once } from '../utils';
 
