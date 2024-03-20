@@ -1,9 +1,11 @@
 import Floater from 'react-floater';
 import { Box, Button, Paragraph } from '@gilbarbara/components';
 
+import Column from '../components/Column';
+
 export default function AutoOpen({ cb }: any) {
   return (
-    <div>
+    <Column>
       <Floater
         autoOpen
         callback={cb}
@@ -24,6 +26,6 @@ export default function AutoOpen({ cb }: any) {
         <Button size="sm">TOP</Button>
       </Floater>
       <Paragraph mt="xxs">autoOpen</Paragraph>
-    </div>
+    </Column>
   );
 }

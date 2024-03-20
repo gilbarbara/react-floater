@@ -1,13 +1,15 @@
 import Floater from 'react-floater';
-import { Box, Button, Paragraph } from '@gilbarbara/components';
+import { Button, Paragraph } from '@gilbarbara/components';
+
+import Column from '../components/Column';
 
 export default function WithHoverCustomDelay({ cb }: any) {
   return (
-    <Box flex>
+    <Column>
       <Floater
         callback={cb}
         content={
-          <Paragraph size="large">
+          <Paragraph size="lg">
             I have an <b>eventDelay</b> prop for <i>hover</i> event that can be adjusted (move you
             mouse away)!
           </Paragraph>
@@ -19,6 +21,6 @@ export default function WithHoverCustomDelay({ cb }: any) {
         <Button size="sm">HOVER</Button>
       </Floater>
       <Paragraph mt="xs">2.5s delay</Paragraph>
-    </Box>
+    </Column>
   );
 }

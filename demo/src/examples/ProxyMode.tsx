@@ -1,7 +1,7 @@
 import { useCallback, useRef } from 'react';
 import Floater from 'react-floater';
-import { useUpdate } from 'react-use';
 import { Box } from '@gilbarbara/components';
+import { useUpdate } from '@gilbarbara/hooks';
 
 import Target from './Target';
 

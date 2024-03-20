@@ -23,7 +23,7 @@ export default function GlobalStyles() {
           background-color: ${theme.white};
           color: ${theme.darkColor};
           font-family: Rubik, sans-serif;
-          font-size: ${theme.typography.regular.fontSize};
+          font-size: ${theme.typography.md.fontSize};
           margin: 0;
           min-height: 100vh;
           padding: 0;
@@ -47,7 +47,9 @@ export default function GlobalStyles() {
         input:-webkit-autofill:hover,
         input:-webkit-autofill:focus,
         input:-webkit-autofill:active {
-          transition: background-color 50000s ease-in-out 0s, color 5000s ease-in-out 0s;
+          transition:
+            background-color 50000s ease-in-out 0s,
+            color 5000s ease-in-out 0s;
         }
       `}
     />

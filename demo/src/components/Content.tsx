@@ -1,31 +1,20 @@
 import { ReactNode } from 'react';
-import { Box, BoxProps } from '@gilbarbara/components';
+import { Flex, FlexProps } from '@gilbarbara/components';
 
-interface Props extends BoxProps {
+interface Props extends FlexProps {
   children: ReactNode;
-  spaced?: boolean;
 }
 
-export default function Content({ children, spaced, ...rest }: Props) {
-  if (spaced) {
-    return (
-      <Box
-        align="center"
-        display="flex"
-        justify="space-between"
-        maxWidth={500}
-        mx="auto"
-        wrap="wrap"
-        {...rest}
-      >
-        {children}
-      </Box>
-    );
-  }
-
+export default function Content(props: Props) {
   return (
-    <Box maxWidth={500} mx="auto" {...rest}>
-      {children}
-    </Box>
+    <Flex
+      data-component-name="Content"
+      justify="space-between"
+      maxWidth={500}
+      mx="auto"
+      width="100%"
+      wrap="wrap"
+      {...props}
+    />
   );
 }

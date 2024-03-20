@@ -1,9 +1,11 @@
 import Floater from 'react-floater';
-import { Box, Button, Paragraph } from '@gilbarbara/components';
+import { Button, Paragraph } from '@gilbarbara/components';
+
+import Column from '../components/Column';
 
 export default function WithHoverDefault({ cb }: any) {
   return (
-    <Box flex>
+    <Column>
       <Floater
         callback={cb}
         content={
@@ -16,6 +18,6 @@ export default function WithHoverDefault({ cb }: any) {
         <Button size="sm">HOVER</Button>
       </Floater>
       <Paragraph mt="xs">default delay (0.4s)</Paragraph>
-    </Box>
+    </Column>
   );
 }
