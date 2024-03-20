@@ -20,7 +20,6 @@ function FloaterArrow(props: Props) {
   let x = spread;
   let y = length;
 
-  /* istanbul ignore else */
   if (placement.startsWith('top')) {
     points = `0,0 ${x / 2},${y} ${x},0`;
   } else if (placement.startsWith('bottom')) {

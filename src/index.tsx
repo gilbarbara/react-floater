@@ -161,11 +161,9 @@ function ReactFloater(props: Props): React.ReactElement {
       };
     }
 
-    /* istanbul ignore else */
     if (element) {
       const targetStyles = window.getComputedStyle(element);
 
-      /* istanbul ignore else */
       if (wrapperStyles.current) {
         nextStyles.wrapper = {
           ...nextStyles.wrapper,
@@ -199,7 +197,6 @@ function ReactFloater(props: Props): React.ReactElement {
     const nextStatus = stateRef.current.status === STATUS.RENDER ? STATUS.OPENING : STATUS.IDLE;
     const element = targetElement.current();
 
-    /* istanbul ignore else */
     if (placement === 'center') {
       setTimeout(() => {
         updateState({ status: nextStatus });
@@ -357,7 +354,6 @@ function ReactFloater(props: Props): React.ReactElement {
   });
 
   const handleTransitionEnd = React.useRef(() => {
-    /* istanbul ignore else */
     if (wrapperPopper.current) {
       wrapperPopper.current.forceUpdate();
     }
@@ -379,7 +375,6 @@ function ReactFloater(props: Props): React.ReactElement {
       return;
     }
 
-    /* istanbul ignore else */
     if (currentEvent === 'click' || (currentEvent === 'hover' && positionWrapper)) {
       log({
         title: 'click',
@@ -414,7 +409,6 @@ function ReactFloater(props: Props): React.ReactElement {
       return;
     }
 
-    /* istanbul ignore else */
     if (currentEvent === 'hover') {
       log({
         title: 'mouseLeave',

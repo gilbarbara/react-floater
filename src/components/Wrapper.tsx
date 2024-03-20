@@ -68,7 +68,6 @@ function FloaterWrapper(props: Props) {
     };
   }
 
-  /* istanbul ignore else */
   if (children) {
     if (
       React.Children.count(children) === 1 &&
