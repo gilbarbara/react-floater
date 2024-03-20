@@ -1,15 +1,23 @@
 import { ReactNode } from 'react';
-import { Box, BoxProps } from '@gilbarbara/components';
+import { Flex, FlexProps } from '@gilbarbara/components';
 
-interface Props extends BoxProps {
+interface Props extends FlexProps {
   children: ReactNode;
   gray?: boolean;
 }
 
 export default function Block({ children, gray, ...rest }: Props) {
   return (
-    <Box bg={gray ? 'gray.100' : 'white'} pb="xl" pt="xl" px="xl" textAlign="center" {...rest}>
+    <Flex
+      align="center"
+      bg={gray ? 'gray.100' : 'white'}
+      data-component-name="Block"
+      direction="column"
+      p="xl"
+      textAlign="center"
+      {...rest}
+    >
       {children}
-    </Box>
+    </Flex>
   );
 }

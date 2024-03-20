@@ -27,7 +27,7 @@ export default function FloaterOverlay({ cb }: any) {
   };
 
   return (
-    <div>
+    <>
       <Floater
         callback={callback}
         content={<Paragraph>I have an invisible overlay that will close the floater</Paragraph>}
@@ -40,6 +40,6 @@ export default function FloaterOverlay({ cb }: any) {
         </Button>
       </Floater>
       {isOpen && <Overlay onClick={handleClick} />}
-    </div>
+    </>
   );
 }

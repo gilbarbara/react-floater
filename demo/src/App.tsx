@@ -1,5 +1,5 @@
-import { useUnmount } from 'react-use';
-import { Box, BoxCenter, H1, H2, Paragraph } from '@gilbarbara/components';
+import { Box, Flex, FlexCenter, H1, H2, Paragraph, Spacer } from '@gilbarbara/components';
+import { useUnmount } from '@gilbarbara/hooks';
 import disableScroll from 'disable-scroll';
 
 import Block from './components/Block';
@@ -40,38 +40,36 @@ export default function App() {
   return (
     <Box>
       <GlobalStyles />
-      <BoxCenter minHeight={256} px="xl" textAlign="center">
+      <FlexCenter minHeight={256} px="xl">
         <H1>react-floater</H1>
         <Paragraph bold>A component to create awesome tooltips, modals and more!</Paragraph>
         {window.innerWidth >= 768 && <WithPosition cb={callback} />}
-      </BoxCenter>
+      </FlexCenter>
       <Block gray>
         <H2 mb="xxl">The classic examples</H2>
 
-        <Content>
+        <Flex direction="column" gap="xl" width="100%">
           <WithAutoOpen cb={callback} />
-          <Content my="xl" spaced>
+          <Flex justify="space-between" maxWidth={500} mx="auto" width="100%">
             <WithTitleAndFooter cb={callback} />
             <WithCustomStyles cb={callback} />
-          </Content>
-          <BoxCenter>
-            <WithStyledComponents cb={callback} />
-          </BoxCenter>
-        </Content>
+          </Flex>
+          <WithStyledComponents cb={callback} />
+        </Flex>
       </Block>
       <Block>
         <H2>Hover</H2>
-        <Paragraph color="gray" size="mid">
+        <Paragraph color="gray" size="md">
           It will switch to click on mobile.
           <br />
           (can be disabled with <b>disableHoverToClick</b> prop)
         </Paragraph>
 
-        <Content mt="xxxl" spaced>
+        <Spacer distribution="center" gap="lg" mt="xxxl" orientation="vertical">
           <WithHoverDefault cb={callback} />
           <WithHoverCustomDelay cb={callback} />
           <WithHoverAndNoDelay cb={callback} />
-        </Content>
+        </Spacer>
       </Block>
       <Block gray>
         <H2 mb="xxl">Inside text</H2>
@@ -83,11 +81,11 @@ export default function App() {
       </Block>
       <Block gray>
         <H2 mb="xxl">Custom targets</H2>
-        <Content maxWidth={640} mb="xxl" spaced>
+        <Content maxWidth={640} mb="xxl">
           <ProxyMode cb={callback} />
           <BeaconMode cb={callback} />
         </Content>
-        <Content maxWidth={640} spaced>
+        <Content maxWidth={640}>
           <ControlledMode cb={callback} />
           <Modal cb={callback} />
         </Content>

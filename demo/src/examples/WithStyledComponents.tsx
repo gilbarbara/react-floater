@@ -1,6 +1,8 @@
-import Floater from 'react-floater';
+import Floater, { CustomComponentProps } from 'react-floater';
 import styled from '@emotion/styled';
 import { Button } from '@gilbarbara/components';
+
+import Column from '../components/Column';
 
 const Wrapper = styled.div`
   background: linear-gradient(to bottom right, #9ec2ff 50%, #6ba2ff 50%, #6ba2ff 60%, #3882ff 60%);
@@ -10,7 +12,7 @@ const Wrapper = styled.div`
   text-align: right;
 `;
 
-function CustomFloater({ closeFn }: any) {
+function CustomFloater({ closeFn }: CustomComponentProps) {
   return (
     <Wrapper>
       <span aria-label="styled" role="img" style={{ fontSize: 60 }}>
@@ -32,7 +34,7 @@ function CustomFloater({ closeFn }: any) {
 
 export default function WithStyledComponents({ cb }: any) {
   return (
-    <div>
+    <Column>
       <Floater
         callback={cb}
         component={CustomFloater}
@@ -47,6 +49,6 @@ export default function WithStyledComponents({ cb }: any) {
       >
         <Button size="sm">BOTTOM</Button>
       </Floater>
-    </div>
+    </Column>
   );
 }

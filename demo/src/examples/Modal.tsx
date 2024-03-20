@@ -1,6 +1,8 @@
 import Floater from 'react-floater';
 import { Box, Button, ButtonUnstyled, FormGroup, H4, Icon, Input } from '@gilbarbara/components';
 
+import Column from '../components/Column';
+
 function Content({ closeFn }: any) {
   return (
     <Box bg="white" height="90vh" padding="xl" position="relative" radius="md" width="90vw">
@@ -38,7 +40,7 @@ function Content({ closeFn }: any) {
 
 export default function Modal({ cb }: any) {
   return (
-    <Box flex>
+    <Column>
       <Floater
         callback={cb}
         component={Content}
@@ -52,6 +54,6 @@ export default function Modal({ cb }: any) {
       >
         <Button size="sm">MODAL</Button>
       </Floater>
-    </Box>
+    </Column>
   );
 }

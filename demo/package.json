@@ -1,26 +1,25 @@
 {
   "name": "react-floater-demo",
-  "version": "0.8.2",
+  "version": "0.9.4",
   "dependencies": {
-    "@emotion/react": "^11.11.1",
-    "@emotion/styled": "^11.11.0",
-    "@gilbarbara/components": "^0.10.1",
-    "@gilbarbara/eslint-config": "^0.5.4",
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
+    "@gilbarbara/components": "^0.14.1",
+    "@gilbarbara/eslint-config": "^0.8.1",
+    "@gilbarbara/hooks": "^0.8.2",
     "@gilbarbara/prettier-config": "^1.0.0",
     "disable-scroll": "^0.6.0",
-    "prettier": "^3.0.3",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "prettier": "^3.3.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-floater": "latest",
     "react-scripts": "5.0.1",
-    "react-use": "^17.4.0",
-    "typescript": "^5.2.2"
+    "typescript": "^5.5.4"
   },
   "devDependencies": {
-    "@types/jest": "^29.5.5",
-    "@types/node": "^20.8.2",
-    "@types/react": "^18.2.25",
-    "@types/react-dom": "^18.2.10"
+    "@types/node": "^20.11.30",
+    "@types/react": "^18.3.5",
+    "@types/react-dom": "^18.3.0"
   },
   "scripts": {
     "start": "react-scripts start",
