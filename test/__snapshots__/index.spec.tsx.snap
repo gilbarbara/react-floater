@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`ReactFloater with \`component\` as element should show the floater with click 1`] = `
+exports[`ReactFloater > with \`component\` as element > should show the floater with click 1`] = `
 <div
   class="__floater"
   id="test"
@@ -42,7 +42,7 @@ exports[`ReactFloater with \`component\` as element should show the floater with
 </div>
 `;
 
-exports[`ReactFloater with \`component\` as function should show the floater with click 1`] = `
+exports[`ReactFloater > with \`component\` as function > should show the floater with click 1`] = `
 <div
   class="__floater"
   id="test"
@@ -84,7 +84,7 @@ exports[`ReactFloater with \`component\` as function should show the floater wit
 </div>
 `;
 
-exports[`ReactFloater with \`placement\` center should show the floater with click 1`] = `
+exports[`ReactFloater > with \`placement\` center > should show the floater with click 1`] = `
 <div
   class="__floater"
   id="test"
@@ -109,7 +109,7 @@ exports[`ReactFloater with \`placement\` center should show the floater with cli
 </div>
 `;
 
-exports[`ReactFloater with \`placement\` left should show the floater with click 1`] = `
+exports[`ReactFloater > with \`placement\` left > should show the floater with click 1`] = `
 <div
   class="__floater"
   id="test"
@@ -150,7 +150,7 @@ exports[`ReactFloater with \`placement\` left should show the floater with click
 </div>
 `;
 
-exports[`ReactFloater with \`placement\` right should show the floater with click 1`] = `
+exports[`ReactFloater > with \`placement\` right > should show the floater with click 1`] = `
 <div
   class="__floater"
   id="test"
@@ -191,7 +191,7 @@ exports[`ReactFloater with \`placement\` right should show the floater with clic
 </div>
 `;
 
-exports[`ReactFloater with \`placement\` top should show the floater with click 1`] = `
+exports[`ReactFloater > with \`placement\` top > should show the floater with click 1`] = `
 <div
   class="__floater"
   id="test"
@@ -232,7 +232,7 @@ exports[`ReactFloater with \`placement\` top should show the floater with click 
 </div>
 `;
 
-exports[`ReactFloater with \`title\`, \`footer\` and \`closeBtn\` should render the floater 1`] = `
+exports[`ReactFloater > with \`title\`, \`footer\` and \`closeBtn\` > should render the floater 1`] = `
 <div
   class="__floater __floater__open"
   id="test"
