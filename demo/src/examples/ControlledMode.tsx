@@ -15,7 +15,7 @@ export default function ControlledMode({ cb }: any) {
         callback={cb}
         content={
           <Box>
-            <Paragraph align="center" bold size="large">
+            <Paragraph align="center" bold size="lg">
               I'm a controlled and centered tooltip
             </Paragraph>
             <Paragraph align="center">The parent control my status</Paragraph>

@@ -46,9 +46,7 @@ export default function BeaconMode({ cb }: any) {
       />
       <Floater
         callback={cb}
-        content={
-          <Paragraph size="large">Yeah, this is how we use to look back in the day!</Paragraph>
-        }
+        content={<Paragraph size="lg">Yeah, this is how we use to look back in the day!</Paragraph>}
         disableFlip
         event="hover"
         placement="top"
