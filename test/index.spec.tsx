@@ -9,6 +9,7 @@ import {
   RenderResult,
   screen,
 } from '@testing-library/react';
+import { MockInstance } from 'vitest';
 
 import { Button, Floaters, Styled } from './__fixtures__/components';
 
@@ -20,10 +21,10 @@ configure({
   testIdAttribute: 'id',
 });
 
-jest.useFakeTimers();
+vi.useFakeTimers();
 
-const mockCallback = jest.fn();
-const mockGetPopper = jest.fn(() => ({ instance: {} }));
+const mockCallback = vi.fn();
+const mockGetPopper = vi.fn(() => ({ instance: {} }));
 
 const id = 'test';
 const content = 'Hello! This is my content!';
@@ -200,7 +201,7 @@ describe('ReactFloater', () => {
       });
 
       await act(async () => {
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
       });
 
       fireEvent.transitionEnd(screen.getByTestId('test'));
@@ -219,7 +220,7 @@ describe('ReactFloater', () => {
       fireEvent.click(getByDataId());
 
       await act(async () => {
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
       });
 
       fireEvent.transitionEnd(screen.getByTestId('test'));
@@ -240,7 +241,7 @@ describe('ReactFloater', () => {
       fireEvent.click(getByDataId());
 
       await act(async () => {
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
       });
 
       fireEvent.transitionEnd(screen.getByTestId('test'));
@@ -296,14 +297,14 @@ describe('ReactFloater', () => {
   });
 
   describe('with `debug`', () => {
-    let consoleGroupCollapsed: jest.SpyInstance;
-    let consoleLog: jest.SpyInstance;
+    let consoleGroupCollapsed: MockInstance;
+    let consoleLog: MockInstance;
 
     beforeAll(() => {
-      consoleGroupCollapsed = jest
+      consoleGroupCollapsed = vi
         .spyOn(console, 'groupCollapsed')
         .mockImplementation(() => undefined);
-      consoleLog = jest.spyOn(console, 'log').mockImplementation(() => undefined);
+      consoleLog = vi.spyOn(console, 'log').mockImplementation(() => undefined);
     });
 
     afterAll(() => {
@@ -343,7 +344,7 @@ describe('ReactFloater', () => {
       expect(consoleLog).toHaveBeenCalledWith({ event: 'click', status: 'opening' });
 
       await act(async () => {
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
       });
 
       fireEvent.transitionEnd(screen.getByTestId('test'));
@@ -368,7 +369,7 @@ describe('ReactFloater', () => {
       fireEvent.mouseEnter(getByDataId());
 
       await act(async () => {
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
       });
 
       fireEvent.transitionEnd(screen.getByTestId('test'));
@@ -380,7 +381,7 @@ describe('ReactFloater', () => {
       fireEvent.mouseLeave(getByDataId());
 
       act(() => {
-        jest.advanceTimersByTime(1000);
+        vi.advanceTimersByTime(1000);
       });
 
       expect(screen.getByTestId('test')).not.toHaveClass('__floater__open');
@@ -404,7 +405,7 @@ describe('ReactFloater', () => {
       fireEvent.mouseEnter(getByDataId());
 
       await act(async () => {
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
       });
 
       fireEvent.transitionEnd(screen.getByTestId('test'));
@@ -435,7 +436,7 @@ describe('ReactFloater', () => {
       fireEvent.click(getByDataId());
 
       await act(async () => {
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
       });
 
       fireEvent.transitionEnd(screen.getByTestId('test'));
@@ -476,7 +477,7 @@ describe('ReactFloater', () => {
       );
 
       await act(async () => {
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
       });
 
       fireEvent.transitionEnd(screen.getByTestId('test'));
@@ -513,7 +514,7 @@ describe('ReactFloater', () => {
       fireEvent.click(getByDataId());
 
       await act(async () => {
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
       });
 
       expect(screen.getByTestId('test')).toMatchSnapshot();
@@ -549,7 +550,7 @@ describe('ReactFloater', () => {
       fireEvent.click(getByDataId());
 
       await act(async () => {
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
       });
 
       expect(screen.getByTestId('test')).toMatchSnapshot();
@@ -576,7 +577,7 @@ describe('ReactFloater', () => {
       fireEvent.click(getByDataId());
 
       await act(async () => {
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
       });
 
       expect(screen.getByTestId('test')).toMatchSnapshot();
@@ -595,7 +596,7 @@ describe('ReactFloater', () => {
       fireEvent.click(getByDataId());
 
       await act(async () => {
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
       });
 
       expect(screen.getByTestId('test')).toMatchSnapshot();
@@ -614,7 +615,7 @@ describe('ReactFloater', () => {
       fireEvent.click(getByDataId());
 
       await act(async () => {
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
       });
 
       expect(screen.getByTestId('test')).toMatchSnapshot();
@@ -632,7 +633,7 @@ describe('ReactFloater', () => {
       fireEvent.click(getByDataId());
 
       await act(async () => {
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
       });
 
       expect(screen.getByTestId('test')).toMatchSnapshot();

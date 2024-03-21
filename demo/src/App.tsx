@@ -61,7 +61,7 @@ export default function App() {
       </Block>
       <Block>
         <H2>Hover</H2>
-        <Paragraph color="gray" size="mid">
+        <Paragraph color="gray" size="md">
           It will switch to click on mobile.
           <br />
           (can be disabled with <b>disableHoverToClick</b> prop)

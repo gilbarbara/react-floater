@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
-import { Box, BoxProps } from '@gilbarbara/components';
+import { Box, Props as ComponentsProps } from '@gilbarbara/components';
 
-interface Props extends BoxProps {
+interface Props extends ComponentsProps.BoxProps {
   children: ReactNode;
   spaced?: boolean;
 }
