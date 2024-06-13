@@ -26,26 +26,26 @@ import { Props, State, Statuses, Styles } from './types';
 
 function ReactFloater(props: Props): React.ReactElement {
   const {
-    autoOpen,
+    autoOpen = false,
     callback,
     children,
     component,
     content,
-    debug,
-    disableFlip,
-    disableHoverToClick,
-    event,
-    eventDelay,
+    debug = false,
+    disableFlip = false,
+    disableHoverToClick = false,
+    event = 'click',
+    eventDelay = 0.4,
     footer,
     getPopper,
-    hideArrow,
+    hideArrow = false,
     id,
     modifiers,
-    offset,
+    offset = 15,
     open,
     placement = 'bottom',
     portalElement,
-    showCloseButton,
+    showCloseButton = false,
     style,
     styles,
     target,
@@ -590,19 +590,6 @@ function ReactFloater(props: Props): React.ReactElement {
     </>
   );
 }
-
-ReactFloater.defaultProps = {
-  autoOpen: false,
-  debug: false,
-  disableFlip: false,
-  disableHoverToClick: false,
-  event: 'click',
-  eventDelay: 0.4,
-  hideArrow: false,
-  offset: 15,
-  placement: 'bottom',
-  showCloseButton: false,
-};
 
 export type {
   Action,
