@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { isValidElement, ReactNode } from 'react';
 import is from 'is-lite';
 
 import CloseButton from './CloseButton';
@@ -6,21 +6,21 @@ import CloseButton from './CloseButton';
 import { CloseFunction, Styles } from '../../types';
 
 interface Props {
-  content: React.ReactNode;
-  footer?: React.ReactNode;
+  content: ReactNode;
+  footer?: ReactNode;
   onClick: CloseFunction<HTMLButtonElement>;
   open?: boolean;
   positionWrapper: boolean;
   showCloseButton?: boolean;
   styles: Styles;
-  title?: React.ReactNode;
+  title?: ReactNode;
 }
 
 export default function FloaterContainer(props: Props) {
   const { content, footer, onClick, open, positionWrapper, showCloseButton, styles, title } = props;
 
-  const output: Record<string, React.ReactNode> = {
-    content: React.isValidElement(content) ? (
+  const output: Record<string, ReactNode> = {
+    content: isValidElement(content) ? (
       content
     ) : (
       <div className="__floater__content" style={styles.content}>
@@ -30,7 +30,7 @@ export default function FloaterContainer(props: Props) {
   };
 
   if (title) {
-    output.title = React.isValidElement(title) ? (
+    output.title = isValidElement(title) ? (
       title
     ) : (
       <div className="__floater__title" style={styles.title}>
@@ -40,7 +40,7 @@ export default function FloaterContainer(props: Props) {
   }
 
   if (footer) {
-    output.footer = React.isValidElement(footer) ? (
+    output.footer = isValidElement(footer) ? (
       footer
     ) : (
       <div className="__floater__footer" style={styles.footer}>

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { ReactNode, useCallback, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import is from 'is-lite';
 
@@ -7,7 +7,7 @@ import { useMount, useUnmount } from '../modules/hooks';
 import { Placement, SelectorOrElement } from '../types';
 
 interface Props {
-  children: React.ReactNode;
+  children: ReactNode;
   hasChildren: boolean;
   internalId: string;
   placement: Placement;
@@ -18,9 +18,9 @@ interface Props {
 
 export default function ReactFloaterPortal(props: Props) {
   const { children, hasChildren, internalId, placement, portalElement, target, zIndex } = props;
-  const node = React.useRef<HTMLElement | null>(null);
+  const node = useRef<HTMLElement | null>(null);
 
-  const initialize = React.useCallback(() => {
+  const initialize = useCallback(() => {
     if (!canUseDOM()) {
       return;
     }
@@ -68,7 +68,7 @@ export default function ReactFloaterPortal(props: Props) {
     initialize();
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     initialize();
   }, [initialize]);
 
