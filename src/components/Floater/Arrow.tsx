@@ -8,7 +8,7 @@ interface Props {
   styles: Styles;
 }
 
-function FloaterArrow(props: Props) {
+export default function FloaterArrow(props: Props) {
   const { arrowRef, placement, styles } = props;
 
   const {
@@ -42,5 +42,3 @@ function FloaterArrow(props: Props) {
     </span>
   );
 }
-
-export default FloaterArrow;
