@@ -19,14 +19,14 @@ importers:
         version: 1.2.1
       tree-changes-hook:
         specifier: ^0.11.2
-        version: 0.11.2(react@18.3.1)
+        version: 0.11.2(react@19.0.0-rc-d6cb4e77-20240911)
     devDependencies:
       '@emotion/react':
         specifier: ^11.13.3
-        version: 11.13.3(@types/react@18.3.5)(react@18.3.1)
+        version: 11.13.3(@types/react@18.3.5)(react@19.0.0-rc-d6cb4e77-20240911)
       '@emotion/styled':
         specifier: ^11.13.0
-        version: 11.13.0(@emotion/react@11.13.3(@types/react@18.3.5)(react@18.3.1))(@types/react@18.3.5)(react@18.3.1)
+        version: 11.13.0(@emotion/react@11.13.3(@types/react@18.3.5)(react@19.0.0-rc-d6cb4e77-20240911))(@types/react@18.3.5)(react@19.0.0-rc-d6cb4e77-20240911)
       '@gilbarbara/eslint-config':
         specifier: ^0.8.1
         version: 0.8.1(@testing-library/dom@10.4.0)(@types/eslint@8.44.3)(@typescript-eslint/utils@8.5.0(eslint@8.57.0)(typescript@5.5.4))(jest@29.7.0(@types/node@22.5.4)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.7.24)(@types/node@22.5.4)(typescript@5.5.4)))(prettier@3.0.3)(typescript@5.5.4)(vitest@2.0.5(@types/node@22.5.4)(jsdom@25.0.0)(terser@5.21.0))(webpack@5.88.2(@swc/core@1.7.24)(esbuild@0.23.1))
@@ -56,7 +56,7 @@ importers:
         version: 6.5.0
       '@testing-library/react':
         specifier: ^16.0.1
-        version: 16.0.1(@testing-library/dom@10.4.0)(@types/react-dom@18.3.0)(@types/react@18.3.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 16.0.1(@testing-library/dom@10.4.0)(@types/react-dom@18.3.0)(@types/react@18.3.5)(react-dom@19.0.0-rc-d6cb4e77-20240911(react@19.0.0-rc-d6cb4e77-20240911))(react@19.0.0-rc-d6cb4e77-20240911)
       '@types/exenv':
         specifier: ^1.2.2
         version: 1.2.2
@@ -94,14 +94,14 @@ importers:
         specifier: ^25.0.0
         version: 25.0.0
       react:
-        specifier: ^18.3.1
-        version: 18.3.1
+        specifier: next
+        version: 19.0.0-rc-d6cb4e77-20240911
       react-dom:
-        specifier: ^18.3.1
-        version: 18.3.1(react@18.3.1)
+        specifier: next
+        version: 19.0.0-rc-d6cb4e77-20240911(react@19.0.0-rc-d6cb4e77-20240911)
       react-use:
         specifier: ^17.5.1
-        version: 17.5.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 17.5.1(react-dom@19.0.0-rc-d6cb4e77-20240911(react@19.0.0-rc-d6cb4e77-20240911))(react@19.0.0-rc-d6cb4e77-20240911)
       repo-tools:
         specifier: ^0.3.1
         version: 0.3.1
@@ -3509,10 +3509,10 @@ packages:
   randombytes@2.1.0:
     resolution: {integrity: sha512-vYl3iOX+4CKUWuxGi9Ukhie6fsqXqS9FE2Zaic4tNFD2N2QQaXOMFbuKK4QmDHC0JO6B1Zp41J0LpT0oR68amQ==}
 
-  react-dom@18.3.1:
-    resolution: {integrity: sha512-5m4nQKp+rZRb09LNH59GM4BxTh9251/ylbKIbpe7TpGxfJ+9kv6BLkLBXIjjspbgbnIBNqlI23tRnTWT0snUIw==}
+  react-dom@19.0.0-rc-d6cb4e77-20240911:
+    resolution: {integrity: sha512-/yDsD2OblI/XQDTCV1b8R3XZQXJReEaxAKZUN703fw1U4RvKKRd1p/XgSsAlTgXyLCVqUQ/4g3HZQpjfrz/J6w==}
     peerDependencies:
-      react: ^18.3.1
+      react: 19.0.0-rc-d6cb4e77-20240911
 
   react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
@@ -3535,8 +3535,8 @@ packages:
       react: '*'
       react-dom: '*'
 
-  react@18.3.1:
-    resolution: {integrity: sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ==}
+  react@19.0.0-rc-d6cb4e77-20240911:
+    resolution: {integrity: sha512-LNf+lzRIAQGSG93xONcQ9le+K3vT37H/wcxmgkucqQk8YZEM2YuUnbh1xbdk641gTjQfTY0Ruf9jKXl+km1Ewg==}
     engines: {node: '>=0.10.0'}
 
   read-pkg-up@7.0.1:
@@ -3671,8 +3671,8 @@ packages:
     resolution: {integrity: sha512-xAg7SOnEhrm5zI3puOOKyy1OMcMlIJZYNJY7xLBwSze0UjhPLnWfj2GF2EpT0jmzaJKIWKHLsaSSajf35bcYnA==}
     engines: {node: '>=v12.22.7'}
 
-  scheduler@0.23.2:
-    resolution: {integrity: sha512-UOShsPwz7NrMUqhR6t0hWjFduvOzbtv7toDH1/hIrfRNIDBnnBWd0CwJTGvTpngVlmwGCdP9/Zl/tVrDqcuYzQ==}
+  scheduler@0.25.0-rc-d6cb4e77-20240911:
+    resolution: {integrity: sha512-ldZT4RDPOujI5ifSQbSexPRYzWUmofhcBiRP4ZBcc7f3XPuApCk5DDEHdOCUfSjzTyqIvAnymMwJqZSuxzDqzQ==}
 
   schema-utils@3.3.0:
     resolution: {integrity: sha512-pN/yOAvcC+5rQ5nERGuwrjLlYvLTbCibnZ1I7B1LaiAz9BRBlE9GMgE/eqV30P7aJQUf7Ddimy/RsbYO/GrVGg==}
@@ -4748,17 +4748,17 @@ snapshots:
 
   '@emotion/memoize@0.9.0': {}
 
-  '@emotion/react@11.13.3(@types/react@18.3.5)(react@18.3.1)':
+  '@emotion/react@11.13.3(@types/react@18.3.5)(react@19.0.0-rc-d6cb4e77-20240911)':
     dependencies:
       '@babel/runtime': 7.24.1
       '@emotion/babel-plugin': 11.12.0
       '@emotion/cache': 11.13.1
       '@emotion/serialize': 1.3.1
-      '@emotion/use-insertion-effect-with-fallbacks': 1.1.0(react@18.3.1)
+      '@emotion/use-insertion-effect-with-fallbacks': 1.1.0(react@19.0.0-rc-d6cb4e77-20240911)
       '@emotion/utils': 1.4.0
       '@emotion/weak-memoize': 0.4.0
       hoist-non-react-statics: 3.3.2
-      react: 18.3.1
+      react: 19.0.0-rc-d6cb4e77-20240911
     optionalDependencies:
       '@types/react': 18.3.5
 
@@ -4772,24 +4772,24 @@ snapshots:
 
   '@emotion/sheet@1.4.0': {}
 
-  '@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@18.3.5)(react@18.3.1))(@types/react@18.3.5)(react@18.3.1)':
+  '@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@18.3.5)(react@19.0.0-rc-d6cb4e77-20240911))(@types/react@18.3.5)(react@19.0.0-rc-d6cb4e77-20240911)':
     dependencies:
       '@babel/runtime': 7.24.1
       '@emotion/babel-plugin': 11.12.0
       '@emotion/is-prop-valid': 1.3.0
-      '@emotion/react': 11.13.3(@types/react@18.3.5)(react@18.3.1)
+      '@emotion/react': 11.13.3(@types/react@18.3.5)(react@19.0.0-rc-d6cb4e77-20240911)
       '@emotion/serialize': 1.3.1
-      '@emotion/use-insertion-effect-with-fallbacks': 1.1.0(react@18.3.1)
+      '@emotion/use-insertion-effect-with-fallbacks': 1.1.0(react@19.0.0-rc-d6cb4e77-20240911)
       '@emotion/utils': 1.4.0
-      react: 18.3.1
+      react: 19.0.0-rc-d6cb4e77-20240911
     optionalDependencies:
       '@types/react': 18.3.5
 
   '@emotion/unitless@0.10.0': {}
 
-  '@emotion/use-insertion-effect-with-fallbacks@1.1.0(react@18.3.1)':
+  '@emotion/use-insertion-effect-with-fallbacks@1.1.0(react@19.0.0-rc-d6cb4e77-20240911)':
     dependencies:
-      react: 18.3.1
+      react: 19.0.0-rc-d6cb4e77-20240911
 
   '@emotion/utils@1.4.0': {}
 
@@ -5442,12 +5442,12 @@ snapshots:
       lodash: 4.17.21
       redent: 3.0.0
 
-  '@testing-library/react@16.0.1(@testing-library/dom@10.4.0)(@types/react-dom@18.3.0)(@types/react@18.3.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@testing-library/react@16.0.1(@testing-library/dom@10.4.0)(@types/react-dom@18.3.0)(@types/react@18.3.5)(react-dom@19.0.0-rc-d6cb4e77-20240911(react@19.0.0-rc-d6cb4e77-20240911))(react@19.0.0-rc-d6cb4e77-20240911)':
     dependencies:
       '@babel/runtime': 7.24.1
       '@testing-library/dom': 10.4.0
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
+      react: 19.0.0-rc-d6cb4e77-20240911
+      react-dom: 19.0.0-rc-d6cb4e77-20240911(react@19.0.0-rc-d6cb4e77-20240911)
     optionalDependencies:
       '@types/react': 18.3.5
       '@types/react-dom': 18.3.0
@@ -8162,15 +8162,15 @@ snapshots:
       object-assign: 4.1.1
       thenify-all: 1.6.0
 
-  nano-css@5.6.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  nano-css@5.6.2(react-dom@19.0.0-rc-d6cb4e77-20240911(react@19.0.0-rc-d6cb4e77-20240911))(react@19.0.0-rc-d6cb4e77-20240911):
     dependencies:
       '@jridgewell/sourcemap-codec': 1.4.15
       css-tree: 1.1.3
       csstype: 3.1.2
       fastest-stable-stringify: 2.0.2
       inline-style-prefixer: 7.0.1
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
+      react: 19.0.0-rc-d6cb4e77-20240911
+      react-dom: 19.0.0-rc-d6cb4e77-20240911(react@19.0.0-rc-d6cb4e77-20240911)
       rtl-css-js: 1.16.1
       stacktrace-js: 2.0.2
       stylis: 4.3.0
@@ -8433,11 +8433,10 @@ snapshots:
     dependencies:
       safe-buffer: 5.2.1
 
-  react-dom@18.3.1(react@18.3.1):
+  react-dom@19.0.0-rc-d6cb4e77-20240911(react@19.0.0-rc-d6cb4e77-20240911):
     dependencies:
-      loose-envify: 1.4.0
-      react: 18.3.1
-      scheduler: 0.23.2
+      react: 19.0.0-rc-d6cb4e77-20240911
+      scheduler: 0.25.0-rc-d6cb4e77-20240911
 
   react-is@16.13.1: {}
 
@@ -8445,12 +8444,12 @@ snapshots:
 
   react-is@18.2.0: {}
 
-  react-universal-interface@0.6.2(react@18.3.1)(tslib@2.6.2):
+  react-universal-interface@0.6.2(react@19.0.0-rc-d6cb4e77-20240911)(tslib@2.6.2):
     dependencies:
-      react: 18.3.1
+      react: 19.0.0-rc-d6cb4e77-20240911
       tslib: 2.6.2
 
-  react-use@17.5.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  react-use@17.5.1(react-dom@19.0.0-rc-d6cb4e77-20240911(react@19.0.0-rc-d6cb4e77-20240911))(react@19.0.0-rc-d6cb4e77-20240911):
     dependencies:
       '@types/js-cookie': 2.2.7
       '@xobotyi/scrollbar-width': 1.9.5
@@ -8458,10 +8457,10 @@ snapshots:
       fast-deep-equal: 3.1.3
       fast-shallow-equal: 1.0.0
       js-cookie: 2.2.1
-      nano-css: 5.6.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
-      react-universal-interface: 0.6.2(react@18.3.1)(tslib@2.6.2)
+      nano-css: 5.6.2(react-dom@19.0.0-rc-d6cb4e77-20240911(react@19.0.0-rc-d6cb4e77-20240911))(react@19.0.0-rc-d6cb4e77-20240911)
+      react: 19.0.0-rc-d6cb4e77-20240911
+      react-dom: 19.0.0-rc-d6cb4e77-20240911(react@19.0.0-rc-d6cb4e77-20240911)
+      react-universal-interface: 0.6.2(react@19.0.0-rc-d6cb4e77-20240911)(tslib@2.6.2)
       resize-observer-polyfill: 1.5.1
       screenfull: 5.2.0
       set-harmonic-interval: 1.0.1
@@ -8469,9 +8468,7 @@ snapshots:
       ts-easing: 0.2.0
       tslib: 2.6.2
 
-  react@18.3.1:
-    dependencies:
-      loose-envify: 1.4.0
+  react@19.0.0-rc-d6cb4e77-20240911: {}
 
   read-pkg-up@7.0.1:
     dependencies:
@@ -8636,9 +8633,7 @@ snapshots:
     dependencies:
       xmlchars: 2.2.0
 
-  scheduler@0.23.2:
-    dependencies:
-      loose-envify: 1.4.0
+  scheduler@0.25.0-rc-d6cb4e77-20240911: {}
 
   schema-utils@3.3.0:
     dependencies:
@@ -9015,10 +9010,10 @@ snapshots:
     dependencies:
       punycode: 2.3.1
 
-  tree-changes-hook@0.11.2(react@18.3.1):
+  tree-changes-hook@0.11.2(react@19.0.0-rc-d6cb4e77-20240911):
     dependencies:
       '@gilbarbara/deep-equal': 0.3.1
-      react: 18.3.1
+      react: 19.0.0-rc-d6cb4e77-20240911
       tree-changes: 0.11.2
 
   tree-changes@0.11.2:
