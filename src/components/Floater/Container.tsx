@@ -16,7 +16,7 @@ interface Props {
   title?: React.ReactNode;
 }
 
-function FloaterContainer(props: Props) {
+export default function FloaterContainer(props: Props) {
   const { content, footer, onClick, open, positionWrapper, showCloseButton, styles, title } = props;
 
   const output: Record<string, React.ReactNode> = {
@@ -62,5 +62,3 @@ function FloaterContainer(props: Props) {
     </div>
   );
 }
-
-export default FloaterContainer;

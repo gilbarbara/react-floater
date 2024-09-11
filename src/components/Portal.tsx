@@ -16,7 +16,7 @@ interface Props {
   zIndex: string | number;
 }
 
-function ReactFloaterPortal(props: Props) {
+export default function ReactFloaterPortal(props: Props) {
   const { children, hasChildren, internalId, placement, portalElement, target, zIndex } = props;
   const node = React.useRef<HTMLElement | null>(null);
 
@@ -105,5 +105,3 @@ function ReactFloaterPortal(props: Props) {
 
   return null;
 }
-
-export default ReactFloaterPortal;

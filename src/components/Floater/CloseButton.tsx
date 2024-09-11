@@ -7,7 +7,7 @@ interface Props {
   styles: React.CSSProperties;
 }
 
-function FloaterCloseButton({ onClick, styles }: Props) {
+export default function FloaterCloseButton({ onClick, styles }: Props) {
   const { color, height, width, ...style } = styles;
 
   return (
@@ -30,5 +30,3 @@ function FloaterCloseButton({ onClick, styles }: Props) {
     </button>
   );
 }
-
-export default FloaterCloseButton;

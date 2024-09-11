@@ -24,7 +24,7 @@ import { useMount, useSingleton, useUnmount, useUpdateEffect } from './modules/h
 import getStyles from './modules/styles';
 import { Props, State, Statuses, Styles } from './types';
 
-function ReactFloater(props: Props): React.ReactElement {
+export default function ReactFloater(props: Props) {
   const {
     autoOpen = false,
     callback,
@@ -593,5 +593,3 @@ export type {
   Props,
   Styles,
 } from './types';
-
-export default ReactFloater;

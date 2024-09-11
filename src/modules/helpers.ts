@@ -9,7 +9,7 @@ import { LogOptions, PopperModifiers, Props } from '../types';
 export const portalId = 'react-floater-portal';
 
 export function canUseDOM(): boolean {
-  return !!(typeof window !== 'undefined' && window.document && window.document.createElement);
+  return !!(typeof window !== 'undefined' && window.document?.createElement);
 }
 
 export function enhanceProps(props: Props) {
