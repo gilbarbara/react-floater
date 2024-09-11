@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { CSSProperties, useCallback, useMemo, useReducer, useRef } from 'react';
 import { PlainObject } from '@gilbarbara/types';
 import { createPopper, Instance, ModifierArguments } from '@popperjs/core';
 import is from 'is-lite';
@@ -53,7 +53,7 @@ export default function ReactFloater(props: Props) {
     wrapperOptions,
   } = enhanceProps(props);
 
-  const [state, setState] = React.useReducer(
+  const [state, setState] = useReducer(
     (previousState: State, nextState: Partial<State>) => ({
       ...previousState,
       ...nextState,
@@ -66,24 +66,24 @@ export default function ReactFloater(props: Props) {
     },
   );
 
-  const arrowRef = React.useRef<HTMLSpanElement>(null);
-  const childRef = React.useRef<HTMLElement>(null);
-  const eventDelayTimer = React.useRef<number>();
-  const floaterRef = React.useRef<HTMLDivElement>(null);
-  const internalId = React.useRef(randomId());
-  const isMounted = React.useRef(false);
-  const popperRef = React.useRef<Instance>();
-  const stateRef = React.useRef<State>(state);
-  const wrapperPopper = React.useRef<Instance>();
-  const wrapperRef = React.useRef<HTMLSpanElement>(null);
-  const wrapperStyles = React.useRef<React.CSSProperties>({});
+  const arrowRef = useRef<HTMLSpanElement>(null);
+  const childRef = useRef<HTMLElement>(null);
+  const eventDelayTimer = useRef<number>();
+  const floaterRef = useRef<HTMLDivElement>(null);
+  const internalId = useRef(randomId());
+  const isMounted = useRef(false);
+  const popperRef = useRef<Instance>();
+  const stateRef = useRef<State>(state);
+  const wrapperPopper = useRef<Instance>();
+  const wrapperRef = useRef<HTMLSpanElement>(null);
+  const wrapperStyles = useRef<CSSProperties>({});
 
   const { currentPlacement, positionWrapper, status, statusWrapper } = state;
 
   const { changed } = useTreeChanges(state);
   const { changed: changedProps } = useTreeChanges(props);
 
-  const updateState = React.useCallback(
+  const updateState = useCallback(
     (nextState: Partial<State>, callback_?: () => void) => {
       if (isMounted.current) {
         setState(nextState);
@@ -97,7 +97,7 @@ export default function ReactFloater(props: Props) {
     [setState, state],
   );
 
-  const toggle = React.useCallback(
+  const toggle = useCallback(
     (forceStatus?: Statuses) => {
       let nextStatus: Statuses =
         stateRef.current.status === STATUS.OPEN ? STATUS.CLOSING : STATUS.RENDER;
@@ -114,7 +114,7 @@ export default function ReactFloater(props: Props) {
     [updateState],
   );
 
-  const targetElement = React.useRef(() => {
+  const targetElement = useRef(() => {
     if (!canUseDOM()) {
       return null;
     }
@@ -130,11 +130,11 @@ export default function ReactFloater(props: Props) {
     return childRef.current ?? wrapperRef.current;
   });
 
-  const currentDebug = React.useMemo(() => {
+  const currentDebug = useMemo(() => {
     return canUseDOM() && (debug || !!window.ReactFloaterDebug);
   }, [debug]);
 
-  const currentEvent = React.useMemo(() => {
+  const currentEvent = useMemo(() => {
     if (event === 'hover' && isMobile() && !disableHoverToClick) {
       return 'click';
     }
@@ -142,12 +142,12 @@ export default function ReactFloater(props: Props) {
     return event;
   }, [disableHoverToClick, event]);
 
-  const currentStyles = React.useMemo(() => {
+  const currentStyles = useMemo(() => {
     const nextStyles: Styles = getStyles(styles);
     const element = targetElement.current();
 
     if (positionWrapper) {
-      let wrapperCurrentStyles: React.CSSProperties | undefined;
+      let wrapperCurrentStyles: CSSProperties | undefined;
 
       if (status !== STATUS.IDLE) {
         wrapperCurrentStyles = nextStyles.wrapperPosition;
@@ -176,7 +176,7 @@ export default function ReactFloater(props: Props) {
           POSITIONING_PROPS.forEach(d => {
             // eslint-disable-next-line unicorn/prefer-ternary
             if (d === 'position') {
-              wrapperStyles.current[d] = targetStyles[d] as React.CSSProperties['position'];
+              wrapperStyles.current[d] = targetStyles[d] as CSSProperties['position'];
             } else {
               wrapperStyles.current[d] = targetStyles[d];
             }
@@ -193,7 +193,7 @@ export default function ReactFloater(props: Props) {
     return nextStyles;
   }, [positionWrapper, status, statusWrapper, styles]);
 
-  const initPopper = React.useRef(() => {
+  const initPopper = useRef(() => {
     const nextStatus = stateRef.current.status === STATUS.RENDER ? STATUS.OPENING : STATUS.IDLE;
     const element = targetElement.current();
 
@@ -343,7 +343,7 @@ export default function ReactFloater(props: Props) {
     }
   });
 
-  const handleLoad = React.useRef(() => {
+  const handleLoad = useRef(() => {
     if (popperRef.current) {
       popperRef.current.forceUpdate();
     }
@@ -353,7 +353,7 @@ export default function ReactFloater(props: Props) {
     }
   });
 
-  const handleTransitionEnd = React.useRef(() => {
+  const handleTransitionEnd = useRef(() => {
     if (wrapperPopper.current) {
       wrapperPopper.current.forceUpdate();
     }
@@ -370,7 +370,7 @@ export default function ReactFloater(props: Props) {
     );
   });
 
-  const handleClick = React.useCallback(() => {
+  const handleClick = useCallback(() => {
     if (is.boolean(open)) {
       return;
     }
@@ -386,7 +386,7 @@ export default function ReactFloater(props: Props) {
     }
   }, [currentDebug, currentEvent, event, open, positionWrapper, status, toggle]);
 
-  const handleMouseEnter = React.useCallback(() => {
+  const handleMouseEnter = useCallback(() => {
     if (is.boolean(open) || isMobile() || currentEvent !== 'hover') {
       return;
     }
@@ -404,7 +404,7 @@ export default function ReactFloater(props: Props) {
     }
   }, [currentDebug, currentEvent, event, open, status, toggle]);
 
-  const handleMouseLeave = React.useCallback(() => {
+  const handleMouseLeave = useCallback(() => {
     if (is.boolean(open) || isMobile()) {
       return;
     }
@@ -432,7 +432,7 @@ export default function ReactFloater(props: Props) {
     }
   }, [currentDebug, currentEvent, event, eventDelay, open, positionWrapper, status, toggle]);
 
-  const handleWrapperMount = React.useCallback(() => {
+  const handleWrapperMount = useCallback(() => {
     if (positionWrapper) {
       initPopper.current();
     }

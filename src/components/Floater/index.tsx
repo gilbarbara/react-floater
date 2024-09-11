@@ -1,19 +1,18 @@
-import * as React from 'react';
+import { cloneElement, CSSProperties, isValidElement, memo, ReactNode, Ref, useMemo } from 'react';
 import { PlainObject } from '@gilbarbara/types';
 
 import Arrow from './Arrow';
 import Container from './Container';
 
 import { STATUS } from '../../literals';
-import { isValidElement } from '../../modules/helpers';
 import { CloseFunction, FloaterComponent, Statuses, Styles } from '../../types';
 
 interface Props {
-  arrowRef: React.Ref<HTMLSpanElement>;
+  arrowRef: Ref<HTMLSpanElement>;
   component?: FloaterComponent;
-  content?: React.ReactNode;
-  floaterRef: React.Ref<HTMLDivElement>;
-  footer?: React.ReactNode;
+  content?: ReactNode;
+  floaterRef: Ref<HTMLDivElement>;
+  footer?: ReactNode;
   hideArrow: boolean;
   id: string;
   onClick: CloseFunction;
@@ -22,7 +21,7 @@ interface Props {
   showCloseButton?: boolean;
   status: Statuses;
   styles: Styles;
-  title?: React.ReactNode;
+  title?: ReactNode;
 }
 
 function Floater(props: Props) {
@@ -38,7 +37,7 @@ function Floater(props: Props) {
     styles,
   } = props;
 
-  const style = React.useMemo(() => {
+  const style = useMemo(() => {
     const {
       arrow: { length },
       floater,
@@ -47,7 +46,7 @@ function Floater(props: Props) {
       floaterOpening,
       floaterWithComponent,
     } = styles;
-    let element: React.CSSProperties = { ...floater };
+    let element: CSSProperties = { ...floater };
 
     if (!hideArrow) {
       if (placement.startsWith('top')) {
@@ -82,7 +81,7 @@ function Floater(props: Props) {
 
   const shouldRender = ['render', 'open', 'opening', 'closing'].includes(status);
 
-  const output: PlainObject<React.ReactNode> = {};
+  const output: PlainObject<ReactNode> = {};
   const classes = ['__floater'];
   const baseProps = { id, role: 'tooltip' };
 
@@ -90,7 +89,7 @@ function Floater(props: Props) {
     const componentProps = { closeFn, ...baseProps };
 
     output.content = isValidElement(component)
-      ? React.cloneElement(component, componentProps)
+      ? cloneElement(component, componentProps)
       : component(componentProps);
   } else {
     output.content = <Container {...props} content={content} />;
@@ -120,4 +119,4 @@ function Floater(props: Props) {
   );
 }
 
-export default React.memo(Floater);
+export default memo(Floater);

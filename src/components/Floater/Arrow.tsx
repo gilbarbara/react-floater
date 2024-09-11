@@ -1,9 +1,9 @@
-import * as React from 'react';
+import { CSSProperties, Ref } from 'react';
 
 import { Styles } from '../../types';
 
 interface Props {
-  arrowRef: React.Ref<HTMLSpanElement>;
+  arrowRef: Ref<HTMLSpanElement>;
   placement: string;
   styles: Styles;
 }
@@ -14,7 +14,7 @@ export default function FloaterArrow(props: Props) {
   const {
     arrow: { color, display, length, position, spread },
   } = styles;
-  const arrowStyles: React.CSSProperties = { display, position };
+  const arrowStyles: CSSProperties = { display, position };
 
   let points;
   let x = spread;

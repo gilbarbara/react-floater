@@ -1,4 +1,14 @@
-import * as React from 'react';
+import {
+  Children,
+  cloneElement,
+  CSSProperties,
+  Fragment,
+  isValidElement,
+  memo,
+  ReactElement,
+  ReactNode,
+  RefObject,
+} from 'react';
 import { PlainObject } from '@gilbarbara/types';
 import is from 'is-lite';
 
@@ -7,8 +17,8 @@ import { useMount } from '../modules/hooks';
 import { CloseFunction, Statuses } from '../types';
 
 interface Props {
-  childRef: React.RefObject<HTMLElement>;
-  children: React.ReactNode;
+  childRef: RefObject<HTMLElement>;
+  children: ReactNode;
   id: string;
   isControlled: boolean;
   onClick: CloseFunction<HTMLSpanElement>;
@@ -16,9 +26,9 @@ interface Props {
   onMouseEnter: CloseFunction<HTMLSpanElement>;
   onMouseLeave: CloseFunction<HTMLSpanElement>;
   status: Statuses;
-  style?: React.CSSProperties;
-  styles: React.CSSProperties;
-  wrapperRef: React.RefObject<HTMLElement>;
+  style?: CSSProperties;
+  styles: CSSProperties;
+  wrapperRef: RefObject<HTMLElement>;
 }
 
 function FloaterWrapper(props: Props) {
@@ -46,7 +56,7 @@ function FloaterWrapper(props: Props) {
   const mergedStyles = {
     ...styles,
     ...style,
-    ...(React.isValidElement(children) ? children.props.style : undefined),
+    ...(isValidElement(children) ? children.props.style : undefined),
   };
 
   let wrapperProps: PlainObject = {
@@ -69,23 +79,19 @@ function FloaterWrapper(props: Props) {
   }
 
   if (children) {
-    if (
-      React.Children.count(children) === 1 &&
-      React.isValidElement(children) &&
-      children.type !== React.Fragment
-    ) {
+    if (Children.count(children) === 1 && isValidElement(children) && children.type !== Fragment) {
       // eslint-disable-next-line unicorn/prefer-ternary
       if (is.function(children.type)) {
         element = (
           <span ref={wrapperRef}>
-            {React.cloneElement(React.Children.only(children) as React.ReactElement, {
+            {cloneElement(Children.only(children) as ReactElement, {
               innerRef: childRef,
               ...wrapperProps,
             })}
           </span>
         );
       } else {
-        element = React.cloneElement(React.Children.only(children) as React.ReactElement, {
+        element = cloneElement(Children.only(children) as ReactElement, {
           ref: wrapperRef,
           ...wrapperProps,
         });
@@ -102,4 +108,4 @@ function FloaterWrapper(props: Props) {
   return element ?? null;
 }
 
-export default React.memo(FloaterWrapper);
+export default memo(FloaterWrapper);

@@ -1,10 +1,10 @@
-import * as React from 'react';
+import { CSSProperties } from 'react';
 
 import { CloseFunction } from '../../types';
 
 interface Props {
   onClick: CloseFunction<HTMLButtonElement>;
-  styles: React.CSSProperties;
+  styles: CSSProperties;
 }
 
 export default function FloaterCloseButton({ onClick, styles }: Props) {

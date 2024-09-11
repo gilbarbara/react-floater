@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { Modifier, Placement } from '@popperjs/core';
 import { deepmerge } from 'deepmerge-ts';
 import is from 'is-lite';
@@ -86,10 +85,6 @@ export function isFixed(el: HTMLElement | null): boolean {
 
 export function isMobile(): boolean {
   return 'ontouchstart' in window && /Mobi/.test(navigator.userAgent);
-}
-
-export function isValidElement(object: unknown): object is React.ReactElement {
-  return React.isValidElement(object);
 }
 
 /**
