@@ -83,10 +83,10 @@ function Floater(props: Props) {
 
   const output: PlainObject<ReactNode> = {};
   const classes = ['__floater'];
-  const baseProps = { id, role: 'tooltip' };
+  const baseProps = { role: 'tooltip' };
 
   if (component) {
-    const componentProps = { closeFn, ...baseProps };
+    const componentProps = { closeFn, id, ...baseProps };
 
     output.content = isValidElement(component)
       ? cloneElement(component, componentProps)
@@ -108,7 +108,7 @@ function Floater(props: Props) {
   }
 
   return (
-    <div ref={floaterRef} style={{ zIndex: styles.options.zIndex }}>
+    <div ref={floaterRef} id={id} style={{ zIndex: styles.options.zIndex }}>
       <div className={classes.join(' ')} style={style} {...baseProps}>
         <div className="__floater__body">
           {output.content}
