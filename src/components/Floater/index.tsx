@@ -1,11 +1,11 @@
 import { cloneElement, CSSProperties, isValidElement, memo, ReactNode, Ref, useMemo } from 'react';
 import { PlainObject } from '@gilbarbara/types';
 
-import Arrow from './Arrow';
-import Container from './Container';
-
 import { STATUS } from '../../literals';
 import { CloseFunction, FloaterComponent, Statuses, Styles } from '../../types';
+
+import Arrow from './Arrow';
+import Container from './Container';
 
 interface Props {
   arrowRef: Ref<HTMLSpanElement>;
@@ -79,7 +79,7 @@ function Floater(props: Props) {
     return element;
   }, [component, hideArrow, placement, status, styles]);
 
-  const shouldRender = ['render', 'open', 'opening', 'closing'].includes(status);
+  const shouldRender = ['closing', 'open', 'opening', 'render'].includes(status);
 
   const output: PlainObject<ReactNode> = {};
   const classes = ['__floater'];

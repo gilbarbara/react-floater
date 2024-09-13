@@ -1,9 +1,9 @@
 import { isValidElement, ReactNode } from 'react';
 import is from 'is-lite';
 
-import CloseButton from './CloseButton';
-
 import { CloseFunction, Styles } from '../../types';
+
+import CloseButton from './CloseButton';
 
 interface Props {
   content: ReactNode;
