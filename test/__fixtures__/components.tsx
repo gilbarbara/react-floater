@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState } from 'react';
 import styled from '@emotion/styled';
 
 import ReactFloater from '../../src';
@@ -13,7 +13,7 @@ export function Button({ innerRef, ...props }: any) {
 }
 
 export function Floaters(props: Omit<Props, 'content' | 'component'>) {
-  const [showTooltip, setTooltip] = React.useState(true);
+  const [showTooltip, setTooltip] = useState(true);
 
   return (
     <>

@@ -1,5 +1,5 @@
 /* eslint-disable testing-library/no-manual-cleanup */
-import * as React from 'react';
+import { ReactNode } from 'react';
 import {
   act,
   cleanup,
@@ -35,7 +35,7 @@ const props: Props = {
   getPopper: mockGetPopper,
 };
 
-function setup(ownProps = props, children: React.ReactNode = 'Places') {
+function setup(ownProps = props, children: ReactNode = 'Places') {
   return render(<ReactFloater {...ownProps}>{children}</ReactFloater>);
 }
 
@@ -45,10 +45,6 @@ describe('ReactFloater', () => {
   const unmountView = () => {
     view?.unmount();
     cleanup();
-  };
-
-  const getByDataId = (dataId = id) => {
-    return view.container.querySelector(`[data-id="${dataId}"]`) || document;
   };
 
   afterEach(() => {
@@ -64,11 +60,11 @@ describe('ReactFloater', () => {
     it('should render the element', () => {
       view = setup(props, 'Places');
 
-      expect(getByDataId()).toBeInTheDocument();
+      expect(screen.getByTestId(`${id}-wrapper`)).toBeInTheDocument();
     });
 
     it('should render the portal, popper and floater', async () => {
-      fireEvent.click(getByDataId());
+      fireEvent.click(screen.getByTestId(`${id}-wrapper`));
       const portal = document.getElementById('react-floater-portal');
       const popper = portal?.firstChild;
 
@@ -90,7 +86,7 @@ describe('ReactFloater', () => {
     });
 
     it('should hide the floater and remove the popper', async () => {
-      fireEvent.click(getByDataId());
+      fireEvent.click(screen.getByTestId(`${id}-wrapper`));
 
       fireEvent.transitionEnd(screen.getByTestId('test'));
 
@@ -115,17 +111,17 @@ describe('ReactFloater', () => {
         </>,
       );
 
-      expect(getByDataId()).toBeInTheDocument();
+      expect(screen.getByTestId(`${id}-wrapper`)).toBeInTheDocument();
     });
 
     it('should render the floater', async () => {
-      fireEvent.click(getByDataId());
+      fireEvent.click(screen.getByTestId(`${id}-wrapper`));
 
       expect(screen.getByTestId('test')).toBeInTheDocument();
     });
 
     it('should hide the floater', async () => {
-      fireEvent.click(getByDataId());
+      fireEvent.click(screen.getByTestId(`${id}-wrapper`));
 
       fireEvent.transitionEnd(screen.getByTestId('test'));
 
@@ -139,21 +135,21 @@ describe('ReactFloater', () => {
     it('should render the elements', () => {
       view = render(<Floaters />);
 
-      expect(getByDataId('president')).toBeInTheDocument();
-      expect(getByDataId('republic')).toBeInTheDocument();
+      expect(screen.getByTestId('president-wrapper')).toBeInTheDocument();
+      expect(screen.getByTestId('republic-wrapper')).toBeInTheDocument();
     });
 
     it('should render the floaters', async () => {
-      fireEvent.click(getByDataId('president'));
-      fireEvent.click(getByDataId('republic'));
+      fireEvent.click(screen.getByTestId('president-wrapper'));
+      fireEvent.click(screen.getByTestId('republic-wrapper'));
 
       expect(screen.getByTestId('president')).toHaveTextContent('It was that bearded guy!');
       expect(screen.getByTestId('republic')).toHaveTextContent('You know what I mean');
     });
 
     it('should hide the floaters', async () => {
-      fireEvent.click(getByDataId('president'));
-      fireEvent.click(getByDataId('republic'));
+      fireEvent.click(screen.getByTestId('president-wrapper'));
+      fireEvent.click(screen.getByTestId('republic-wrapper'));
 
       fireEvent.transitionEnd(screen.getByTestId('president'));
       fireEvent.transitionEnd(screen.getByTestId('republic'));
@@ -183,8 +179,8 @@ describe('ReactFloater', () => {
       expect(screen.queryByTestId(portalId)).not.toBeInTheDocument();
       expect(screen.getByTestId('floaters')).toBeInTheDocument();
 
-      fireEvent.click(getByDataId('president'));
-      fireEvent.click(getByDataId('republic'));
+      fireEvent.click(screen.getByTestId('president-wrapper'));
+      fireEvent.click(screen.getByTestId('republic-wrapper'));
 
       expect(screen.getByTestId('president')).toHaveTextContent('It was that bearded guy!');
       expect(screen.getByTestId('republic')).toHaveTextContent('You know what I mean');
@@ -209,7 +205,7 @@ describe('ReactFloater', () => {
     });
 
     it('should hide the floater', async () => {
-      fireEvent.click(getByDataId());
+      fireEvent.click(screen.getByTestId(`${id}-wrapper`));
 
       fireEvent.transitionEnd(screen.getByTestId('test'));
 
@@ -217,7 +213,7 @@ describe('ReactFloater', () => {
     });
 
     it('should show the floater again', async () => {
-      fireEvent.click(getByDataId());
+      fireEvent.click(screen.getByTestId(`${id}-wrapper`));
 
       await act(async () => {
         vi.runOnlyPendingTimers();
@@ -238,7 +234,7 @@ describe('ReactFloater', () => {
         callback: mockCallback,
       });
 
-      fireEvent.click(getByDataId());
+      fireEvent.click(screen.getByTestId(`${id}-wrapper`));
 
       await act(async () => {
         vi.runOnlyPendingTimers();
@@ -269,7 +265,7 @@ describe('ReactFloater', () => {
     });
 
     it('should call the callback function on close', async () => {
-      fireEvent.click(getByDataId());
+      fireEvent.click(screen.getByTestId(`${id}-wrapper`));
 
       fireEvent.transitionEnd(screen.getByTestId('test'));
 
@@ -335,7 +331,7 @@ describe('ReactFloater', () => {
         }),
       );
 
-      fireEvent.click(getByDataId());
+      fireEvent.click(screen.getByTestId(`${id}-wrapper`));
 
       expect(consoleGroupCollapsed).toHaveBeenCalledWith(
         '%creact-floater: click',
@@ -366,7 +362,7 @@ describe('ReactFloater', () => {
         disableHoverToClick: true,
       });
 
-      fireEvent.mouseEnter(getByDataId());
+      fireEvent.mouseEnter(screen.getByTestId(`${id}-wrapper`));
 
       await act(async () => {
         vi.runOnlyPendingTimers();
@@ -378,7 +374,7 @@ describe('ReactFloater', () => {
     });
 
     it('should close itself after `eventDelay`', async () => {
-      fireEvent.mouseLeave(getByDataId());
+      fireEvent.mouseLeave(screen.getByTestId(`${id}-wrapper`));
 
       act(() => {
         vi.advanceTimersByTime(1000);
@@ -402,7 +398,7 @@ describe('ReactFloater', () => {
         eventDelay: 0,
       });
 
-      fireEvent.mouseEnter(getByDataId());
+      fireEvent.mouseEnter(screen.getByTestId(`${id}-wrapper`));
 
       await act(async () => {
         vi.runOnlyPendingTimers();
@@ -414,7 +410,7 @@ describe('ReactFloater', () => {
     });
 
     it('should have close itself immediately', async () => {
-      fireEvent.mouseLeave(getByDataId());
+      fireEvent.mouseLeave(screen.getByTestId(`${id}-wrapper`));
 
       fireEvent.transitionEnd(screen.getByTestId('test'));
 
@@ -433,7 +429,7 @@ describe('ReactFloater', () => {
         title: 'Title',
       });
 
-      fireEvent.click(getByDataId());
+      fireEvent.click(screen.getByTestId(`${id}-wrapper`));
 
       await act(async () => {
         vi.runOnlyPendingTimers();
@@ -456,7 +452,7 @@ describe('ReactFloater', () => {
     it('should not be able to show the floater with click', async () => {
       view = setup(localProps);
 
-      fireEvent.click(getByDataId());
+      fireEvent.click(screen.getByTestId(`${id}-wrapper`));
 
       expect(screen.queryByTestId('test')).not.toBeInTheDocument();
     });
@@ -464,7 +460,7 @@ describe('ReactFloater', () => {
     it('should not be able to show the floater with hover', async () => {
       view = setup({ ...localProps, event: 'hover' });
 
-      fireEvent.mouseEnter(getByDataId());
+      fireEvent.mouseEnter(screen.getAllByTestId(`${id}-wrapper`)[0]);
 
       expect(screen.queryByTestId('test')).not.toBeInTheDocument();
     });
@@ -511,7 +507,7 @@ describe('ReactFloater', () => {
         <Button />,
       );
 
-      fireEvent.click(getByDataId());
+      fireEvent.click(screen.getByTestId('button'));
 
       await act(async () => {
         vi.runOnlyPendingTimers();
@@ -547,7 +543,7 @@ describe('ReactFloater', () => {
         <span>Places</span>,
       );
 
-      fireEvent.click(getByDataId());
+      fireEvent.click(screen.getByTestId(`${id}-wrapper`));
 
       await act(async () => {
         vi.runOnlyPendingTimers();
@@ -574,7 +570,7 @@ describe('ReactFloater', () => {
         placement: 'top',
       });
 
-      fireEvent.click(getByDataId());
+      fireEvent.click(screen.getByTestId(`${id}-wrapper`));
 
       await act(async () => {
         vi.runOnlyPendingTimers();
@@ -593,7 +589,7 @@ describe('ReactFloater', () => {
         placement: 'left',
       });
 
-      fireEvent.click(getByDataId());
+      fireEvent.click(screen.getByTestId(`${id}-wrapper`));
 
       await act(async () => {
         vi.runOnlyPendingTimers();
@@ -612,7 +608,7 @@ describe('ReactFloater', () => {
         placement: 'right',
       });
 
-      fireEvent.click(getByDataId());
+      fireEvent.click(screen.getByTestId(`${id}-wrapper`));
 
       await act(async () => {
         vi.runOnlyPendingTimers();
@@ -630,23 +626,23 @@ describe('ReactFloater', () => {
         ...props,
         placement: 'center',
       });
-      fireEvent.click(getByDataId());
+      fireEvent.click(screen.getByTestId(`${id}-wrapper`));
 
       await act(async () => {
         vi.runOnlyPendingTimers();
       });
 
-      expect(screen.getByTestId('test')).toMatchSnapshot();
+      expect(screen.getByTestId(id)).toMatchSnapshot();
     });
   });
 
   describe('with `wrapperOptions`', () => {
     afterAll(unmountView);
 
-    it('should render properly', () => {
+    it('should render properly', async () => {
       view = render(
         <>
-          <span className="external" data-id="external">
+          <span className="external" id="external">
             external
           </span>
           <ReactFloater
@@ -663,16 +659,14 @@ describe('ReactFloater', () => {
               position: true,
             }}
           >
-            <span data-id="beacon" />
+            <span id="beacon">Beacon</span>
           </ReactFloater>
         </>,
       );
 
-      expect(getByDataId('external')).toBeInTheDocument();
+      fireEvent.click(screen.getByTestId('test-wrapper'));
 
-      fireEvent.click(document.querySelector('[data-id="test"]') || document);
-
-      expect(screen.getByTestId('test')).toHaveTextContent(
+      expect(screen.getByTestId(id)).toHaveTextContent(
         'Yeah, this is how we use to look back in the day!',
       );
     });
