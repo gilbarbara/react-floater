@@ -27,6 +27,7 @@ const mockCallback = vi.fn();
 const mockGetPopper = vi.fn(() => ({ instance: {} }));
 
 const id = 'test';
+const idWrapper = `${id}-wrapper`;
 const content = 'Hello! This is my content!';
 
 const props: Props = {
@@ -60,11 +61,11 @@ describe('ReactFloater', () => {
     it('should render the element', () => {
       view = setup(props, 'Places');
 
-      expect(screen.getByTestId(`${id}-wrapper`)).toBeInTheDocument();
+      expect(screen.getByTestId(idWrapper)).toBeInTheDocument();
     });
 
     it('should render the portal, popper and floater', async () => {
-      fireEvent.click(screen.getByTestId(`${id}-wrapper`));
+      fireEvent.click(screen.getByTestId(idWrapper));
       const portal = document.getElementById('react-floater-portal');
       const popper = portal?.firstChild;
 
@@ -72,8 +73,8 @@ describe('ReactFloater', () => {
       expect(portal).toHaveStyle({ zIndex: 100 });
       expect(popper).toHaveStyle({ zIndex: 100 });
 
-      expect(screen.getByTestId('test')).toHaveClass('__floater');
-      expect(screen.getByTestId('test')).not.toHaveClass('__floater__open');
+      expect(screen.getByTestId(id).firstChild).toHaveClass('__floater');
+      expect(screen.getByTestId(id).firstChild).not.toHaveClass('__floater__open');
     });
 
     it('should have called getPopper', () => {
@@ -81,14 +82,14 @@ describe('ReactFloater', () => {
     });
 
     it('should show the floater after the transition ends', () => {
-      fireEvent.transitionEnd(screen.getByTestId('test'));
-      expect(screen.getByTestId('test')).toHaveClass('__floater__open');
+      fireEvent.transitionEnd(screen.getByTestId(id));
+      expect(screen.getByTestId(id).firstChild).toHaveClass('__floater__open');
     });
 
     it('should hide the floater and remove the popper', async () => {
-      fireEvent.click(screen.getByTestId(`${id}-wrapper`));
+      fireEvent.click(screen.getByTestId(idWrapper));
 
-      fireEvent.transitionEnd(screen.getByTestId('test'));
+      fireEvent.transitionEnd(screen.getByTestId(id));
 
       const portal = document.getElementById('react-floater-portal');
       const popper = portal?.firstChild;
@@ -111,19 +112,19 @@ describe('ReactFloater', () => {
         </>,
       );
 
-      expect(screen.getByTestId(`${id}-wrapper`)).toBeInTheDocument();
+      expect(screen.getByTestId(idWrapper)).toBeInTheDocument();
     });
 
     it('should render the floater', async () => {
-      fireEvent.click(screen.getByTestId(`${id}-wrapper`));
+      fireEvent.click(screen.getByTestId(idWrapper));
 
-      expect(screen.getByTestId('test')).toBeInTheDocument();
+      expect(screen.getByTestId(id)).toBeInTheDocument();
     });
 
     it('should hide the floater', async () => {
-      fireEvent.click(screen.getByTestId(`${id}-wrapper`));
+      fireEvent.click(screen.getByTestId(idWrapper));
 
-      fireEvent.transitionEnd(screen.getByTestId('test'));
+      fireEvent.transitionEnd(screen.getByTestId(id));
 
       expect(screen.getByTestId('react-floater-portal')).toBeEmptyDOMElement();
     });
@@ -200,28 +201,28 @@ describe('ReactFloater', () => {
         vi.runOnlyPendingTimers();
       });
 
-      fireEvent.transitionEnd(screen.getByTestId('test'));
-      expect(screen.getByTestId('test')).toHaveClass('__floater__open');
+      fireEvent.transitionEnd(screen.getByTestId(id));
+      expect(screen.getByTestId(id).firstChild).toHaveClass('__floater__open');
     });
 
     it('should hide the floater', async () => {
-      fireEvent.click(screen.getByTestId(`${id}-wrapper`));
+      fireEvent.click(screen.getByTestId(idWrapper));
 
-      fireEvent.transitionEnd(screen.getByTestId('test'));
+      fireEvent.transitionEnd(screen.getByTestId(id));
 
       expect(screen.getByTestId('react-floater-portal')).toBeEmptyDOMElement();
     });
 
     it('should show the floater again', async () => {
-      fireEvent.click(screen.getByTestId(`${id}-wrapper`));
+      fireEvent.click(screen.getByTestId(idWrapper));
 
       await act(async () => {
         vi.runOnlyPendingTimers();
       });
 
-      fireEvent.transitionEnd(screen.getByTestId('test'));
+      fireEvent.transitionEnd(screen.getByTestId(id));
 
-      expect(screen.getByTestId('test')).toHaveClass('__floater__open');
+      expect(screen.getByTestId(id).firstChild).toHaveClass('__floater__open');
     });
   });
 
@@ -234,13 +235,13 @@ describe('ReactFloater', () => {
         callback: mockCallback,
       });
 
-      fireEvent.click(screen.getByTestId(`${id}-wrapper`));
+      fireEvent.click(screen.getByTestId(idWrapper));
 
       await act(async () => {
         vi.runOnlyPendingTimers();
       });
 
-      fireEvent.transitionEnd(screen.getByTestId('test'));
+      fireEvent.transitionEnd(screen.getByTestId(id));
 
       expect(mockCallback).toHaveBeenCalledWith('open', {
         autoOpen: false,
@@ -265,9 +266,9 @@ describe('ReactFloater', () => {
     });
 
     it('should call the callback function on close', async () => {
-      fireEvent.click(screen.getByTestId(`${id}-wrapper`));
+      fireEvent.click(screen.getByTestId(idWrapper));
 
-      fireEvent.transitionEnd(screen.getByTestId('test'));
+      fireEvent.transitionEnd(screen.getByTestId(id));
 
       expect(mockCallback).toHaveBeenCalledWith('close', {
         autoOpen: false,
@@ -331,7 +332,7 @@ describe('ReactFloater', () => {
         }),
       );
 
-      fireEvent.click(screen.getByTestId(`${id}-wrapper`));
+      fireEvent.click(screen.getByTestId(idWrapper));
 
       expect(consoleGroupCollapsed).toHaveBeenCalledWith(
         '%creact-floater: click',
@@ -343,9 +344,9 @@ describe('ReactFloater', () => {
         vi.runOnlyPendingTimers();
       });
 
-      fireEvent.transitionEnd(screen.getByTestId('test'));
+      fireEvent.transitionEnd(screen.getByTestId(id));
 
-      expect(screen.getByTestId('test')).toHaveClass('__floater__open');
+      expect(screen.getByTestId(id).firstChild).toHaveClass('__floater__open');
 
       expect(consoleGroupCollapsed).toHaveBeenCalledTimes(2);
       expect(consoleLog).toHaveBeenCalledTimes(2);
@@ -362,27 +363,27 @@ describe('ReactFloater', () => {
         disableHoverToClick: true,
       });
 
-      fireEvent.mouseEnter(screen.getByTestId(`${id}-wrapper`));
+      fireEvent.mouseEnter(screen.getByTestId(idWrapper));
 
       await act(async () => {
         vi.runOnlyPendingTimers();
       });
 
-      fireEvent.transitionEnd(screen.getByTestId('test'));
+      fireEvent.transitionEnd(screen.getByTestId(id));
 
-      expect(screen.getByTestId('test')).toHaveClass('__floater__open');
+      expect(screen.getByTestId(id).firstChild).toHaveClass('__floater__open');
     });
 
     it('should close itself after `eventDelay`', async () => {
-      fireEvent.mouseLeave(screen.getByTestId(`${id}-wrapper`));
+      fireEvent.mouseLeave(screen.getByTestId(idWrapper));
 
       act(() => {
         vi.advanceTimersByTime(1000);
       });
 
-      expect(screen.getByTestId('test')).not.toHaveClass('__floater__open');
+      expect(screen.getByTestId(id).firstChild).not.toHaveClass('__floater__open');
 
-      fireEvent.transitionEnd(screen.getByTestId('test'));
+      fireEvent.transitionEnd(screen.getByTestId(id));
 
       expect(screen.getByTestId('react-floater-portal')).toBeEmptyDOMElement();
     });
@@ -398,21 +399,21 @@ describe('ReactFloater', () => {
         eventDelay: 0,
       });
 
-      fireEvent.mouseEnter(screen.getByTestId(`${id}-wrapper`));
+      fireEvent.mouseEnter(screen.getByTestId(idWrapper));
 
       await act(async () => {
         vi.runOnlyPendingTimers();
       });
 
-      fireEvent.transitionEnd(screen.getByTestId('test'));
+      fireEvent.transitionEnd(screen.getByTestId(id));
 
-      expect(screen.getByTestId('test')).toHaveClass('__floater__open');
+      expect(screen.getByTestId(id).firstChild).toHaveClass('__floater__open');
     });
 
     it('should have close itself immediately', async () => {
-      fireEvent.mouseLeave(screen.getByTestId(`${id}-wrapper`));
+      fireEvent.mouseLeave(screen.getByTestId(idWrapper));
 
-      fireEvent.transitionEnd(screen.getByTestId('test'));
+      fireEvent.transitionEnd(screen.getByTestId(id));
 
       expect(screen.getByTestId('react-floater-portal')).toBeEmptyDOMElement();
     });
@@ -429,15 +430,15 @@ describe('ReactFloater', () => {
         title: 'Title',
       });
 
-      fireEvent.click(screen.getByTestId(`${id}-wrapper`));
+      fireEvent.click(screen.getByTestId(idWrapper));
 
       await act(async () => {
         vi.runOnlyPendingTimers();
       });
 
-      fireEvent.transitionEnd(screen.getByTestId('test'));
+      fireEvent.transitionEnd(screen.getByTestId(id));
 
-      expect(screen.getByTestId('test')).toMatchSnapshot();
+      expect(screen.getByTestId(id)).toMatchSnapshot();
     });
   });
 
@@ -452,17 +453,17 @@ describe('ReactFloater', () => {
     it('should not be able to show the floater with click', async () => {
       view = setup(localProps);
 
-      fireEvent.click(screen.getByTestId(`${id}-wrapper`));
+      fireEvent.click(screen.getByTestId(idWrapper));
 
-      expect(screen.queryByTestId('test')).not.toBeInTheDocument();
+      expect(screen.queryByTestId(id)).not.toBeInTheDocument();
     });
 
     it('should not be able to show the floater with hover', async () => {
       view = setup({ ...localProps, event: 'hover' });
 
-      fireEvent.mouseEnter(screen.getAllByTestId(`${id}-wrapper`)[0]);
+      fireEvent.mouseEnter(screen.getAllByTestId(idWrapper)[0]);
 
-      expect(screen.queryByTestId('test')).not.toBeInTheDocument();
+      expect(screen.queryByTestId(id)).not.toBeInTheDocument();
     });
 
     it('should show the floater when `open` is true', async () => {
@@ -476,9 +477,9 @@ describe('ReactFloater', () => {
         vi.runOnlyPendingTimers();
       });
 
-      fireEvent.transitionEnd(screen.getByTestId('test'));
+      fireEvent.transitionEnd(screen.getByTestId(id));
 
-      expect(screen.getByTestId('test')).toHaveClass('__floater__open');
+      expect(screen.getByTestId(id).firstChild).toHaveClass('__floater__open');
     });
 
     it('should close the floater when `open` is false', async () => {
@@ -488,9 +489,9 @@ describe('ReactFloater', () => {
         </ReactFloater>,
       );
 
-      fireEvent.transitionEnd(screen.getByTestId('test'));
+      fireEvent.transitionEnd(screen.getByTestId(id));
 
-      expect(screen.queryByTestId('test')).not.toBeInTheDocument();
+      expect(screen.queryByTestId(id)).not.toBeInTheDocument();
     });
   });
 
@@ -513,13 +514,13 @@ describe('ReactFloater', () => {
         vi.runOnlyPendingTimers();
       });
 
-      expect(screen.getByTestId('test')).toMatchSnapshot();
+      expect(screen.getByTestId(id)).toMatchSnapshot();
     });
 
     it('should close the floater with `closeFn` prop', async () => {
       fireEvent.click(screen.getByRole('button', { name: /close/i }));
 
-      fireEvent.transitionEnd(screen.getByTestId('test'));
+      fireEvent.transitionEnd(screen.getByTestId(id));
 
       expect(screen.getByTestId('react-floater-portal')).toBeEmptyDOMElement();
     });
@@ -543,19 +544,19 @@ describe('ReactFloater', () => {
         <span>Places</span>,
       );
 
-      fireEvent.click(screen.getByTestId(`${id}-wrapper`));
+      fireEvent.click(screen.getByTestId(idWrapper));
 
       await act(async () => {
         vi.runOnlyPendingTimers();
       });
 
-      expect(screen.getByTestId('test')).toMatchSnapshot();
+      expect(screen.getByTestId(id)).toMatchSnapshot();
     });
 
     it('should close the floater with `closeFn` prop', async () => {
       fireEvent.click(screen.getByRole('button', { name: /close/i }));
 
-      fireEvent.transitionEnd(screen.getByTestId('test'));
+      fireEvent.transitionEnd(screen.getByTestId(id));
 
       expect(screen.getByTestId('react-floater-portal')).toBeEmptyDOMElement();
     });
@@ -570,13 +571,13 @@ describe('ReactFloater', () => {
         placement: 'top',
       });
 
-      fireEvent.click(screen.getByTestId(`${id}-wrapper`));
+      fireEvent.click(screen.getByTestId(idWrapper));
 
       await act(async () => {
         vi.runOnlyPendingTimers();
       });
 
-      expect(screen.getByTestId('test')).toMatchSnapshot();
+      expect(screen.getByTestId(id)).toMatchSnapshot();
     });
   });
 
@@ -589,13 +590,13 @@ describe('ReactFloater', () => {
         placement: 'left',
       });
 
-      fireEvent.click(screen.getByTestId(`${id}-wrapper`));
+      fireEvent.click(screen.getByTestId(idWrapper));
 
       await act(async () => {
         vi.runOnlyPendingTimers();
       });
 
-      expect(screen.getByTestId('test')).toMatchSnapshot();
+      expect(screen.getByTestId(id)).toMatchSnapshot();
     });
   });
 
@@ -608,13 +609,13 @@ describe('ReactFloater', () => {
         placement: 'right',
       });
 
-      fireEvent.click(screen.getByTestId(`${id}-wrapper`));
+      fireEvent.click(screen.getByTestId(idWrapper));
 
       await act(async () => {
         vi.runOnlyPendingTimers();
       });
 
-      expect(screen.getByTestId('test')).toMatchSnapshot();
+      expect(screen.getByTestId(id)).toMatchSnapshot();
     });
   });
 
@@ -626,7 +627,7 @@ describe('ReactFloater', () => {
         ...props,
         placement: 'center',
       });
-      fireEvent.click(screen.getByTestId(`${id}-wrapper`));
+      fireEvent.click(screen.getByTestId(idWrapper));
 
       await act(async () => {
         vi.runOnlyPendingTimers();
@@ -666,6 +667,7 @@ describe('ReactFloater', () => {
 
       fireEvent.click(screen.getByTestId('test-wrapper'));
 
+      expect(screen.getByTestId(idWrapper)).toHaveStyle('visibility: hidden');
       expect(screen.getByTestId(id)).toHaveTextContent(
         'Yeah, this is how we use to look back in the day!',
       );
