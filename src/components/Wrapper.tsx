@@ -51,7 +51,7 @@ function FloaterWrapper(props: Props) {
     onMount();
   });
 
-  let element;
+  let element: ReactElement | null = null;
 
   const mergedStyles = {
     ...styles,
@@ -59,13 +59,13 @@ function FloaterWrapper(props: Props) {
     ...(isValidElement(children) ? children.props.style : undefined),
   };
 
+  const wrapperId = `${id}-wrapper`;
   let wrapperProps: PlainObject = {
     'aria-describedby': ([STATUS.OPENING, STATUS.OPEN, STATUS.CLOSING] as Statuses[]).includes(
       status,
     )
       ? id
       : undefined,
-    'data-id': id,
     style: mergedStyles,
   };
 
@@ -80,32 +80,29 @@ function FloaterWrapper(props: Props) {
 
   if (children) {
     if (Children.count(children) === 1 && isValidElement(children) && children.type !== Fragment) {
-      // eslint-disable-next-line unicorn/prefer-ternary
-      if (is.function(children.type)) {
-        element = (
-          <span ref={wrapperRef}>
-            {cloneElement(Children.only(children) as ReactElement, {
-              innerRef: childRef,
-              ...wrapperProps,
-            })}
-          </span>
-        );
-      } else {
-        element = cloneElement(Children.only(children) as ReactElement, {
+      element = is.function(children.type) ? (
+        <span ref={wrapperRef} id={wrapperId} {...wrapperProps}>
+          {cloneElement(Children.only(children) as ReactElement, {
+            innerRef: childRef,
+          })}
+        </span>
+      ) : (
+        cloneElement(Children.only(children) as ReactElement, {
+          id: wrapperId,
           ref: wrapperRef,
           ...wrapperProps,
-        });
-      }
+        })
+      );
     } else {
       element = (
-        <span ref={wrapperRef} {...wrapperProps}>
+        <span ref={wrapperRef} id={wrapperId} {...wrapperProps}>
           {children}
         </span>
       );
     }
   }
 
-  return element ?? null;
+  return element;
 }
 
 export default memo(FloaterWrapper);
