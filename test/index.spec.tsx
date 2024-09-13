@@ -11,11 +11,11 @@ import {
 } from '@testing-library/react';
 import { MockInstance } from 'vitest';
 
-import { Button, Floaters, Styled } from './__fixtures__/components';
-
 import ReactFloater from '../src';
 import { portalId } from '../src/modules/helpers';
 import { Props } from '../src/types';
+
+import { Button, Floaters, Styled } from './__fixtures__/components';
 
 configure({
   testIdAttribute: 'id',

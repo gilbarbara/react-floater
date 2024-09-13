@@ -4,6 +4,14 @@ import styled from '@emotion/styled';
 import ReactFloater from '../../src';
 import { Props } from '../../src/types';
 
+export function Button({ innerRef, ...props }: any) {
+  return (
+    <button ref={innerRef} {...props} type="button">
+      Click me
+    </button>
+  );
+}
+
 export function Floaters(props: Omit<Props, 'content' | 'component'>) {
   const [showTooltip, setTooltip] = React.useState(true);
 
@@ -28,14 +36,6 @@ export function Floaters(props: Omit<Props, 'content' | 'component'>) {
         Toggle
       </button>
     </>
-  );
-}
-
-export function Button({ innerRef, ...props }: any) {
-  return (
-    <button ref={innerRef} {...props} type="button">
-      Click me
-    </button>
   );
 }
 
