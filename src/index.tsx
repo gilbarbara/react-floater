@@ -193,7 +193,7 @@ export default function ReactFloater(props: Props) {
     return nextStyles;
   }, [positionWrapper, status, statusWrapper, styles]);
 
-  const initPopper = useRef(() => {
+  const initPopper = useCallback(() => {
     const nextStatus = stateRef.current.status === STATUS.RENDER ? STATUS.OPENING : STATUS.IDLE;
     const element = targetElement.current();
 
@@ -341,7 +341,17 @@ export default function ReactFloater(props: Props) {
         }
       }
     }
-  });
+  }, [
+    disableFlip,
+    getPopper,
+    hideArrow,
+    modifiers,
+    offset,
+    placement,
+    updateState,
+    wrapperOptions.offset,
+    wrapperOptions?.placement,
+  ]);
 
   const handleLoad = useRef(() => {
     if (popperRef.current) {
@@ -434,9 +444,9 @@ export default function ReactFloater(props: Props) {
 
   const handleWrapperMount = useCallback(() => {
     if (positionWrapper) {
-      initPopper.current();
+      initPopper();
     }
-  }, [positionWrapper]);
+  }, [initPopper, positionWrapper]);
 
   const cleanUp = () => {
     if (popperRef.current) {
@@ -472,7 +482,7 @@ export default function ReactFloater(props: Props) {
       debug: currentDebug,
     });
 
-    initPopper.current();
+    initPopper();
   });
 
   useUnmount(() => {
@@ -517,7 +527,7 @@ export default function ReactFloater(props: Props) {
         popperRef.current.destroy();
       }
 
-      initPopper.current();
+      initPopper();
     }
 
     if (floaterRef.current && changed('status', [STATUS.RENDER, STATUS.CLOSING])) {
