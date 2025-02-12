@@ -18,6 +18,7 @@ export default function getStyles(styles?: PartialDeep<Styles>): Styles {
         length: 16,
         position: 'absolute',
         spread: 32,
+        rounded: false,
       },
       close: {
         backgroundColor: 'transparent',

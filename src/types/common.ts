@@ -7,27 +7,19 @@ import {
 } from 'react';
 import { PartialDeep, RequireExactlyOne, ValueOf } from 'type-fest';
 
-import { PopperInstance, PopperModifiers, PopperPlacement } from './popper';
-
 import { STATUS } from '../literals';
+
+import { PopperInstance, PopperModifiers, PopperPlacement } from './popper';
 
 export type Action = 'open' | 'close';
 export type CloseFunction<T = HTMLElement> = MouseEventHandler<T>;
-export type Placement = PopperPlacement | 'center';
-export type SelectorOrElement = string | null | HTMLElement;
-export type Statuses = ValueOf<typeof STATUS>;
-
-export interface CustomComponentProps {
-  closeFn: CloseFunction;
-}
-
-export interface LogOptions {
-  data: any;
-  debug?: boolean;
-  title: string;
-}
-
 export type FloaterComponent<T = CustomComponentProps> = FunctionComponent<T> | ReactElement<T>;
+export type Placement = PopperPlacement | 'center';
+export type Props = RequireExactlyOne<BaseProps, 'content' | 'component'>;
+
+export type SelectorOrElement = string | null | HTMLElement;
+
+export type Statuses = ValueOf<typeof STATUS>;
 
 export interface BaseProps {
   /**
@@ -121,7 +113,15 @@ export interface BaseProps {
   };
 }
 
-export type Props = RequireExactlyOne<BaseProps, 'content' | 'component'>;
+export interface CustomComponentProps {
+  closeFn: CloseFunction;
+}
+
+export interface LogOptions {
+  data: any;
+  debug?: boolean;
+  title: string;
+}
 
 export interface State {
   currentPlacement: Placement;
@@ -133,6 +133,7 @@ export interface State {
 export interface Styles {
   arrow: CSSProperties & {
     length: number;
+    rounded: boolean;
     spread: number;
   };
   close: CSSProperties;
