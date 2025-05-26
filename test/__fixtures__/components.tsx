@@ -6,7 +6,7 @@ import { Props } from '../../src/types';
 
 export function Button({ innerRef, ...props }: any) {
   return (
-    <button ref={innerRef} {...props} type="button">
+    <button ref={innerRef} id="button" {...props} type="button">
       Click me
     </button>
   );

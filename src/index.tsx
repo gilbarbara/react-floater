@@ -26,6 +26,7 @@ import { Props, State, Statuses, Styles } from './types';
 
 export default function ReactFloater(props: Props) {
   const {
+    arrow: arrowElement,
     autoOpen = false,
     callback,
     children,
@@ -305,7 +306,7 @@ export default function ReactFloater(props: Props) {
       }
 
       if (wrapperRef.current && !wrapperPopper.current && stateRef.current.positionWrapper) {
-        const wrapperOffset = wrapperOptions?.offset ? wrapperOptions.offset : 0;
+        const wrapperOffset = wrapperOptions?.offset ?? 0;
 
         wrapperPopper.current = createPopper(element, wrapperRef.current, {
           placement: wrapperOptions?.placement ?? placement,
@@ -349,7 +350,7 @@ export default function ReactFloater(props: Props) {
     offset,
     placement,
     updateState,
-    wrapperOptions.offset,
+    wrapperOptions?.offset,
     wrapperOptions?.placement,
   ]);
 
@@ -573,6 +574,7 @@ export default function ReactFloater(props: Props) {
         zIndex={currentStyles.options.zIndex}
       >
         <Floater
+          arrow={arrowElement}
           arrowRef={arrowRef}
           component={component}
           content={content}

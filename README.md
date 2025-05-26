@@ -2,15 +2,15 @@
 
 [![NPM version](https://badge.fury.io/js/react-floater.svg)](https://www.npmjs.com/package/react-floater) [![CI](https://github.com/gilbarbara/react-floater/actions/workflows/main.yml/badge.svg)](https://github.com/gilbarbara/react-floater/actions/workflows/main.yml) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=gilbarbara_react-floater&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=gilbarbara_react-floater) [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=gilbarbara_react-floater&metric=coverage)](https://sonarcloud.io/summary/new_code?id=gilbarbara_react-floater)
 
-Advanced tooltips for React!
+**Flexible, customizable, and accessible tooltips, popovers, and guided hints for React.**
 
-View the [demo](https://codesandbox.io/s/github/gilbarbara/react-floater/tree/main/demo)
+[**View the live demo →**](https://codesandbox.io/s/github/gilbarbara/react-floater/tree/main/demo)
 
 ## Highlights
 
 - 🏖 **Easy to use:** Just set the `content`
 - 🛠 **Flexible:** Personalize the options to fit your needs
-- 🟦 **Typescript:** Nicely typed
+- 🟦 **Type-safe:** Full TypeScript support
 
 ## Usage
 
@@ -18,7 +18,7 @@ View the [demo](https://codesandbox.io/s/github/gilbarbara/react-floater/tree/ma
 npm install react-floater
 ```
 
-Import it in your app:
+Import it into your app:
 
 ```tsx
 import Floater from 'react-floater';
@@ -28,72 +28,64 @@ import Floater from 'react-floater';
 </Floater>;
 ```
 
-And voíla!
+Voilà! A tooltip will appear on click!
 
-## Customization
+## Customization & Styling
 
-You can use a custom component to render the Floater with the `component` prop.  
-Check `WithStyledComponents.ts` in the [demo](https://codesandbox.io/s/github/gilbarbara/react-floater/tree/main/demo) for an example.
+React Floater is highly customizable. You can:
+
+- Use a custom component for the content via the `component` prop  
+  (see `WithStyledComponents.ts` in the [demo](https://codesandbox.io/s/github/gilbarbara/react-floater/tree/main/demo)).
+- Pass a custom arrow using the `arrow` prop.
+- Customize the UI appearance using the `styles` prop.  
+  You only need to provide the keys you want to override—defaults will be merged automatically.
+
+```tsx
+<Floater
+  content={<div>Custom content <b>with bold!</b></div>}
+  placement="right"
+  arrow={<MyCustomArrow />}
+  styles={{
+    container: { backgroundColor: "#222", color: "#fff" },
+    arrow: { color: "#222", length: 16, spread: 24 },
+  }}
+>
+  <button>Hover or click me</button>
+</Floater>
+```
+For all available style keys and their default values, see the [styles.ts](src/modules/styles.ts) source.
 
 ## Props
 
-**autoOpen**  `boolean` ▶︎ false  
-Open the Floater automatically.
-
-**callback** `(action: 'open' | 'close', props: Props) => void`  
-It will be called when the Floater changes state.
-
-**children** `ReactNode`  
-An element to trigger the Floater.
-
-**component** `ComponentType | ReactElement`  
-A React element or function to use as a custom UI for the Floater.  
-The prop `closeFn` will be available in your component.
-
-**content** `ReactNode`  
-The Floater content. It can be anything that can be rendered.  
-_This is required unless you pass a_ `component`.
-
-**debug** `boolean` ▶︎ false  
-Log some basic actions.  
-_You can also set a global variable_ `ReactFloaterDebug = true;`
-
-**disableFlip** `boolean` ▶︎ false  
-Disable changes in the Floater position on scroll/resize.
-
-**disableHoverToClick** `boolean` ▶︎ false  
-Don't convert the _hover_ event to _click_ on mobile.
-
-**event** `'hover' | 'click'` ▶︎ click  
-The event that will trigger the Floater.
-
-> This won't work in a controlled mode.
-
-**eventDelay** `number` ▶︎ 0.4  
-The amount of time (in seconds) the floater should wait after a `mouseLeave` event before hiding.  
-> Only valid for event type `hover`.
-
-**footer** `ReactNode`  
-It can be anything that can be rendered.
-
-**getPopper** `(popper: PopperInstance, origin: 'floater' | 'wrapper') => void`  
-Get the popper.js instance.
-
-**hideArrow** `boolean` ▶︎ false  
-Don't show the arrow. Useful for centered or modal layout.
-
-**offset** `number` ▶︎ 15  
-The distance between the Floater and its target in pixels.
-
-**open** `boolean`  
-The switch between normal and controlled modes.  
-> Setting this prop will disable normal behavior.
-
-**modifiers** `PopperModifiers`  
-Customize popper.js modifiers.  
+| **Prop**            | **Type**                                                     | **Default** | **Description**                                              |
+|---------------------| ------------------------------------------------------------ | ----------- | ------------------------------------------------------------ |
+| arrow ✨              | ReactNode                                                    | –           | Custom arrow for the floater. [See styles.arrow](#styles-type-definition) |
+| autoOpen            | boolean                                                      | false       | Open the Floater automatically.                              |
+| callback            | (action: ‘open’ \| ‘close’, props: Props) => void            | –           | Called when the Floater opens or closes.                     |
+| children            | ReactNode                                                    | –           | Element to trigger the Floater.                              |
+| component           | ComponentType \| ReactElement                                | –           | Custom component UI for the Floater. Has access to closeFn.  |
+| content             | ReactNode                                                    | –           | The content of the Floater. (Required unless you pass a component.) |
+| debug               | boolean                                                      | false       | Log basic actions.                                           |
+| disableFlip         | boolean                                                      | false       | Disable changes in position on scroll/resize.                |
+| disableHoverToClick | boolean                                                      | false       | Don’t convert hover to click on mobile.                      |
+| event               | 'hover' \| 'click'                                           | 'click'     | Event that triggers the Floater.*Not used in controlled mode.* |
+| eventDelay          | number                                                       | 0.4         | Time in seconds before hiding on mouseLeave (only for hover). |
+| footer              | ReactNode                                                    | –           | Footer area content.                                         |
+| getPopper           | (popper: PopperInstance, origin: ‘floater’ \| ‘wrapper’) => void | –           | Get the popper.js instance.                                  |
+| hideArrow           | boolean                                                      | false       | Hide the arrow (good for centered/modal).                    |
+| offset              | number                                                       | 15          | Distance (px) between Floater and target.                    |
+| open                | boolean                                                      | –           | Switch to controlled mode. Disables normal event triggers.   |
+| modifiers           | [PopperModifiers](#poppermodifiers-type-definition)          | –           | Customize popper.js modifiers.                               |
+| placement           | [Placement](#placement-type-definition)                      | 'bottom'    | Floater’s position.                                          |
+| portalElement       | string \| HTMLElement                                        | –           | Selector or element for rendering.                           |
+| showCloseButton     | boolean                                                      | false       | Shows a close (×) button.                                    |
+| styles              | [Styles](#styles-type-definition)                            | –           | Customize UI styles.                                         |
+| target              | string \| HTMLElement                                        | –           | Target element for position. Defaults to children.           |
+| title               | ReactNode                                                    | –           | Floater title.                                               |
+| wrapperOptions      | [WrapperOptions](#wrapperoptions-type-definition)            | –           | Options for positioning the wrapper. Requires a target.      |
 
 <details>
-  <summary>Type Definition</summary>
+	<summary><b id="poppermodifiers-type-definition">PopperModifiers Type Definition</b></summary>
 
 ```typescript
 interface PopperModifiers {
@@ -111,13 +103,10 @@ interface PopperModifiers {
 
 </details>
 
-> Don't use it unless you know what you're doing
-
-**placement** `Placement` ▶︎ `bottom`  
-The placement of the Floater. It will update the position if there's no space available.
+> **Intended for advanced customization—use with caution.**
 
 <details>
-  <summary>Type Definition</summary>
+<summary><b id="placement-type-definition">Placement Type Definition</b></summary>
 
 ```typescript
 type Placement = 
@@ -131,18 +120,9 @@ type Placement =
 
 </details>
 
-**portalElement** `string|HTMLElement`  
-A css selector or element to render the tooltips
-
-**showCloseButton** `boolean` ▶︎ false  
-It will show a ⨉ button to close the Floater.  
-This will be `true` when you change the `wrapperOptions` position.
-
-**styles** `Styles`  
-Customize the UI.
 
 <details>
-  <summary>Type Definition</summary>
+<summary><b id="styles-type-definition">Styles Type Definition</b></summary>
 
 ```typescript
 interface Styles {
@@ -171,40 +151,25 @@ interface Styles {
 
 </details>
 
-**target** `string | HTMLElement`  
-The target element to calculate the Floater position. It will use the children as the target if it's not set.
-
-**title** `ReactNode`  
-It can be anything that can be rendered.
-
-**wrapperOptions** `WrapperOptions`  
-Position the wrapper relative to the target.  
-_You need to set a `target` for this to work._
-
 <details>
-  <summary>Type Definition</summary>
+  <summary><b id="wrapperoptions-type-definition">WrapperOptions Type Definition</b></summary>
 
 ```typescript
 interface WrapperOptions {
   offset: number; // The distance between the wrapper and the target. It can be a negative value.
   placement: string; // the same options as above, except center
-  position: bool; // Set to true to position the wrapper
+  position: boolean; // Set to true to position the wrapper
 }
 ```
 
 </details>
 
-## Styling
-
-You can customize everything with the `styles` prop.  
-Only set the properties you want to change, and the default styles will be merged.
-
-Check the [styles.ts](src/modules/styles.ts) for the syntax.
-
 ## Modes
 
+React Floater supports several modes for flexible positioning and control:
+
 **Default**  
-The wrapper will trigger the events and use itself as the Floater's target.
+The Floater is anchored to its child and triggers on event.
 
 ```tsx
 <Floater content="This is the Floater content">
@@ -213,7 +178,7 @@ The wrapper will trigger the events and use itself as the Floater's target.
 ```
 
 **Proxy**  
-The wrapper will trigger the events, but the Floater will use the **target** prop to position itself.
+The Floater is triggered by the child, but positioned relative to the `target`.
 
 ```tsx
 <div className="App">
@@ -226,7 +191,7 @@ The wrapper will trigger the events, but the Floater will use the **target** pro
 ```
 
 **Beacon**  
-It is the same as the **proxy mode,** but the wrapper will be positioned relative to the `target`.
+The Floater wrapper is positioned relative to the target (useful for guided tours or beacons).
 
 ```tsx
 <div className="App">
@@ -251,7 +216,7 @@ It is the same as the **proxy mode,** but the wrapper will be positioned relativ
 ```
 
 **Controlled**  
-Setting a boolean to the open prop will enter the controlled mode and not respond to events.  
+You manage the Floater’s visibility with the `open` prop - no trigger events are needed.
 In this mode, you don't even need to have `children`
 
 ```tsx
