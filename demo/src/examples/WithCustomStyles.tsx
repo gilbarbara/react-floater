@@ -1,14 +1,12 @@
 import Floater from 'react-floater';
-import { Button, H3, Paragraph } from '@gilbarbara/components';
+import { Button } from '@heroui/react';
 
 export default function WithCustomStyles({ cb }: any) {
   return (
     <Floater
       callback={cb}
       content={
-        <Paragraph>
-          You can change the UI completely. Also control placement, offset, flip and much more.
-        </Paragraph>
+        <p>You can change the UI completely. Also control placement, offset, flip and much more.</p>
       }
       footer="I should move down on mobile"
       offset={0}
@@ -34,15 +32,17 @@ export default function WithCustomStyles({ cb }: any) {
         },
       }}
       title={
-        <H3>
+        <h3 className="text-lg font-bold">
           I'm super customizable{' '}
           <span aria-label="Smile with Sunglasses" role="img">
             😎
           </span>
-        </H3>
+        </h3>
       }
     >
-      <Button size="sm">RIGHT</Button>
+      <Button color="primary" size="sm">
+        RIGHT
+      </Button>
     </Floater>
   );
 }

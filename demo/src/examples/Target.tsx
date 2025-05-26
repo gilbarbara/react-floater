@@ -1,21 +1,19 @@
-import React, { useEffect } from 'react';
+import { forwardRef, useEffect } from 'react';
 import Floater from 'react-floater';
-import { Anchor } from '@gilbarbara/components';
 
-export default React.forwardRef<HTMLDivElement, any>(({ onMount }, ref) => {
+const Target = forwardRef<HTMLDivElement, any>(({ onMount }, ref) => {
   useEffect(() => {
     onMount();
   }, [onMount]);
 
   return (
-    <div ref={ref} className="target">
+    <div ref={ref} className="target" style={{ height: 64, width: 64, margin: '0 auto' }}>
       <Floater content="I have a click event to my repo!" event="hover" placement="top">
-        <Anchor
-          display="inline-flex"
-          external
-          height={64}
+        <a
+          className="inline-flex h-16 w-16"
           href="https://github.com/gilbarbara/react-floater"
-          width={64}
+          rel="noopener noreferrer"
+          target="_blank"
         >
           <img
             alt="GitHub"
@@ -24,8 +22,10 @@ export default React.forwardRef<HTMLDivElement, any>(({ onMount }, ref) => {
             src="https://cdn.svgporn.com/logos/github-icon.svg"
             width={64}
           />
-        </Anchor>
+        </a>
       </Floater>
     </div>
   );
 });
+
+export default Target;

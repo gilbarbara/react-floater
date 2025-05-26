@@ -1,5 +1,5 @@
 import Floater from 'react-floater';
-import { Button, Paragraph } from '@gilbarbara/components';
+import { Button } from '@heroui/react';
 
 export default function WithTitleAndFooter({ cb }: any) {
   return (
@@ -7,13 +7,11 @@ export default function WithTitleAndFooter({ cb }: any) {
       callback={cb}
       content={
         <>
-          <Paragraph>
-            My content can be anything that can be rendered: numbers, strings, elements.
-          </Paragraph>
-          <Paragraph>Also I have a custom long arrow.</Paragraph>
+          <p>My content can be anything that can be rendered: numbers, strings, elements.</p>
+          <p>Also I have a custom long arrow.</p>
         </>
       }
-      footer="And I should move up on mobile"
+      footer="And I should move up on small screens"
       placement="left"
       styles={{
         arrow: {
@@ -23,7 +21,9 @@ export default function WithTitleAndFooter({ cb }: any) {
       }}
       title="Oi, I have a title!"
     >
-      <Button size="sm">LEFT</Button>
+      <Button color="primary" size="sm">
+        LEFT
+      </Button>
     </Floater>
   );
 }

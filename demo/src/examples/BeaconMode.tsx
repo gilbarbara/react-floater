@@ -1,52 +1,18 @@
 import Floater from 'react-floater';
-import { keyframes } from '@emotion/react';
-import styled from '@emotion/styled';
-import { Box, Paragraph } from '@gilbarbara/components';
-
-const { PUBLIC_URL = '' } = process.env;
-
-const BeaconFlick = keyframes`
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.3;
-  }
-  100% {
-    opacity: 1;
-  }
-`;
-
-const Beacon = styled.span`
-  animation: ${BeaconFlick} 1s infinite;
-  display: inline-block;
-  border-radius: 50%;
-  border: 3px solid #0044ff;
-  padding: 4px;
-
-  &:before {
-    background-color: #0044ff;
-    border-radius: 50%;
-    content: '';
-    display: block;
-    height: 20px;
-    width: 20px;
-  }
-`;
 
 export default function BeaconMode({ cb }: any) {
   return (
-    <Box flex>
+    <div className="flex flex-col flex-1 items-center gap-4">
       <img
         alt="Microsoft Popup"
         className="old-tooltip"
         height="200"
-        src={`${PUBLIC_URL}/windows-popup.png`}
+        src="/windows-popup.png"
         width="320"
       />
       <Floater
         callback={cb}
-        content={<Paragraph size="lg">Yeah, this is how we use to look back in the day!</Paragraph>}
+        content={<p className="text-lg">Yeah, this is how we use to look back in the day!</p>}
         disableFlip
         event="hover"
         placement="top"
@@ -57,9 +23,12 @@ export default function BeaconMode({ cb }: any) {
           position: true,
         }}
       >
-        <Beacon />
+        <button aria-label="Beacon" className="relative size-8" type="button">
+          <span className="absolute inset-0 animate-ping rounded-full bg-[rgba(48,48,232,0.6)]" />
+          <span className="absolute inset-0 rounded-full bg-[rgba(48,48,232,0.6)]" />
+        </button>
       </Floater>
-      <Paragraph mt="md">Beacon mode</Paragraph>
-    </Box>
+      <p className="mt-4">Beacon mode</p>
+    </div>
   );
 }

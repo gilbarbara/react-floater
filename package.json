@@ -1,6 +1,6 @@
 {
   "name": "react-floater",
-  "version": "0.9.4",
+  "version": "0.9.5-5",
   "description": "Floaters everywhere!",
   "author": "Gil Barbara <gilbarbara@gmail.com>",
   "keywords": [
@@ -86,6 +86,7 @@
     "watch": "tsdown --watch",
     "clean": "del dist/*",
     "lint": "eslint --fix src test",
+    "demo": "pnpm --dir demo dev",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:watch": "vitest watch",

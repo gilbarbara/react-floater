@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Floater from 'react-floater';
-import { Box, Button, Paragraph } from '@gilbarbara/components';
+import { Button } from '@heroui/react';
 
 import Column from '../components/Column';
 
@@ -16,12 +16,10 @@ export default function ControlledMode({ cb }: any) {
       <Floater
         callback={cb}
         content={
-          <Box>
-            <Paragraph align="center" bold size="lg">
-              I'm a controlled and centered tooltip
-            </Paragraph>
-            <Paragraph align="center">The parent control my status</Paragraph>
-          </Box>
+          <div>
+            <p className="font-bold text-center text-lg">I'm a controlled and centered tooltip</p>
+            <p className="text-center">The parent control my status</p>
+          </div>
         }
         footer={
           <footer
@@ -32,7 +30,7 @@ export default function ControlledMode({ cb }: any) {
               textAlign: 'right',
             }}
           >
-            <Button bg="black" onClick={handleClick} size="sm">
+            <Button className="bg-black text-white" onPress={handleClick} size="sm">
               Close
             </Button>
           </footer>
@@ -49,7 +47,7 @@ export default function ControlledMode({ cb }: any) {
           },
         }}
       />
-      <Button onClick={handleClick} size="sm">
+      <Button color="primary" onPress={handleClick} size="sm">
         Controlled floater
       </Button>
     </Column>

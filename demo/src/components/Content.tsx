@@ -1,19 +1,18 @@
-import { ReactNode } from 'react';
-import { Flex, FlexProps } from '@gilbarbara/components';
+import { HTMLAttributes, ReactNode } from 'react';
+import { cn } from '@heroui/react';
 
-interface Props extends FlexProps {
+interface Props extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
 }
 
-export default function Content(props: Props) {
+export default function Content({ className, ...props }: Props) {
   return (
-    <Flex
-      data-component-name="Content"
-      justify="space-between"
-      maxWidth={500}
-      mx="auto"
-      width="100%"
-      wrap="wrap"
+    <div
+      className={cn(
+        'flex items-center justify-between flex-wrap max-w-lg mx-auto w-full',
+        className,
+      )}
+      data-testid="Content"
       {...props}
     />
   );

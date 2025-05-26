@@ -1,23 +1,21 @@
-import { ReactNode } from 'react';
-import { Flex, FlexProps } from '@gilbarbara/components';
+import { HTMLAttributes, ReactNode } from 'react';
+import { cn } from '@heroui/react';
 
-interface Props extends FlexProps {
+interface Props extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
   gray?: boolean;
 }
 
 export default function Block({ children, gray, ...rest }: Props) {
   return (
-    <Flex
-      align="center"
-      bg={gray ? 'gray.100' : 'white'}
-      data-component-name="Block"
-      direction="column"
-      p="xl"
-      textAlign="center"
+    <div
+      className={cn('flex flex-col items-center justify-center p-8 bg-white', {
+        'bg-gray-200': gray,
+      })}
+      data-testid="Block"
       {...rest}
     >
       {children}
-    </Flex>
+    </div>
   );
 }

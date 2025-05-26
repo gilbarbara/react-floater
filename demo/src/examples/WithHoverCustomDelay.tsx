@@ -1,5 +1,5 @@
 import Floater from 'react-floater';
-import { Button, Paragraph } from '@gilbarbara/components';
+import { Button } from '@heroui/react';
 
 import Column from '../components/Column';
 
@@ -9,18 +9,20 @@ export default function WithHoverCustomDelay({ cb }: any) {
       <Floater
         callback={cb}
         content={
-          <Paragraph size="lg">
+          <p className="text-large">
             I have an <b>eventDelay</b> prop for <i>hover</i> event that can be adjusted (move you
             mouse away)!
-          </Paragraph>
+          </p>
         }
         event="hover"
         eventDelay={2.5}
         placement="top"
       >
-        <Button size="sm">HOVER</Button>
+        <Button color="primary" size="sm">
+          HOVER
+        </Button>
       </Floater>
-      <Paragraph mt="xs">2.5s delay</Paragraph>
+      <p className="p-2">2.5s delay</p>
     </Column>
   );
 }

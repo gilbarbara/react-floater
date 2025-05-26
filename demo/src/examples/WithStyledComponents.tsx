@@ -1,6 +1,6 @@
 import Floater, { CustomComponentProps } from 'react-floater';
 import styled from '@emotion/styled';
-import { Button } from '@gilbarbara/components';
+import { Button } from '@heroui/react';
 
 import Column from '../components/Column';
 
@@ -18,16 +18,16 @@ function CustomFloater({ closeFn }: CustomComponentProps) {
       <span aria-label="styled" role="img" style={{ fontSize: 60 }}>
         💅
       </span>
-      <div>
+      <div className="mb-1">
         I'm a floater with a custom component using{' '}
         <a href="https://emotion.sh/docs/introduction" rel="noopener noreferrer" target="_blank">
           <b>emotion</b>
         </a>{' '}
         and <strong>bottom-start</strong> placement.
       </div>
-      <Button bg="white" onClick={closeFn} size="sm" style={{ marginTop: 10 }}>
+      <button className="bg-white px-2 py-1 rounded-sm font-bold" onClick={closeFn} type="button">
         Close
-      </Button>
+      </button>
     </Wrapper>
   );
 }
@@ -66,7 +66,9 @@ export default function WithStyledComponents({ cb }: any) {
           },
         }}
       >
-        <Button size="sm">BOTTOM</Button>
+        <Button color="primary" size="sm">
+          BOTTOM
+        </Button>
       </Floater>
     </Column>
   );

@@ -1,5 +1,5 @@
 import Floater from 'react-floater';
-import { Box, Button, Paragraph } from '@gilbarbara/components';
+import { Button } from '@heroui/react';
 
 import Column from '../components/Column';
 
@@ -10,22 +10,24 @@ export default function AutoOpen({ cb }: any) {
         autoOpen
         callback={cb}
         content={
-          <Box>
-            <Paragraph>React Floater is super easy to use and customize.</Paragraph>
-            <Paragraph>
+          <div>
+            <p>React Floater is super easy to use and customize.</p>
+            <p>
               It's powered by{' '}
               <a href="https://popper.js.org/" rel="noopener noreferrer" target="_blank">
                 popper.js
               </a>{' '}
               to position the elements
-            </Paragraph>
-          </Box>
+            </p>
+          </div>
         }
         placement="top"
       >
-        <Button size="sm">TOP</Button>
+        <Button color="primary" size="sm">
+          TOP
+        </Button>
       </Floater>
-      <Paragraph mt="xxs">autoOpen</Paragraph>
+      <p className="mt-2">autoOpen</p>
     </Column>
   );
 }
