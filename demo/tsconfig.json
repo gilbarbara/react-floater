@@ -4,9 +4,11 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "lib": ["dom", "dom.iterable", "esnext"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "skipLibCheck": true,
     "strict": true,
-    "target": "es5"
+    "target": "ESNext"
   },
   "include": ["src/**/*"]
 }

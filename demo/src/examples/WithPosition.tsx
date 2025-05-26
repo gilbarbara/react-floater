@@ -1,16 +1,17 @@
 import Floater from 'react-floater';
-import { Button } from '@gilbarbara/components';
+import { Button } from '@heroui/react';
+import { Menu } from 'lucide-react';
 
 export default function WithPosition({ cb }: any) {
   return (
-    <div>
+    <div className="fixed top-4 left-4">
       <Floater
         callback={cb}
         content={<div>I live up here on large screens!</div>}
         placement="bottom-end"
         styles={{
           container: {
-            padding: '4rem',
+            padding: '16px',
             fontSize: 24,
             textAlign: 'center',
           },
@@ -20,8 +21,8 @@ export default function WithPosition({ cb }: any) {
           },
         }}
       >
-        <Button size="sm" style={{ position: 'fixed', top: 15, right: 15, width: 75 }}>
-          {'  ☗  '}︎
+        <Button color="primary" isIconOnly size="sm">
+          <Menu size={18} />
         </Button>
       </Floater>
     </div>

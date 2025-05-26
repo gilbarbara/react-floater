@@ -1,10 +1,16 @@
-import { ReactNode } from 'react';
-import { FlexCenter, FlexProps } from '@gilbarbara/components';
+import { HTMLAttributes, ReactNode } from 'react';
+import { cn } from '@heroui/react';
 
-interface Props extends FlexProps {
+interface Props extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
 }
 
-export default function Column(props: Props) {
-  return <FlexCenter align="center" data-component-name="Column" flex {...props} />;
+export default function Column({ className, ...props }: Props) {
+  return (
+    <div
+      className={cn('flex flex-col items-center justify-center flex-1', className)}
+      data-testid="Column"
+      {...props}
+    />
+  );
 }

@@ -1,5 +1,5 @@
 import Floater from 'react-floater';
-import { Button, Paragraph } from '@gilbarbara/components';
+import { Button } from '@heroui/react';
 
 import Column from '../components/Column';
 
@@ -8,16 +8,16 @@ export default function WithHoverDefault({ cb }: any) {
     <Column>
       <Floater
         callback={cb}
-        content={
-          <Paragraph>I can be triggered by click or hover (on devices with a mouse)</Paragraph>
-        }
+        content={<p>I can be triggered by click or hover (on devices with a mouse)</p>}
         event="hover"
         placement="top"
         title="Events"
       >
-        <Button size="sm">HOVER</Button>
+        <Button color="primary" size="sm">
+          HOVER
+        </Button>
       </Floater>
-      <Paragraph mt="xs">default delay (0.4s)</Paragraph>
+      <p className="p-2">default delay (0.4s)</p>
     </Column>
   );
 }

@@ -1,6 +1,5 @@
 import { useCallback, useRef } from 'react';
 import Floater from 'react-floater';
-import { Box } from '@gilbarbara/components';
 import { useUpdate } from '@gilbarbara/hooks';
 
 import Target from './Target';
@@ -14,7 +13,7 @@ export default function ProxyMode({ cb }: any) {
   }, [update]);
 
   return (
-    <Box flex>
+    <div className="flex flex-col flex-1 items-center gap-4">
       <Target ref={target} onMount={handleTargetMount} />
       {target.current && (
         <Floater
@@ -42,9 +41,9 @@ export default function ProxyMode({ cb }: any) {
           }}
           target={target.current}
         >
-          <span style={{ textDecoration: 'underline' }}>Proxy mode</span>
+          <span className="underline">Proxy mode</span>
         </Floater>
       )}
-    </Box>
+    </div>
   );
 }

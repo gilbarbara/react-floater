@@ -1,40 +1,34 @@
 import Floater from 'react-floater';
-import { Box, Button, ButtonUnstyled, FormGroup, H4, Icon, Input } from '@gilbarbara/components';
+import { Button, Input } from '@heroui/react';
+import { X } from 'lucide-react';
 
 import Column from '../components/Column';
 
 function Content({ closeFn }: any) {
   return (
-    <Box bg="white" height="90vh" padding="xl" position="relative" radius="md" width="90vw">
-      <H4 align="center" mb="xxl">
-        I'm a custom component acting as modal. No arrow and centered
-      </H4>
-      <ButtonUnstyled
-        onClick={closeFn}
-        padding="sm"
-        style={{ position: 'absolute', right: 16, top: 16 }}
-      >
-        <Icon name="close" size={24} />
-      </ButtonUnstyled>
-      <Box
-        as="form"
-        maxWidth={640}
-        mx="auto"
+    <div className="relative w-[90vh] h-[90vh] z-50 bg-white p-8 rounded-2xl">
+      <h3 className="text-xl font-bold text-center mb-1">
+        I'm a custom component acting as modal.
+      </h3>
+      <p className="text-center mb-8">No arrow and centered</p>
+      <Button className="absolute top-2 right-2" isIconOnly onPress={closeFn} variant="light">
+        <X size={24} />
+      </Button>
+      <form
+        className="max-w-2xl mx-auto space-y-8"
         onSubmit={event => {
           event.preventDefault();
           closeFn();
         }}
       >
-        <FormGroup label="Name">
-          <Input name="name" />
-        </FormGroup>
-        <FormGroup label="E-mail">
-          <Input name="email" />
-        </FormGroup>
+        <Input label="Name" labelPlacement="outside-top" name="name" variant="bordered" />
+        <Input label="E-mail" labelPlacement="outside-top" name="email" variant="bordered" />
 
-        <Button type="submit">SEND</Button>
-      </Box>
-    </Box>
+        <Button color="primary" type="submit">
+          SEND
+        </Button>
+      </form>
+    </div>
   );
 }
 
@@ -48,11 +42,13 @@ export default function Modal({ cb }: any) {
         placement="center"
         styles={{
           options: {
-            zIndex: 50,
+            zIndex: 1000,
           },
         }}
       >
-        <Button size="sm">MODAL</Button>
+        <Button color="primary" size="sm">
+          Modal
+        </Button>
       </Floater>
     </Column>
   );

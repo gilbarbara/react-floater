@@ -1,5 +1,5 @@
 import Floater from 'react-floater';
-import { Button, Paragraph } from '@gilbarbara/components';
+import { Button } from '@heroui/react';
 
 import Column from '../components/Column';
 
@@ -8,18 +8,18 @@ export default function WithHoverAndNoDelay({ cb }: any) {
     <Column>
       <Floater
         callback={cb}
-        content={
-          <Paragraph>I can be triggered by click or hover (on devices with a mouse)</Paragraph>
-        }
+        content={<p>I can be triggered by click or hover (on devices with a mouse)</p>}
         disableHoverToClick
         event="hover"
         eventDelay={0}
         placement="top"
         title="Events"
       >
-        <Button size="sm">HOVER</Button>
+        <Button color="primary" size="sm">
+          HOVER
+        </Button>
       </Floater>
-      <Paragraph mt="xs">no delay (0)</Paragraph>
+      <p className="p-1">no delay (0)</p>
     </Column>
   );
 }

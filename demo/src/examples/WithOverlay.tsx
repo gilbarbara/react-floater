@@ -1,17 +1,6 @@
 import { useState } from 'react';
 import Floater from 'react-floater';
-import styled from '@emotion/styled';
-import { Button, Paragraph } from '@gilbarbara/components';
-
-const Overlay = styled.div`
-  background-color: rgba(0, 0, 0, 0.2);
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  top: 0;
-  z-index: 100;
-`;
+import { Button } from '@heroui/react';
 
 export default function FloaterOverlay({ cb }: any) {
   const [isOpen, setOpen] = useState(false);
@@ -30,16 +19,18 @@ export default function FloaterOverlay({ cb }: any) {
     <>
       <Floater
         callback={callback}
-        content={<Paragraph>I have an invisible overlay that will close the floater</Paragraph>}
+        content={<p>I have an invisible overlay that will close the floater</p>}
         open={isOpen}
         placement="top"
         styles={{ options: { zIndex: 250 } }}
       >
-        <Button onClick={handleClick} size="sm">
+        <Button color="primary" onPress={handleClick} size="sm">
           Click me
         </Button>
       </Floater>
-      {isOpen && <Overlay onClick={handleClick} />}
+      {isOpen && (
+        <div className="fixed inset-0 z-50 bg-black/10" onClick={handleClick} role="presentation" />
+      )}
     </>
   );
 }

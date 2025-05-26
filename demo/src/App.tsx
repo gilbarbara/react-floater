@@ -1,11 +1,9 @@
-import { Box, Flex, FlexCenter, H1, H2, Paragraph, Spacer } from '@gilbarbara/components';
 import { useUnmount } from '@gilbarbara/hooks';
 import disableScroll from 'disable-scroll';
 
 import Block from './components/Block';
 import Content from './components/Content';
-import GlobalStyles from './components/GlobalStyles';
-import Badges from './examples/Badges';
+import GitHubRepo from './components/GitHubRepo';
 import BeaconMode from './examples/BeaconMode';
 import ControlledMode from './examples/ControlledMode';
 import Modal from './examples/Modal';
@@ -20,8 +18,6 @@ import WithPosition from './examples/WithPosition';
 import WithStyledComponents from './examples/WithStyledComponents';
 import WithText from './examples/WithText';
 import WithTitleAndFooter from './examples/WithTitleAndFooter';
-
-const { NODE_ENV } = process.env;
 
 function callback(action: any, data: any) {
   // eslint-disable-next-line no-console
@@ -38,60 +34,59 @@ export default function App() {
   });
 
   return (
-    <Box>
-      <GlobalStyles />
-      <FlexCenter minHeight={256} px="xl">
-        <H1>react-floater</H1>
-        <Paragraph bold>A component to create awesome tooltips, modals and more!</Paragraph>
+    <div>
+      <GitHubRepo />
+      <div className="flex flex-col items-center justify-center min-h-64 px-16">
+        <h1 className="text-4xl font-bold mb-4">react-floater</h1>
+        <p className="font-bold">A component to create awesome tooltips, modals and more!</p>
         {window.innerWidth >= 768 && <WithPosition cb={callback} />}
-      </FlexCenter>
+      </div>
       <Block gray>
-        <H2 mb="xxl">The classic examples</H2>
+        <h2 className="text-2xl font-bold mb-8">The classic examples</h2>
 
-        <Flex direction="column" gap="xl" width="100%">
+        <div className="flex flex-col gap-8 w-full">
           <WithAutoOpen cb={callback} />
-          <Flex justify="space-between" maxWidth={500} mx="auto" width="100%">
+          <div className="flex justify-between max-w-lg mx-auto w-full">
             <WithTitleAndFooter cb={callback} />
             <WithCustomStyles cb={callback} />
-          </Flex>
+          </div>
           <WithStyledComponents cb={callback} />
-        </Flex>
+        </div>
       </Block>
       <Block>
-        <H2>Hover</H2>
-        <Paragraph color="gray" size="md">
+        <h2 className="text-2xl font-bold">Hover</h2>
+        <p className="text-foreground-500 text-center">
           It will switch to click on mobile.
           <br />
           (can be disabled with <b>disableHoverToClick</b> prop)
-        </Paragraph>
+        </p>
 
-        <Spacer distribution="center" gap="lg" mt="xxxl" orientation="vertical">
+        <div className="flex flex-col gap-4 mt-8">
           <WithHoverDefault cb={callback} />
           <WithHoverCustomDelay cb={callback} />
           <WithHoverAndNoDelay cb={callback} />
-        </Spacer>
+        </div>
       </Block>
       <Block gray>
-        <H2 mb="xxl">Inside text</H2>
+        <h2 className="text-2xl font-bold mb-8">Inside text</h2>
         <WithText cb={callback} />
       </Block>
       <Block>
-        <H2 mb="xxl">With Overlay</H2>
+        <h2 className="text-2xl font-bold mb-8">With Overlay</h2>
         <WithOverlay cb={callback} />
       </Block>
       <Block gray>
-        <H2 mb="xxl">Custom targets</H2>
-        <Content maxWidth={640} mb="xxl">
+        <h2 className="text-2xl font-bold mb-8">Custom targets</h2>
+        <Content className="max-w-2xl mb-8">
           <ProxyMode cb={callback} />
           <BeaconMode cb={callback} />
         </Content>
-        <Content maxWidth={640}>
+        <Content className="max-w-2xl">
           <ControlledMode cb={callback} />
           <Modal cb={callback} />
         </Content>
       </Block>
       <div id="portalElement" />
-      {NODE_ENV === 'production' && <Badges />}
-    </Box>
+    </div>
   );
 }
