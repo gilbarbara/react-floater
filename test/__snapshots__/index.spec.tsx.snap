@@ -1,12 +1,62 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`ReactFloater > with \`arrow\` > should render a custom arrow floater with click 1`] = `
+<div
+  data-popper-escaped=""
+  data-popper-placement="bottom"
+  data-popper-reference-hidden=""
+  id="test"
+  style="z-index: 100; position: absolute; left: 0px; top: 0px; margin: 0px; right: auto; bottom: auto; transform: translate(0px, 15px);"
+>
+  <div
+    class="__floater"
+    role="tooltip"
+    style="display: inline-block; filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.3)); max-width: 300px; opacity: 1; position: relative; transition: opacity 0.3s; visibility: visible; padding: 80px 0px 0px;"
+  >
+    <div
+      class="__floater__body"
+    >
+      <div
+        class="__floater__container"
+        style="background-color: rgb(255, 255, 255); color: rgb(102, 102, 102); min-height: 60px; min-width: 200px; padding: 20px; position: relative; z-index: 10;"
+      >
+        <div
+          class="__floater__content"
+          style="font-size: 15px;"
+        >
+          Hello! This is my content!
+        </div>
+      </div>
+      <span
+        style="color: rgb(107, 162, 255); height: 80px; width: 10px; position: absolute; left: 0px; transform: translate(8px, 0px); top: 0px;"
+      >
+        <svg
+          height="100px"
+          version="1.1"
+          viewBox="0 0 10 100"
+          width="10px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g>
+            <path
+              d="M5.19249228e-07,5.16768813 C0.000571745188,2.3180242 2.3238984,6.52762368e-06 5.17356233,6.52762368e-06 C7.4961469,-0.00369898343 9.46628897,1.57062447 10.1275925,3.67813093 C11.5918888,8.26905035 5.18127186,100.000007 5.18127186,100.000007 L1.9635443,41.3615605 C0.907405183,22.0686414 -0.000792731847,5.40502691 5.19249228e-07,5.16768813 Z M5.18507488,2.58554059 C3.75638551,2.5874823 2.59249512,3.74291582 2.59443184,5.17160518 C2.59160462,6.52075954 3.7928988,13.3574741 4.95859452,14.5045202 C6.56709198,13.5758538 7.69207267,4.78979882 7.69207267,4.78979882 C7.50203478,3.55199808 6.48229278,2.58749911 5.18507488,2.58554059 Z"
+              fill="currentColor"
+            />
+          </g>
+        </svg>
+      </span>
+    </div>
+  </div>
+</div>
+`;
+
 exports[`ReactFloater > with \`component\` as element > should show the floater with click 1`] = `
 <div
   data-popper-escaped=""
   data-popper-placement="bottom"
   data-popper-reference-hidden=""
   id="test"
-  style="z-index: 1000; position: absolute; left: 0px; top: 0px; margin: 0px; transform: translate(0px, 15px);"
+  style="z-index: 1000; position: absolute; left: 0px; top: 0px; margin: 0px; right: auto; bottom: auto; transform: translate(0px, 15px);"
 >
   <div
     class="__floater"
@@ -55,7 +105,7 @@ exports[`ReactFloater > with \`component\` as function > should show the floater
   data-popper-placement="bottom"
   data-popper-reference-hidden=""
   id="test"
-  style="z-index: 100; position: absolute; left: 0px; top: 0px; margin: 0px; transform: translate(0px, 15px);"
+  style="z-index: 100; position: absolute; left: 0px; top: 0px; margin: 0px; right: auto; bottom: auto; transform: translate(0px, 15px);"
 >
   <div
     class="__floater"
@@ -133,7 +183,7 @@ exports[`ReactFloater > with \`placement\` left > should show the floater with c
   data-popper-placement="left"
   data-popper-reference-hidden=""
   id="test"
-  style="z-index: 100; position: absolute; left: 0px; top: 0px; margin: 0px; right: 0px; transform: translate(-15px, 0px);"
+  style="z-index: 100; position: absolute; left: auto; top: 0px; margin: 0px; right: 0px; bottom: auto; transform: translate(-15px, 0px);"
 >
   <div
     class="__floater"
@@ -181,7 +231,7 @@ exports[`ReactFloater > with \`placement\` right > should show the floater with 
   data-popper-placement="right"
   data-popper-reference-hidden=""
   id="test"
-  style="z-index: 100; position: absolute; left: 0px; top: 0px; margin: 0px; transform: translate(15px, 0px);"
+  style="z-index: 100; position: absolute; left: 0px; top: 0px; margin: 0px; right: auto; bottom: auto; transform: translate(15px, 0px);"
 >
   <div
     class="__floater"
@@ -229,7 +279,7 @@ exports[`ReactFloater > with \`placement\` top > should show the floater with cl
   data-popper-placement="top"
   data-popper-reference-hidden=""
   id="test"
-  style="z-index: 100; position: absolute; left: 0px; top: 0px; margin: 0px; bottom: 0px; transform: translate(0px, -15px);"
+  style="z-index: 100; position: absolute; left: 0px; top: auto; margin: 0px; right: auto; bottom: 0px; transform: translate(0px, -15px);"
 >
   <div
     class="__floater"
@@ -277,7 +327,7 @@ exports[`ReactFloater > with \`title\`, \`footer\` and \`closeBtn\` > should ren
   data-popper-placement="bottom"
   data-popper-reference-hidden=""
   id="test"
-  style="z-index: 100; position: absolute; left: 0px; top: 0px; margin: 0px; transform: translate(0px, 15px);"
+  style="z-index: 100; position: absolute; left: 0px; top: 0px; margin: 0px; right: auto; bottom: auto; transform: translate(0px, 15px);"
 >
   <div
     class="__floater __floater__open"

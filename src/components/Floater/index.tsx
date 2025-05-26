@@ -8,6 +8,7 @@ import Arrow from './Arrow';
 import Container from './Container';
 
 interface Props {
+  arrow?: ReactNode;
   arrowRef: Ref<HTMLSpanElement>;
   component?: FloaterComponent;
   content?: ReactNode;

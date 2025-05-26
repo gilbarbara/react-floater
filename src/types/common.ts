@@ -23,6 +23,10 @@ export type Statuses = ValueOf<typeof STATUS>;
 
 export interface BaseProps {
   /**
+   * A custom arrow for the Floater.
+   */
+  arrow?: ReactNode;
+  /**
    * Open the Floater automatically.
    * @default false
    */

@@ -1,16 +1,16 @@
-import { CSSProperties, Ref } from 'react';
+import { CSSProperties, ReactNode, Ref } from 'react';
 
 import { Styles } from '../../types';
 
 interface Props {
+  arrow?: ReactNode;
   arrowRef: Ref<HTMLSpanElement>;
   placement: string;
   styles: Styles;
 }
 
 export default function FloaterArrow(props: Props) {
-  const { arrowRef, placement, styles } = props;
-
+  const { arrow, arrowRef, placement, styles } = props;
   const {
     arrow: { color, display, length, position, spread },
   } = styles;
@@ -32,6 +32,14 @@ export default function FloaterArrow(props: Props) {
     y = spread;
     x = length;
     points = `${x},${y} ${x},0 0,${y / 2}`;
+  }
+
+  if (arrow) {
+    return (
+      <span ref={arrowRef} style={{ color, height: length, width: spread }}>
+        {arrow}
+      </span>
+    );
   }
 
   return (
