@@ -9,17 +9,6 @@ export function useMount(effect: EffectCallback) {
   useEffectOnce(effect);
 }
 
-export function useSingleton(callback: () => void): void {
-  const hasBeenCalled = useRef(false);
-
-  if (hasBeenCalled.current) {
-    return;
-  }
-
-  callback();
-  hasBeenCalled.current = true;
-}
-
 export function useUnmount(fn: () => any): void {
   const fnRef = useRef(fn);
 
