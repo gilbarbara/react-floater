@@ -1,4 +1,4 @@
-import { CSSProperties, useCallback, useMemo, useReducer, useRef } from 'react';
+import { CSSProperties, useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
 import { PlainObject } from '@gilbarbara/types';
 import { createPopper, Instance, ModifierArguments } from '@popperjs/core';
 import is from 'is-lite';
@@ -20,7 +20,7 @@ import {
   once,
   randomId,
 } from './modules/helpers';
-import { useMount, useSingleton, useUnmount, useUpdateEffect } from './modules/hooks';
+import { useUpdateEffect } from './modules/hooks';
 import getStyles from './modules/styles';
 import { Props, State, Statuses, Styles } from './types';
 
@@ -84,19 +84,16 @@ export default function ReactFloater(props: Props) {
   const { changed } = useTreeChanges(state);
   const { changed: changedProps } = useTreeChanges(props);
 
-  const updateState = useCallback(
-    (nextState: Partial<State>, callback_?: () => void) => {
-      if (isMounted.current) {
-        setState(nextState);
-        stateRef.current = { ...state, ...nextState };
+  const updateState = useCallback((nextState: Partial<State>, callback_?: () => void) => {
+    if (isMounted.current) {
+      setState(nextState);
+      stateRef.current = { ...stateRef.current, ...nextState };
 
-        if (callback_) {
-          callback_();
-        }
+      if (callback_) {
+        callback_();
       }
-    },
-    [setState, state],
-  );
+    }
+  }, []);
 
   const toggle = useCallback(
     (forceStatus?: Statuses) => {
@@ -354,7 +351,7 @@ export default function ReactFloater(props: Props) {
     wrapperOptions?.placement,
   ]);
 
-  const handleLoad = useRef(() => {
+  const handleLoad = useCallback(() => {
     if (popperRef.current) {
       popperRef.current.forceUpdate();
     }
@@ -362,9 +359,9 @@ export default function ReactFloater(props: Props) {
     if (wrapperPopper.current) {
       wrapperPopper.current.forceUpdate();
     }
-  });
+  }, []);
 
-  const handleTransitionEnd = useRef(() => {
+  const handleTransitionEnd = useCallback(() => {
     if (wrapperPopper.current) {
       wrapperPopper.current.forceUpdate();
     }
@@ -379,7 +376,7 @@ export default function ReactFloater(props: Props) {
         }
       },
     );
-  });
+  }, [updateState, callback, props]);
 
   const handleClick = useCallback(() => {
     if (is.boolean(open)) {
@@ -449,7 +446,7 @@ export default function ReactFloater(props: Props) {
     }
   }, [initPopper, positionWrapper]);
 
-  const cleanUp = () => {
+  const cleanUp = useCallback(() => {
     if (popperRef.current) {
       popperRef.current.destroy();
       popperRef.current = undefined;
@@ -459,17 +456,23 @@ export default function ReactFloater(props: Props) {
       wrapperPopper.current.destroy();
       wrapperPopper.current = undefined;
     }
-  };
+  }, []);
 
-  useSingleton(() => {
+  // Global load event listener (singleton)
+  useEffect(() => {
     if (canUseDOM()) {
-      window.addEventListener('load', handleLoad.current);
+      window.addEventListener('load', handleLoad);
     }
-  });
+  }, [handleLoad]);
 
-  useMount(() => {
+  // Mount effect
+  useEffect(() => {
     isMounted.current = true;
+    initPopper();
+  }, [initPopper]);
 
+  // Debug logging effect
+  useEffect(() => {
     log({
       title: 'init',
       data: {
@@ -482,16 +485,22 @@ export default function ReactFloater(props: Props) {
       },
       debug: currentDebug,
     });
+  }, [children, target, open, positionWrapper, currentDebug]);
 
-    initPopper();
-  });
+  // Unmount effect
+  useEffect(() => {
+    return () => {
+      isMounted.current = false;
+      clearTimeout(eventDelayTimer.current);
+      cleanUp();
+      window.removeEventListener('load', handleLoad);
+    };
+  }, [cleanUp, handleLoad]);
 
-  useUnmount(() => {
-    isMounted.current = false;
-
-    cleanUp();
-    window.removeEventListener('load', handleLoad.current);
-  });
+  // Update state ref when state changes
+  useEffect(() => {
+    stateRef.current = state;
+  }, [state]);
 
   // handle changes
   useUpdateEffect(() => {
@@ -532,7 +541,7 @@ export default function ReactFloater(props: Props) {
     }
 
     if (floaterRef.current && changed('status', [STATUS.RENDER, STATUS.CLOSING])) {
-      once(floaterRef.current, 'transitionend', handleTransitionEnd.current);
+      once(floaterRef.current, 'transitionend', handleTransitionEnd);
     }
 
     if (changed('status', STATUS.IDLE, STATUS.CLOSING) && popperRef.current) {
