@@ -47,7 +47,7 @@ React Floater is highly customizable. You can:
   arrow={<MyCustomArrow />}
   styles={{
     container: { backgroundColor: "#222", color: "#fff" },
-    arrow: { color: "#222", length: 16, spread: 24 },
+    arrow: { color: "#222", size: 16, base: 24 },
   }}
 >
   <button>Hover or click me</button>
@@ -57,32 +57,32 @@ For all available style keys and their default values, see the [styles.ts](src/m
 
 ## Props
 
-| **Prop**            | **Type**                                                     | **Default** | **Description**                                              |
-|---------------------| ------------------------------------------------------------ | ----------- | ------------------------------------------------------------ |
-| arrow ✨              | ReactNode                                                    | –           | Custom arrow for the floater. [See styles.arrow](#styles-type-definition) |
-| autoOpen            | boolean                                                      | false       | Open the Floater automatically.                              |
-| callback            | (action: ‘open’ \| ‘close’, props: Props) => void            | –           | Called when the Floater opens or closes.                     |
-| children            | ReactNode                                                    | –           | Element to trigger the Floater.                              |
-| component           | ComponentType \| ReactElement                                | –           | Custom component UI for the Floater. Has access to closeFn.  |
-| content             | ReactNode                                                    | –           | The content of the Floater. (Required unless you pass a component.) |
-| debug               | boolean                                                      | false       | Log basic actions.                                           |
-| disableFlip         | boolean                                                      | false       | Disable changes in position on scroll/resize.                |
-| disableHoverToClick | boolean                                                      | false       | Don’t convert hover to click on mobile.                      |
-| event               | 'hover' \| 'click'                                           | 'click'     | Event that triggers the Floater.*Not used in controlled mode.* |
-| eventDelay          | number                                                       | 0.4         | Time in seconds before hiding on mouseLeave (only for hover). |
-| footer              | ReactNode                                                    | –           | Footer area content.                                         |
-| getPopper           | (popper: PopperInstance, origin: ‘floater’ \| ‘wrapper’) => void | –           | Get the popper.js instance.                                  |
-| hideArrow           | boolean                                                      | false       | Hide the arrow (good for centered/modal).                    |
-| offset              | number                                                       | 15          | Distance (px) between Floater and target.                    |
-| open                | boolean                                                      | –           | Switch to controlled mode. Disables normal event triggers.   |
-| modifiers           | [PopperModifiers](#poppermodifiers-type-definition)          | –           | Customize popper.js modifiers.                               |
-| placement           | [Placement](#placement-type-definition)                      | 'bottom'    | Floater’s position.                                          |
-| portalElement       | string \| HTMLElement                                        | –           | Selector or element for rendering.                           |
-| showCloseButton     | boolean                                                      | false       | Shows a close (×) button.                                    |
-| styles              | [Styles](#styles-type-definition)                            | –           | Customize UI styles.                                         |
-| target              | string \| HTMLElement                                        | –           | Target element for position. Defaults to children.           |
-| title               | ReactNode                                                    | –           | Floater title.                                               |
-| wrapperOptions      | [WrapperOptions](#wrapperoptions-type-definition)            | –           | Options for positioning the wrapper. Requires a target.      |
+| **Prop**            | **Type**                                                         | **Default** | **Description**                                                           |
+|---------------------|------------------------------------------------------------------|-------------|---------------------------------------------------------------------------|
+| arrow ✨             | ReactNode                                                        | –           | Custom arrow for the floater. [See styles.arrow](#styles-type-definition) |
+| autoOpen            | boolean                                                          | false       | Open the Floater automatically.                                           |
+| callback            | (action: ‘open’ \| ‘close’, props: Props) => void                | –           | Called when the Floater opens or closes.                                  |
+| children            | ReactNode                                                        | –           | Element to trigger the Floater.                                           |
+| component           | ComponentType \| ReactElement                                    | –           | Custom component UI for the Floater. Has access to closeFn.               |
+| content             | ReactNode                                                        | –           | The content of the Floater. (Required unless you pass a component.)       |
+| debug               | boolean                                                          | false       | Log basic actions.                                                        |
+| disableFlip         | boolean                                                          | false       | Disable changes in position on scroll/resize.                             |
+| disableHoverToClick | boolean                                                          | false       | Don’t convert hover to click on mobile.                                   |
+| event               | 'hover' \| 'click'                                               | 'click'     | Event that triggers the Floater.*Not used in controlled mode.*            |
+| eventDelay          | number                                                           | 0.4         | Time in seconds before hiding on mouseLeave (only for hover).             |
+| footer              | ReactNode                                                        | –           | Footer area content.                                                      |
+| getPopper           | (popper: PopperInstance, origin: ‘floater’ \| ‘wrapper’) => void | –           | Get the popper.js instance.                                               |
+| hideArrow           | boolean                                                          | false       | Hide the arrow (good for centered/modal).                                 |
+| offset              | number                                                           | 15          | Distance (px) between Floater and target.                                 |
+| open                | boolean                                                          | –           | Switch to controlled mode. Disables normal event triggers.                |
+| modifiers           | [PopperModifiers](#poppermodifiers-type-definition)              | –           | Customize popper.js modifiers.                                            |
+| placement           | [Placement](#placement-type-definition)                          | 'bottom'    | Floater’s position.                                                       |
+| portalElement       | string \| HTMLElement                                            | –           | Selector or element for rendering.                                        |
+| showCloseButton     | boolean                                                          | false       | Shows a close (×) button.                                                 |
+| styles              | [Styles](#styles-type-definition)                                | –           | Customize UI styles.                                                      |
+| target              | string \| HTMLElement                                            | –           | Target element for position. Defaults to children.                        |
+| title               | ReactNode                                                        | –           | Floater title.                                                            |
+| wrapperOptions      | [WrapperOptions](#wrapperoptions-type-definition)                | –           | Options for positioning the wrapper. Requires a target.                   |
 
 <details>
 	<summary><b id="poppermodifiers-type-definition">PopperModifiers Type Definition</b></summary>
@@ -127,8 +127,8 @@ type Placement =
 ```typescript
 interface Styles {
   arrow: CSSProperties & {
-    length: number;
-    spread: number;
+    size: number;
+    base: number;
   };
   close: CSSProperties;
   container: CSSProperties;
