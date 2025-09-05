@@ -17,8 +17,8 @@ export default function WithTitleAndFooter({ cb }: any) {
       placement="left"
       styles={{
         arrow: {
-          length: 64,
-          spread: 12,
+          base: 12,
+          size: 64,
         },
       }}
       title="Oi, I have a title!"

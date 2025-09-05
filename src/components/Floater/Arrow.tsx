@@ -12,31 +12,38 @@ interface Props {
 export default function FloaterArrow(props: Props) {
   const { arrow, arrowRef, placement, styles } = props;
   const {
-    arrow: { color, display, length, position, spread },
+    arrow: { base, color, display, position, size },
   } = styles;
   const arrowStyles: CSSProperties = { display, position };
 
   let points;
-  let x = spread;
-  let y = length;
+  let x = base;
+  let y = size;
 
   if (placement.startsWith('top')) {
     points = `0,0 ${x / 2},${y} ${x},0`;
   } else if (placement.startsWith('bottom')) {
     points = `${x},${y} ${x / 2},0 0,${y}`;
   } else if (placement.startsWith('left')) {
-    y = spread;
-    x = length;
+    y = base;
+    x = size;
     points = `0,0 ${x},${y / 2} 0,${y}`;
   } else if (placement.startsWith('right')) {
-    y = spread;
-    x = length;
+    y = base;
+    x = size;
     points = `${x},${y} ${x},0 0,${y / 2}`;
   }
 
   if (arrow) {
     return (
-      <span ref={arrowRef} style={{ color, height: length, width: spread }}>
+      <span
+        ref={arrowRef}
+        style={{
+          color,
+          height: placement.startsWith('left') || placement.startsWith('right') ? base : size,
+          width: placement.startsWith('left') || placement.startsWith('right') ? size : base,
+        }}
+      >
         {arrow}
       </span>
     );

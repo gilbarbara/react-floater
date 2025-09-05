@@ -699,8 +699,8 @@ describe('ReactFloater', () => {
         styles: {
           arrow: {
             color: '#6ba2ff',
-            length: 80,
-            spread: 10,
+            size: 80,
+            base: 10,
           },
         },
       });
