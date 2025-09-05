@@ -13,11 +13,11 @@ export default function getStyles(styles?: PartialDeep<Styles>): Styles {
   return deepmerge(
     {
       arrow: {
+        base: 32,
         color: '#fff',
         display: 'inline-flex',
-        length: 16,
         position: 'absolute',
-        spread: 32,
+        size: 16,
       },
       close: {
         backgroundColor: 'transparent',

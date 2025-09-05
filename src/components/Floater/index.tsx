@@ -40,7 +40,7 @@ function Floater(props: Props) {
 
   const style = useMemo(() => {
     const {
-      arrow: { length },
+      arrow: { size },
       floater,
       floaterCentered,
       floaterClosing,
@@ -51,13 +51,13 @@ function Floater(props: Props) {
 
     if (!hideArrow) {
       if (placement.startsWith('top')) {
-        element.padding = `0 0 ${length}px`;
+        element.padding = `0 0 ${size}px`;
       } else if (placement.startsWith('bottom')) {
-        element.padding = `${length}px 0 0`;
+        element.padding = `${size}px 0 0`;
       } else if (placement.startsWith('left')) {
-        element.padding = `0 ${length}px 0 0`;
+        element.padding = `0 ${size}px 0 0`;
       } else if (placement.startsWith('right')) {
-        element.padding = `0 0 0 ${length}px`;
+        element.padding = `0 0 0 ${size}px`;
       }
     }
 

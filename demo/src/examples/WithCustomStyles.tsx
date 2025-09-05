@@ -28,9 +28,9 @@ export default function WithCustomStyles({ cb }: any) {
           textAlign: 'right',
         },
         arrow: {
+          base: 10,
           color: '#000',
-          length: 8,
-          spread: 10,
+          size: 8,
         },
       }}
       title={

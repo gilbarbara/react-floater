@@ -136,8 +136,14 @@ export interface State {
 
 export interface Styles {
   arrow: CSSProperties & {
-    length: number;
-    spread: number;
+    /**
+     * The distance from the tip of the arrow to the edge of the Floater.
+     */
+    base: number;
+    /**
+     * The width of the base of the arrow.
+     */
+    size: number;
   };
   close: CSSProperties;
   container: CSSProperties;
