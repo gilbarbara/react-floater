@@ -1,7 +1,7 @@
 import { Modifier, Placement } from '@popperjs/core';
 import { deepmerge } from 'deepmerge-ts';
 import is from 'is-lite';
-import { SetRequired } from 'type-fest';
+import type { SetRequired } from 'type-fest';
 
 import { LogOptions, PopperModifiers, Props } from '../types';
 

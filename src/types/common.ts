@@ -5,7 +5,7 @@ import {
   ReactElement,
   ReactNode,
 } from 'react';
-import { PartialDeep, RequireExactlyOne, ValueOf } from 'type-fest';
+import type { PartialDeep, RequireExactlyOne, ValueOf } from 'type-fest';
 
 import { STATUS } from '../literals';
 
