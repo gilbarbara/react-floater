@@ -307,6 +307,7 @@ export default function ReactFloater(props: Props) {
 
         wrapperPopper.current = createPopper(element, wrapperRef.current, {
           placement: wrapperOptions?.placement ?? placement,
+          strategy: isFixed(targetElement.current()) ? 'fixed' : 'absolute',
           modifiers: [
             {
               name: 'arrow',
