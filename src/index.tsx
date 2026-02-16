@@ -69,13 +69,13 @@ export default function ReactFloater(props: Props) {
 
   const arrowRef = useRef<HTMLSpanElement>(null);
   const childRef = useRef<HTMLElement>(null);
-  const eventDelayTimer = useRef<number>();
+  const eventDelayTimer = useRef<number>(undefined);
   const floaterRef = useRef<HTMLDivElement>(null);
   const internalId = useRef(randomId());
   const isMounted = useRef(false);
-  const popperRef = useRef<Instance>();
+  const popperRef = useRef<Instance>(undefined);
   const stateRef = useRef<State>(state);
-  const wrapperPopper = useRef<Instance>();
+  const wrapperPopper = useRef<Instance>(undefined);
   const wrapperRef = useRef<HTMLSpanElement>(null);
   const wrapperStyles = useRef<CSSProperties>({});
 

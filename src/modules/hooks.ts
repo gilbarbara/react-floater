@@ -1,7 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps,react-compiler/react-compiler */
 import { DependencyList, EffectCallback, useEffect, useRef } from 'react';
 
 function useEffectOnce(effect: EffectCallback) {
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(effect, []);
 }
 
@@ -25,7 +25,6 @@ export function useUpdateEffect(effect: EffectCallback, deps?: DependencyList) {
     if (!isFirst.current) {
       effect();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
 
   if (isFirst.current) {

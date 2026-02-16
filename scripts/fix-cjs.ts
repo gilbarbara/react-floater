@@ -2,12 +2,12 @@ import { replaceContent, type ReplaceContentOptions } from '@gilbarbara/node-hel
 
 export const fixCjsDts = async (options?: Partial<ReplaceContentOptions>) => {
   return replaceContent({
-    pattern: '**/*.d.{ts,cts}',
+    pattern: '**/*.d.cts',
     ...options,
     name: 'fix-cjs-dts',
 
     callback: content => {
-      const result = /(?<toReplace>\}\n\n(?<code>export .+))/u.exec(content);
+      const result = /(?<toReplace>\/\/#endregion\n(?<code>export .+))/u.exec(content);
       const { code, toReplace } = result?.groups ?? {};
 
       const exportEqual = 'export = ReactFloater;';
@@ -39,7 +39,7 @@ if (module.exports.default) {
 `;
 
   return replaceContent({
-    pattern: '**/*.js',
+    pattern: '**/*.cjs',
     ...options,
     name: 'fix-cjs-exports',
 

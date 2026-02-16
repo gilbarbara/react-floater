@@ -1,5 +1,4 @@
 import { cloneElement, CSSProperties, isValidElement, memo, ReactNode, Ref, useMemo } from 'react';
-import { PlainObject } from '@gilbarbara/types';
 
 import { STATUS } from '../../literals';
 import { CloseFunction, FloaterComponent, Statuses, Styles } from '../../types';
@@ -82,7 +81,7 @@ function Floater(props: Props) {
 
   const shouldRender = ['closing', 'open', 'opening', 'render'].includes(status);
 
-  const output: PlainObject<ReactNode> = {};
+  const output: Record<string, ReactNode> = {};
   const classes = ['__floater'];
   const baseProps = { role: 'tooltip' };
 
@@ -91,7 +90,7 @@ function Floater(props: Props) {
 
     output.content = isValidElement(component)
       ? cloneElement(component, componentProps)
-      : component(componentProps);
+      : (component(componentProps) as ReactNode);
   } else {
     output.content = <Container {...props} content={content} />;
   }

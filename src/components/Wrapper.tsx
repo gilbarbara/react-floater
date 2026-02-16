@@ -17,7 +17,7 @@ import { useMount } from '../modules/hooks';
 import { CloseFunction, Statuses } from '../types';
 
 interface Props {
-  childRef: RefObject<HTMLElement>;
+  childRef: RefObject<HTMLElement | null>;
   children: ReactNode;
   id: string;
   isControlled: boolean;
@@ -28,7 +28,7 @@ interface Props {
   status: Statuses;
   style?: CSSProperties;
   styles: CSSProperties;
-  wrapperRef: RefObject<HTMLElement>;
+  wrapperRef: RefObject<HTMLElement | null>;
 }
 
 function FloaterWrapper(props: Props) {
@@ -56,7 +56,9 @@ function FloaterWrapper(props: Props) {
   const mergedStyles = {
     ...styles,
     ...style,
-    ...(isValidElement(children) ? children.props.style : undefined),
+    ...(isValidElement(children)
+      ? (children as ReactElement<{ style?: CSSProperties }>).props.style
+      : undefined),
   };
 
   const wrapperId = `${id}-wrapper`;
@@ -82,12 +84,12 @@ function FloaterWrapper(props: Props) {
     if (Children.count(children) === 1 && isValidElement(children) && children.type !== Fragment) {
       element = is.function(children.type) ? (
         <span ref={wrapperRef} id={wrapperId} {...wrapperProps}>
-          {cloneElement(Children.only(children) as ReactElement, {
+          {cloneElement(Children.only(children) as ReactElement<PlainObject>, {
             innerRef: childRef,
           })}
         </span>
       ) : (
-        cloneElement(Children.only(children) as ReactElement, {
+        cloneElement(Children.only(children) as ReactElement<PlainObject>, {
           id: wrapperId,
           ref: wrapperRef,
           ...wrapperProps,

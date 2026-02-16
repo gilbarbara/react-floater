@@ -343,7 +343,7 @@ exports[`ReactFloater > with \`title\`, \`footer\` and \`closeBtn\` > should ren
       >
         <button
           aria-label="close"
-          style="background-color: transparent; border: 0px; border-radius: 0; font-size: 0px; outline: none; padding: 10px; position: absolute; right: 0px; top: 0px;"
+          style="background-color: transparent; border: 0px; border-radius: 0px; font-size: 0px; outline: none; padding: 10px; position: absolute; right: 0px; top: 0px; -webkit-appearance: none;"
           type="button"
         >
           <svg
@@ -364,7 +364,7 @@ exports[`ReactFloater > with \`title\`, \`footer\` and \`closeBtn\` > should ren
         </button>
         <div
           class="__floater__title"
-          style="border-bottom: 1px solid #555; color: rgb(85, 85, 85); font-size: 18px; margin-bottom: 5px; padding-bottom: 6px; padding-right: 18px;"
+          style="border-bottom: 1px solid rgb(85, 85, 85); color: rgb(85, 85, 85); font-size: 18px; margin-bottom: 5px; padding-bottom: 6px; padding-right: 18px;"
         >
           Title
         </div>
@@ -376,7 +376,7 @@ exports[`ReactFloater > with \`title\`, \`footer\` and \`closeBtn\` > should ren
         </div>
         <div
           class="__floater__footer"
-          style="border-top: 1px solid #ccc; font-size: 13px; margin-top: 10px; padding-top: 5px;"
+          style="border-top: 1px solid rgb(204, 204, 204); font-size: 13px; margin-top: 10px; padding-top: 5px;"
         >
           Footer
         </div>
