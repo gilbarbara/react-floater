@@ -12,7 +12,8 @@ import {
 import { MockInstance } from 'vitest';
 
 import ReactFloater from '../src';
-import { portalId } from '../src/modules/helpers';
+import { isFixed, log, portalId } from '../src/modules/helpers';
+import getStyles from '../src/modules/styles';
 import { Props } from '../src/types';
 
 import { Button, Floaters, Styled } from './__fixtures__/components';
@@ -711,6 +712,272 @@ describe('ReactFloater', () => {
       });
 
       expect(screen.getByTestId(id)).toMatchSnapshot();
+    });
+  });
+
+  describe('with custom `arrow` and `placement` left', () => {
+    afterAll(unmountView);
+
+    it('should render with left/right size swap', async () => {
+      view = setup({
+        ...props,
+        placement: 'left',
+        arrow: <span>arrow</span>,
+        styles: {
+          arrow: {
+            color: '#6ba2ff',
+            size: 80,
+            base: 10,
+          },
+        },
+      });
+
+      fireEvent.click(screen.getByTestId(idWrapper));
+
+      await act(async () => {
+        vi.runOnlyPendingTimers();
+      });
+
+      expect(screen.getByTestId(id)).toMatchSnapshot();
+    });
+  });
+
+  describe('with `portalElement` as string selector', () => {
+    let element: HTMLDivElement;
+
+    beforeAll(() => {
+      element = document.createElement('div');
+      element.id = 'string-portal';
+      document.body.appendChild(element);
+    });
+
+    afterAll(() => {
+      unmountView();
+      document.body.removeChild(element);
+    });
+
+    it('should render in the element found by selector', async () => {
+      view = setup({
+        ...props,
+        portalElement: '#string-portal',
+      });
+
+      fireEvent.click(screen.getByTestId(idWrapper));
+
+      expect(screen.getByTestId('string-portal')).toBeInTheDocument();
+      expect(screen.getByTestId(id)).toHaveTextContent(content);
+    });
+  });
+
+  describe('with controlled `open` and `event` hover', () => {
+    afterAll(unmountView);
+
+    it('should ignore mouseEnter and mouseLeave', async () => {
+      view = setup({
+        ...props,
+        open: true,
+        event: 'hover',
+      });
+
+      await act(async () => {
+        vi.runOnlyPendingTimers();
+      });
+
+      fireEvent.transitionEnd(screen.getByTestId(id));
+
+      expect(screen.getByTestId(id).firstChild).toHaveClass('__floater__open');
+
+      fireEvent.mouseEnter(screen.getByTestId(idWrapper));
+      fireEvent.mouseLeave(screen.getByTestId(idWrapper));
+
+      expect(screen.getByTestId(id).firstChild).toHaveClass('__floater__open');
+    });
+  });
+
+  describe('with `event` hover and `wrapperOptions`', () => {
+    afterAll(unmountView);
+
+    it('should handle click in hover+positionWrapper mode', async () => {
+      view = render(
+        <>
+          <span className="hover-target" id="hover-target">
+            target
+          </span>
+          <ReactFloater
+            content={<div>Hover content</div>}
+            event="hover"
+            id={id}
+            placement="top"
+            target=".hover-target"
+            wrapperOptions={{
+              placement: 'bottom',
+              position: true,
+            }}
+          >
+            <span>Beacon</span>
+          </ReactFloater>
+        </>,
+      );
+
+      fireEvent.click(screen.getByTestId(idWrapper));
+
+      await act(async () => {
+        vi.runOnlyPendingTimers();
+      });
+
+      expect(screen.getByTestId(id)).toBeInTheDocument();
+    });
+  });
+
+  describe('with ReactElement `title` and `footer`', () => {
+    afterAll(unmountView);
+
+    it('should render ReactElement title and footer', async () => {
+      view = setup({
+        ...props,
+        title: <h2>Custom Title</h2>,
+        footer: <div>Custom Footer</div>,
+      });
+
+      fireEvent.click(screen.getByTestId(idWrapper));
+
+      await act(async () => {
+        vi.runOnlyPendingTimers();
+      });
+
+      expect(screen.getByTestId(id)).toMatchSnapshot();
+    });
+  });
+
+  describe('with changing `wrapperOptions`', () => {
+    afterAll(unmountView);
+
+    it('should update positionWrapper when props change', async () => {
+      view = render(
+        <>
+          <span className="change-target" id="change-target">
+            target
+          </span>
+          <ReactFloater
+            content={<div>Content</div>}
+            id={id}
+            target=".change-target"
+            wrapperOptions={{ position: true }}
+          >
+            <span>Beacon</span>
+          </ReactFloater>
+        </>,
+      );
+
+      view.rerender(
+        <>
+          <span className="change-target" id="change-target">
+            target
+          </span>
+          <ReactFloater
+            content={<div>Content</div>}
+            id={id}
+            target=".change-target"
+            wrapperOptions={{ position: false }}
+          >
+            <span>Beacon</span>
+          </ReactFloater>
+        </>,
+      );
+
+      await act(async () => {
+        vi.runOnlyPendingTimers();
+      });
+
+      expect(screen.getByTestId(idWrapper)).toBeInTheDocument();
+    });
+  });
+
+  describe('with `target` as DOM element', () => {
+    let element: HTMLSpanElement;
+
+    beforeAll(() => {
+      element = document.createElement('span');
+      element.id = 'dom-target';
+      document.body.appendChild(element);
+    });
+
+    afterAll(() => {
+      unmountView();
+      document.body.removeChild(element);
+    });
+
+    it('should render with a DOM element target', async () => {
+      view = setup({
+        ...props,
+        target: element,
+      });
+
+      fireEvent.click(screen.getByTestId(idWrapper));
+
+      await act(async () => {
+        vi.runOnlyPendingTimers();
+      });
+
+      expect(screen.getByTestId(id)).toBeInTheDocument();
+    });
+  });
+
+  describe('portal cleanup', () => {
+    it('should remove the portal when the last instance unmounts', () => {
+      const { unmount } = setup(props);
+
+      expect(document.getElementById(portalId)).toBeInTheDocument();
+
+      unmount();
+
+      expect(document.getElementById(portalId)).not.toBeInTheDocument();
+    });
+  });
+
+  describe('helpers', () => {
+    it('isFixed should return true for fixed-position elements', () => {
+      const parent = document.createElement('div');
+
+      parent.style.position = 'fixed';
+      document.body.appendChild(parent);
+
+      const child = document.createElement('span');
+
+      parent.appendChild(child);
+
+      expect(isFixed(child)).toBe(true);
+
+      document.body.removeChild(parent);
+    });
+
+    it('log should handle non-array data', () => {
+      const consoleGroupCollapsed = vi
+        .spyOn(console, 'groupCollapsed')
+        .mockImplementation(() => undefined);
+      const consoleLog = vi.spyOn(console, 'log').mockImplementation(() => undefined);
+
+      log({ title: 'test', data: { key: 'value' }, debug: true });
+
+      expect(consoleGroupCollapsed).toHaveBeenCalled();
+      expect(consoleLog).toHaveBeenCalledWith({ key: 'value' });
+
+      consoleGroupCollapsed.mockRestore();
+      consoleLog.mockRestore();
+    });
+  });
+
+  describe('styles', () => {
+    it('getStyles should work with no argument', () => {
+      const styles = getStyles();
+
+      expect(styles.options.zIndex).toBe(100);
+    });
+
+    it('getStyles should work with undefined', () => {
+      const styles = getStyles(undefined);
+
+      expect(styles.options.zIndex).toBe(100);
     });
   });
 });

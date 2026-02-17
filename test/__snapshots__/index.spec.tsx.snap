@@ -401,3 +401,96 @@ exports[`ReactFloater > with \`title\`, \`footer\` and \`closeBtn\` > should ren
   </div>
 </div>
 `;
+
+exports[`ReactFloater > with ReactElement \`title\` and \`footer\` > should render ReactElement title and footer 1`] = `
+<div
+  data-popper-escaped=""
+  data-popper-placement="bottom"
+  data-popper-reference-hidden=""
+  id="test"
+  style="z-index: 100; position: absolute; left: 0px; top: 0px; margin: 0px; right: auto; bottom: auto; transform: translate(0px, 15px);"
+>
+  <div
+    class="__floater"
+    role="tooltip"
+    style="display: inline-block; filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.3)); max-width: 300px; opacity: 1; position: relative; transition: opacity 0.3s; visibility: visible; padding: 16px 0px 0px;"
+  >
+    <div
+      class="__floater__body"
+    >
+      <div
+        class="__floater__container"
+        style="background-color: rgb(255, 255, 255); color: rgb(102, 102, 102); min-height: 60px; min-width: 200px; padding: 20px; position: relative; z-index: 10;"
+      >
+        <h2>
+          Custom Title
+        </h2>
+        <div
+          class="__floater__content"
+          style="font-size: 15px;"
+        >
+          Hello! This is my content!
+        </div>
+        <div>
+          Custom Footer
+        </div>
+      </div>
+      <span
+        class="__floater__arrow"
+        style="display: inline-flex; position: absolute; left: 0px; transform: translate(8px, 0px); top: 0px;"
+      >
+        <svg
+          height="16"
+          version="1.1"
+          width="32"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <polygon
+            fill="#fff"
+            points="32,16 16,0 0,16"
+          />
+        </svg>
+      </span>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ReactFloater > with custom \`arrow\` and \`placement\` left > should render with left/right size swap 1`] = `
+<div
+  data-popper-escaped=""
+  data-popper-placement="left"
+  data-popper-reference-hidden=""
+  id="test"
+  style="z-index: 100; position: absolute; left: auto; top: 0px; margin: 0px; right: 0px; bottom: auto; transform: translate(-15px, 0px);"
+>
+  <div
+    class="__floater"
+    role="tooltip"
+    style="display: inline-block; filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.3)); max-width: 300px; opacity: 1; position: relative; transition: opacity 0.3s; visibility: visible; padding: 0px 80px 0px 0px;"
+  >
+    <div
+      class="__floater__body"
+    >
+      <div
+        class="__floater__container"
+        style="background-color: rgb(255, 255, 255); color: rgb(102, 102, 102); min-height: 60px; min-width: 200px; padding: 20px; position: relative; z-index: 10;"
+      >
+        <div
+          class="__floater__content"
+          style="font-size: 15px;"
+        >
+          Hello! This is my content!
+        </div>
+      </div>
+      <span
+        style="color: rgb(107, 162, 255); height: 10px; width: 80px; position: absolute; top: 0px; transform: translate(0px, 8px); right: 0px;"
+      >
+        <span>
+          arrow
+        </span>
+      </span>
+    </div>
+  </div>
+</div>
+`;

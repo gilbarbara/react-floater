@@ -1,3 +1,3 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`without dom > should render 1`] = `"<span id="r1tc2-wrapper" style="cursor:help">Hey</span>"`;
+exports[`without dom > should render 1`] = `""`;
