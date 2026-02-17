@@ -5,11 +5,11 @@ import {
   ReactElement,
   ReactNode,
 } from 'react';
-import type { PartialDeep, RequireExactlyOne, ValueOf } from 'type-fest';
 
 import { STATUS } from '../literals';
 
 import { PopperInstance, PopperModifiers, PopperPlacement } from './popper';
+import { PartialDeep, RequireExactlyOne, ValueOf } from './utilities';
 
 export type Action = 'open' | 'close';
 export type CloseFunction<T = HTMLElement> = MouseEventHandler<T>;
