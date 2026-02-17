@@ -1,9 +1,8 @@
 import { Modifier, Placement } from '@popperjs/core';
 import { deepmerge } from 'deepmerge-ts';
 import is from 'is-lite';
-import type { SetRequired } from 'type-fest';
 
-import { LogOptions, PopperModifiers, Props } from '../types';
+import { LogOptions, PopperModifiers, Props, SetRequired } from '../types';
 
 export const portalId = 'react-floater-portal';
 
