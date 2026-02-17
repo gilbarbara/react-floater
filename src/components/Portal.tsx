@@ -2,7 +2,7 @@ import { ReactNode, useCallback, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import is from 'is-lite';
 
-import { canUseDOM, portalId } from '../modules/helpers';
+import { portalId } from '../modules/helpers';
 import { useMount, useUnmount } from '../modules/hooks';
 import { Placement, SelectorOrElement } from '../types';
 
@@ -21,10 +21,6 @@ export default function ReactFloaterPortal(props: Props) {
   const node = useRef<HTMLElement | null>(null);
 
   const initialize = useCallback(() => {
-    if (!canUseDOM()) {
-      return;
-    }
-
     if (portalElement) {
       node.current = is.string(portalElement)
         ? (document.querySelector(portalElement) as HTMLElement)
@@ -52,19 +48,9 @@ export default function ReactFloaterPortal(props: Props) {
         document.body.appendChild(node.current);
       }
     }
-
-    if (!portalElement && !document.getElementById(portalId)) {
-      if (node.current) {
-        document.body.appendChild(node.current);
-      }
-    }
   }, [internalId, portalElement, zIndex]);
 
   useMount(() => {
-    if (!canUseDOM) {
-      return;
-    }
-
     initialize();
   });
 
@@ -73,7 +59,7 @@ export default function ReactFloaterPortal(props: Props) {
   }, [initialize]);
 
   useUnmount(() => {
-    if (!canUseDOM() || !node.current) {
+    if (!node.current) {
       return;
     }
 
@@ -81,11 +67,11 @@ export default function ReactFloaterPortal(props: Props) {
       if (node.current.id === portalId) {
         const ids: string[] = node.current.dataset.ids?.split(',') ?? [];
 
-        if (ids.includes(internalId)) {
-          node.current.dataset.ids = ids.filter(id => id !== internalId).join(',');
-        }
+        const remainingIds = ids.filter(id => id !== internalId);
 
-        if (ids.length <= 1) {
+        node.current.dataset.ids = remainingIds.join(',');
+
+        if (remainingIds.length === 0) {
           document.body.removeChild(node.current);
           node.current = null;
         }

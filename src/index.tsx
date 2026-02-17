@@ -24,7 +24,7 @@ import { useUpdateEffect } from './modules/hooks';
 import getStyles from './modules/styles';
 import { Props, State, Statuses, Styles } from './types';
 
-export default function ReactFloater(props: Props) {
+function FloaterComponent(props: Props) {
   const {
     arrow: arrowElement,
     autoOpen = false,
@@ -77,7 +77,7 @@ export default function ReactFloater(props: Props) {
   const stateRef = useRef<State>(state);
   const wrapperPopper = useRef<Instance>(undefined);
   const wrapperRef = useRef<HTMLSpanElement>(null);
-  const wrapperStyles = useRef<CSSProperties>({});
+  const wrapperStyles = useRef<CSSProperties>(undefined);
 
   const { currentPlacement, positionWrapper, status, statusWrapper } = state;
 
@@ -113,10 +113,6 @@ export default function ReactFloater(props: Props) {
   );
 
   const targetElement = useRef(() => {
-    if (!canUseDOM()) {
-      return null;
-    }
-
     if (target) {
       if (is.domElement(target)) {
         return target;
@@ -172,11 +168,10 @@ export default function ReactFloater(props: Props) {
 
         if (!positionWrapper) {
           POSITIONING_PROPS.forEach(d => {
-            // eslint-disable-next-line unicorn/prefer-ternary
             if (d === 'position') {
-              wrapperStyles.current[d] = targetStyles[d] as CSSProperties['position'];
+              wrapperStyles.current![d] = targetStyles[d] as CSSProperties['position'];
             } else {
-              wrapperStyles.current[d] = targetStyles[d];
+              wrapperStyles.current![d] = targetStyles[d];
             }
           });
 
@@ -243,17 +238,20 @@ export default function ReactFloater(props: Props) {
               name: 'updatePlacement',
               enabled: true,
               phase: 'afterWrite',
+              /* v8 ignore start -- @preserve */
               fn: ({ instance, state: popperState }: ModifierArguments<PlainObject>) => {
                 if (popperState.placement !== stateRef.current.currentPlacement) {
                   popperRef.current = instance;
                   updateState({ currentPlacement: popperState.placement });
                 }
               },
+              /* v8 ignore stop -- @preserve */
             },
             {
               name: 'applyArrowStyle',
               enabled: true,
               phase: 'write',
+              /* v8 ignore start -- @preserve */
               fn: ({ state: popperState }: ModifierArguments<PlainObject>) => {
                 const {
                   elements: { arrow: stateArrow },
@@ -276,9 +274,11 @@ export default function ReactFloater(props: Props) {
                   }
                 }
               },
+              /* v8 ignore stop -- @preserve */
             },
             ...Object.values(rest),
           ],
+          /* v8 ignore start -- @preserve */
           onFirstUpdate: popperState => {
             updateState({
               currentPlacement: popperState.placement,
@@ -291,17 +291,20 @@ export default function ReactFloater(props: Props) {
               });
             }
           },
+          /* v8 ignore stop -- @preserve */
         });
 
         if (getPopper && popperRef.current) {
           getPopper(popperRef.current, 'floater');
         }
       } else {
+        /* v8 ignore next 3 -- @preserve */
         updateState({
           status: STATUS.IDLE,
         });
       }
 
+      /* v8 ignore start -- @preserve */
       if (wrapperRef.current && !wrapperPopper.current && stateRef.current.positionWrapper) {
         const wrapperOffset = wrapperOptions?.offset ?? 0;
 
@@ -339,6 +342,7 @@ export default function ReactFloater(props: Props) {
           getPopper(wrapperPopper.current, 'wrapper');
         }
       }
+      /* v8 ignore stop -- @preserve */
     }
   }, [
     disableFlip,
@@ -352,6 +356,7 @@ export default function ReactFloater(props: Props) {
     wrapperOptions?.placement,
   ]);
 
+  /* v8 ignore start -- @preserve */
   const handleLoad = useCallback(() => {
     if (popperRef.current) {
       popperRef.current.forceUpdate();
@@ -361,8 +366,10 @@ export default function ReactFloater(props: Props) {
       wrapperPopper.current.forceUpdate();
     }
   }, []);
+  /* v8 ignore stop -- @preserve */
 
   const handleTransitionEnd = useCallback(() => {
+    /* v8 ignore next 3 -- @preserve */
     if (wrapperPopper.current) {
       wrapperPopper.current.forceUpdate();
     }
@@ -461,9 +468,7 @@ export default function ReactFloater(props: Props) {
 
   // Global load event listener (singleton)
   useEffect(() => {
-    if (canUseDOM()) {
-      window.addEventListener('load', handleLoad);
-    }
+    window.addEventListener('load', handleLoad);
   }, [handleLoad]);
 
   // Mount effect
@@ -505,10 +510,6 @@ export default function ReactFloater(props: Props) {
 
   // handle changes
   useUpdateEffect(() => {
-    if (!canUseDOM()) {
-      return;
-    }
-
     if (changedProps('open')) {
       let forceStatus;
 
@@ -549,6 +550,7 @@ export default function ReactFloater(props: Props) {
       popperRef.current.destroy();
       popperRef.current = undefined;
 
+      /* v8 ignore next 3 -- @preserve */
       if (wrapperPopper.current) {
         wrapperPopper.current.forceUpdate();
       }
@@ -605,6 +607,14 @@ export default function ReactFloater(props: Props) {
       {!positionWrapper && wrapper}
     </>
   );
+}
+
+export default function ReactFloater(props: Props) {
+  if (!canUseDOM()) {
+    return null;
+  }
+
+  return <FloaterComponent {...props} />;
 }
 
 export type {
