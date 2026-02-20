@@ -22,12 +22,12 @@ export function useUpdateEffect(effect: EffectCallback, deps?: DependencyList) {
   const isFirst = useRef(true);
 
   useEffect(() => {
-    if (!isFirst.current) {
-      effect();
-    }
-  }, deps);
+    if (isFirst.current) {
+      isFirst.current = false;
 
-  if (isFirst.current) {
-    isFirst.current = false;
-  }
+      return undefined;
+    }
+
+    return effect();
+  }, deps);
 }

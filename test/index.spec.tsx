@@ -16,7 +16,7 @@ import { isFixed, log, portalId } from '../src/modules/helpers';
 import getStyles from '../src/modules/styles';
 import { Props } from '../src/types';
 
-import { Button, Floaters, Styled } from './__fixtures__/components';
+import { Button, Floaters, InlineComponentWrapper, Styled } from './__fixtures__/components';
 
 configure({
   testIdAttribute: 'id',
@@ -24,7 +24,6 @@ configure({
 
 vi.useFakeTimers();
 
-const mockCallback = vi.fn();
 const mockGetPopper = vi.fn(() => ({ instance: {} }));
 
 const id = 'test';
@@ -48,10 +47,6 @@ describe('ReactFloater', () => {
     view?.unmount();
     cleanup();
   };
-
-  afterEach(() => {
-    mockCallback.mockClear();
-  });
 
   describe('basic usage', () => {
     afterAll(() => {
@@ -189,237 +184,6 @@ describe('ReactFloater', () => {
     });
   });
 
-  describe('with `autoOpen`', () => {
-    afterAll(unmountView);
-
-    it('should have rendered the Floater initially open', async () => {
-      view = setup({
-        ...props,
-        autoOpen: true,
-      });
-
-      await act(async () => {
-        vi.runOnlyPendingTimers();
-      });
-
-      fireEvent.transitionEnd(screen.getByTestId(id));
-      expect(screen.getByTestId(id).firstChild).toHaveClass('__floater__open');
-    });
-
-    it('should hide the floater', async () => {
-      fireEvent.click(screen.getByTestId(idWrapper));
-
-      fireEvent.transitionEnd(screen.getByTestId(id));
-
-      expect(screen.getByTestId('react-floater-portal')).toBeEmptyDOMElement();
-    });
-
-    it('should show the floater again', async () => {
-      fireEvent.click(screen.getByTestId(idWrapper));
-
-      await act(async () => {
-        vi.runOnlyPendingTimers();
-      });
-
-      fireEvent.transitionEnd(screen.getByTestId(id));
-
-      expect(screen.getByTestId(id).firstChild).toHaveClass('__floater__open');
-    });
-  });
-
-  describe('with `callback`', () => {
-    afterAll(unmountView);
-
-    it('should call the callback function on open', async () => {
-      view = setup({
-        ...props,
-        callback: mockCallback,
-      });
-
-      fireEvent.click(screen.getByTestId(idWrapper));
-
-      await act(async () => {
-        vi.runOnlyPendingTimers();
-      });
-
-      fireEvent.transitionEnd(screen.getByTestId(id));
-
-      expect(mockCallback).toHaveBeenCalledWith('open', {
-        autoOpen: false,
-        callback: mockCallback,
-        children: 'Places',
-        content: 'Hello! This is my content!',
-        debug: false,
-        disableFlip: false,
-        disableHoverToClick: false,
-        event: 'click',
-        eventDelay: 0.4,
-        getPopper: mockGetPopper,
-        hideArrow: false,
-        id,
-        offset: 15,
-        placement: 'bottom',
-        showCloseButton: false,
-        styles: {},
-        target: null,
-        wrapperOptions: { position: false },
-      });
-    });
-
-    it('should call the callback function on close', async () => {
-      fireEvent.click(screen.getByTestId(idWrapper));
-
-      fireEvent.transitionEnd(screen.getByTestId(id));
-
-      expect(mockCallback).toHaveBeenCalledWith('close', {
-        autoOpen: false,
-        callback: mockCallback,
-        children: 'Places',
-        content: 'Hello! This is my content!',
-        debug: false,
-        disableFlip: false,
-        disableHoverToClick: false,
-        event: 'click',
-        eventDelay: 0.4,
-        getPopper: mockGetPopper,
-        hideArrow: false,
-        id,
-        offset: 15,
-        placement: 'bottom',
-        showCloseButton: false,
-        styles: {},
-        target: null,
-        wrapperOptions: { position: false },
-      });
-    });
-  });
-
-  describe('with `debug`', () => {
-    let consoleGroupCollapsed: MockInstance;
-    let consoleLog: MockInstance;
-
-    beforeAll(() => {
-      consoleGroupCollapsed = vi
-        .spyOn(console, 'groupCollapsed')
-        .mockImplementation(() => undefined);
-      consoleLog = vi.spyOn(console, 'log').mockImplementation(() => undefined);
-    });
-
-    afterAll(() => {
-      consoleGroupCollapsed.mockRestore();
-      consoleLog.mockRestore();
-      unmountView();
-    });
-
-    it('should be able to show and hide the floater', async () => {
-      view = setup({
-        ...props,
-        debug: true,
-      });
-
-      expect(consoleGroupCollapsed).toHaveBeenCalledWith(
-        '%creact-floater: init',
-        'color: #9b00ff; font-weight: bold; font-size: 12px;',
-      );
-
-      expect(consoleLog).toHaveBeenCalledWith(
-        expect.objectContaining({
-          floater: null,
-          hasChildren: true,
-          hasTarget: false,
-          isControlled: false,
-          positionWrapper: false,
-          target: expect.anything(),
-        }),
-      );
-
-      fireEvent.click(screen.getByTestId(idWrapper));
-
-      expect(consoleGroupCollapsed).toHaveBeenCalledWith(
-        '%creact-floater: click',
-        'color: #9b00ff; font-weight: bold; font-size: 12px;',
-      );
-      expect(consoleLog).toHaveBeenCalledWith({ event: 'click', status: 'opening' });
-
-      await act(async () => {
-        vi.runOnlyPendingTimers();
-      });
-
-      fireEvent.transitionEnd(screen.getByTestId(id));
-
-      expect(screen.getByTestId(id).firstChild).toHaveClass('__floater__open');
-
-      expect(consoleGroupCollapsed).toHaveBeenCalledTimes(2);
-      expect(consoleLog).toHaveBeenCalledTimes(2);
-    });
-  });
-
-  describe('with `event` hover', () => {
-    afterAll(unmountView);
-
-    it('should be able to show the floater', async () => {
-      view = setup({
-        ...props,
-        event: 'hover',
-        disableHoverToClick: true,
-      });
-
-      fireEvent.mouseEnter(screen.getByTestId(idWrapper));
-
-      await act(async () => {
-        vi.runOnlyPendingTimers();
-      });
-
-      fireEvent.transitionEnd(screen.getByTestId(id));
-
-      expect(screen.getByTestId(id).firstChild).toHaveClass('__floater__open');
-    });
-
-    it('should close itself after `eventDelay`', async () => {
-      fireEvent.mouseLeave(screen.getByTestId(idWrapper));
-
-      act(() => {
-        vi.advanceTimersByTime(1000);
-      });
-
-      expect(screen.getByTestId(id).firstChild).not.toHaveClass('__floater__open');
-
-      fireEvent.transitionEnd(screen.getByTestId(id));
-
-      expect(screen.getByTestId('react-floater-portal')).toBeEmptyDOMElement();
-    });
-  });
-
-  describe('with `event` hover and `eventDelay` set to 0', () => {
-    afterAll(unmountView);
-
-    it('should be able to show the floater', async () => {
-      view = setup({
-        ...props,
-        event: 'hover',
-        eventDelay: 0,
-      });
-
-      fireEvent.mouseEnter(screen.getByTestId(idWrapper));
-
-      await act(async () => {
-        vi.runOnlyPendingTimers();
-      });
-
-      fireEvent.transitionEnd(screen.getByTestId(id));
-
-      expect(screen.getByTestId(id).firstChild).toHaveClass('__floater__open');
-    });
-
-    it('should have close itself immediately', async () => {
-      fireEvent.mouseLeave(screen.getByTestId(idWrapper));
-
-      fireEvent.transitionEnd(screen.getByTestId(id));
-
-      expect(screen.getByTestId('react-floater-portal')).toBeEmptyDOMElement();
-    });
-  });
-
   describe('with `title`, `footer` and `closeBtn`', () => {
     afterAll(unmountView);
 
@@ -440,59 +204,6 @@ describe('ReactFloater', () => {
       fireEvent.transitionEnd(screen.getByTestId(id));
 
       expect(screen.getByTestId(id)).toMatchSnapshot();
-    });
-  });
-
-  describe('with `open`', () => {
-    const localProps = {
-      ...props,
-      open: false,
-    };
-
-    afterAll(unmountView);
-
-    it('should not be able to show the floater with click', async () => {
-      view = setup(localProps);
-
-      fireEvent.click(screen.getByTestId(idWrapper));
-
-      expect(screen.queryByTestId(id)).not.toBeInTheDocument();
-    });
-
-    it('should not be able to show the floater with hover', async () => {
-      view = setup({ ...localProps, event: 'hover' });
-
-      fireEvent.mouseEnter(screen.getAllByTestId(idWrapper)[0]);
-
-      expect(screen.queryByTestId(id)).not.toBeInTheDocument();
-    });
-
-    it('should show the floater when `open` is true', async () => {
-      view.rerender(
-        <ReactFloater {...localProps} open>
-          {content}
-        </ReactFloater>,
-      );
-
-      await act(async () => {
-        vi.runOnlyPendingTimers();
-      });
-
-      fireEvent.transitionEnd(screen.getByTestId(id));
-
-      expect(screen.getByTestId(id).firstChild).toHaveClass('__floater__open');
-    });
-
-    it('should close the floater when `open` is false', async () => {
-      view.rerender(
-        <ReactFloater {...localProps} open={false}>
-          {content}
-        </ReactFloater>,
-      );
-
-      fireEvent.transitionEnd(screen.getByTestId(id));
-
-      expect(screen.queryByTestId(id)).not.toBeInTheDocument();
     });
   });
 
@@ -560,6 +271,32 @@ describe('ReactFloater', () => {
       fireEvent.transitionEnd(screen.getByTestId(id));
 
       expect(screen.getByTestId('react-floater-portal')).toBeEmptyDOMElement();
+    });
+  });
+
+  describe('component prop stability', () => {
+    afterAll(unmountView);
+
+    it('should not remount when open changes from false to true with inline component', async () => {
+      const mountSpy = vi.fn();
+
+      const { rerender } = render(
+        <InlineComponentWrapper id={id} initialOpen={false} onMount={mountSpy} />,
+      );
+
+      rerender(<InlineComponentWrapper id={id} initialOpen onMount={mountSpy} />);
+
+      await act(async () => {
+        vi.runAllTimers();
+      });
+
+      const floaterElement = document.querySelector(`#${id}`);
+
+      if (floaterElement) {
+        fireEvent.transitionEnd(floaterElement);
+      }
+
+      expect(mountSpy).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -635,6 +372,32 @@ describe('ReactFloater', () => {
       });
 
       expect(screen.getByTestId(id)).toMatchSnapshot();
+    });
+
+    it('should reach OPEN status after transitionEnd', () => {
+      fireEvent.transitionEnd(screen.getByTestId(id));
+
+      expect(screen.getByTestId(id).firstChild).toHaveClass('__floater__open');
+    });
+
+    it('should hide the floater', () => {
+      fireEvent.click(screen.getByTestId(idWrapper));
+
+      fireEvent.transitionEnd(screen.getByTestId(id));
+
+      expect(screen.getByTestId('react-floater-portal')).toBeEmptyDOMElement();
+    });
+
+    it('should re-open after close', async () => {
+      fireEvent.click(screen.getByTestId(idWrapper));
+
+      await act(async () => {
+        vi.runOnlyPendingTimers();
+      });
+
+      fireEvent.transitionEnd(screen.getByTestId(id));
+
+      expect(screen.getByTestId(id).firstChild).toHaveClass('__floater__open');
     });
   });
 
@@ -769,31 +532,6 @@ describe('ReactFloater', () => {
     });
   });
 
-  describe('with controlled `open` and `event` hover', () => {
-    afterAll(unmountView);
-
-    it('should ignore mouseEnter and mouseLeave', async () => {
-      view = setup({
-        ...props,
-        open: true,
-        event: 'hover',
-      });
-
-      await act(async () => {
-        vi.runOnlyPendingTimers();
-      });
-
-      fireEvent.transitionEnd(screen.getByTestId(id));
-
-      expect(screen.getByTestId(id).firstChild).toHaveClass('__floater__open');
-
-      fireEvent.mouseEnter(screen.getByTestId(idWrapper));
-      fireEvent.mouseLeave(screen.getByTestId(idWrapper));
-
-      expect(screen.getByTestId(id).firstChild).toHaveClass('__floater__open');
-    });
-  });
-
   describe('with `event` hover and `wrapperOptions`', () => {
     afterAll(unmountView);
 
@@ -849,50 +587,6 @@ describe('ReactFloater', () => {
     });
   });
 
-  describe('with changing `wrapperOptions`', () => {
-    afterAll(unmountView);
-
-    it('should update positionWrapper when props change', async () => {
-      view = render(
-        <>
-          <span className="change-target" id="change-target">
-            target
-          </span>
-          <ReactFloater
-            content={<div>Content</div>}
-            id={id}
-            target=".change-target"
-            wrapperOptions={{ position: true }}
-          >
-            <span>Beacon</span>
-          </ReactFloater>
-        </>,
-      );
-
-      view.rerender(
-        <>
-          <span className="change-target" id="change-target">
-            target
-          </span>
-          <ReactFloater
-            content={<div>Content</div>}
-            id={id}
-            target=".change-target"
-            wrapperOptions={{ position: false }}
-          >
-            <span>Beacon</span>
-          </ReactFloater>
-        </>,
-      );
-
-      await act(async () => {
-        vi.runOnlyPendingTimers();
-      });
-
-      expect(screen.getByTestId(idWrapper)).toBeInTheDocument();
-    });
-  });
-
   describe('with `target` as DOM element', () => {
     let element: HTMLSpanElement;
 
@@ -920,6 +614,66 @@ describe('ReactFloater', () => {
       });
 
       expect(screen.getByTestId(id)).toBeInTheDocument();
+    });
+  });
+
+  describe('with `debug`', () => {
+    let consoleGroupCollapsed: MockInstance;
+    let consoleLog: MockInstance;
+
+    beforeAll(() => {
+      consoleGroupCollapsed = vi
+        .spyOn(console, 'groupCollapsed')
+        .mockImplementation(() => undefined);
+      consoleLog = vi.spyOn(console, 'log').mockImplementation(() => undefined);
+    });
+
+    afterAll(() => {
+      consoleGroupCollapsed.mockRestore();
+      consoleLog.mockRestore();
+      unmountView();
+    });
+
+    it('should be able to show and hide the floater', async () => {
+      view = setup({
+        ...props,
+        debug: true,
+      });
+
+      expect(consoleGroupCollapsed).toHaveBeenCalledWith(
+        '%creact-floater: init',
+        'color: #9b00ff; font-weight: bold; font-size: 12px;',
+      );
+
+      expect(consoleLog).toHaveBeenCalledWith(
+        expect.objectContaining({
+          floater: null,
+          hasChildren: true,
+          hasTarget: false,
+          isControlled: false,
+          positionWrapper: false,
+          target: expect.anything(),
+        }),
+      );
+
+      fireEvent.click(screen.getByTestId(idWrapper));
+
+      expect(consoleGroupCollapsed).toHaveBeenCalledWith(
+        '%creact-floater: click',
+        'color: #9b00ff; font-weight: bold; font-size: 12px;',
+      );
+      expect(consoleLog).toHaveBeenCalledWith({ event: 'click', status: 'opening' });
+
+      await act(async () => {
+        vi.runOnlyPendingTimers();
+      });
+
+      fireEvent.transitionEnd(screen.getByTestId(id));
+
+      expect(screen.getByTestId(id).firstChild).toHaveClass('__floater__open');
+
+      expect(consoleGroupCollapsed).toHaveBeenCalledTimes(2);
+      expect(consoleLog).toHaveBeenCalledTimes(2);
     });
   });
 

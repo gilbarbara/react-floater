@@ -1,4 +1,4 @@
-import { cloneElement, CSSProperties, isValidElement, memo, ReactNode, Ref, useMemo } from 'react';
+import { cloneElement, CSSProperties, isValidElement, ReactNode, Ref, useMemo } from 'react';
 
 import { STATUS } from '../../literals';
 import { CloseFunction, FloaterComponent, Statuses, Styles } from '../../types';
@@ -24,7 +24,7 @@ interface Props {
   title?: ReactNode;
 }
 
-function Floater(props: Props) {
+export default function Floater(props: Props) {
   const {
     component,
     content,
@@ -118,5 +118,3 @@ function Floater(props: Props) {
     </div>
   );
 }
-
-export default memo(Floater);

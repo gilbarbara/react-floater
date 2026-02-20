@@ -24,11 +24,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### Core Component Flow
 The library uses a state machine pattern for managing the floater lifecycle:
 
-1. **Main Entry** (`src/index.tsx`): The `ReactFloater` component manages state using `useReducer` and handles:
-   - Popper.js instance creation/management for positioning
-   - Event handling (click/hover) with mobile detection
-   - Portal rendering for the floating element
-   - Status transitions: IDLE → OPENING → OPEN → CLOSING → IDLE
+1. **Main Entry** (`src/index.tsx`): Thin JSX shell that delegates to `useFloater` hook
+   - `useFloater` (`src/modules/useFloater.ts`): All state management, Popper.js integration, event handlers
+   - Status transitions: INIT → IDLE → RENDER → OPENING → OPEN → CLOSING → IDLE
 
 2. **Component Structure**:
    - `Portal` (`src/components/Portal.tsx`): Manages DOM portal rendering
@@ -44,7 +42,7 @@ The library uses a state machine pattern for managing the floater lifecycle:
 
 ### Key Patterns
 
-**State Management**: The component uses `useReducer` with status-based state transitions. Changes are tracked using `tree-changes-hook` for efficient callback triggers.
+**State Management**: The `useFloater` hook uses `useReducer` with status-based state transitions. A `previousStatus` ref tracks the prior status, and 3 focused `useEffect` hooks handle controlled mode, wrapper positioning, and status transitions.
 
 **Style Merging**: Custom styles are deeply merged with defaults using `deepmerge-ts`. The styles object structure is defined in `src/modules/styles.ts`.
 
@@ -56,6 +54,7 @@ The library uses a state machine pattern for managing the floater lifecycle:
 
 ### Testing Approach
 - Uses Vitest with React Testing Library
-- Test files in `test/` directory
+- `test/index.spec.tsx`: Rendering, UI, and integration tests
+- `test/modules/useFloater.spec.tsx`: State machine, lifecycle, and event handling tests
 - Coverage requirements: 90% for all metrics
 - Mock components in `test/__fixtures__/`
