@@ -4,7 +4,6 @@ import {
   CSSProperties,
   Fragment,
   isValidElement,
-  memo,
   ReactElement,
   ReactNode,
   RefObject,
@@ -31,7 +30,7 @@ interface Props {
   wrapperRef: RefObject<HTMLElement | null>;
 }
 
-function FloaterWrapper(props: Props) {
+export default function FloaterWrapper(props: Props) {
   const {
     childRef,
     children,
@@ -106,5 +105,3 @@ function FloaterWrapper(props: Props) {
 
   return element;
 }
-
-export default memo(FloaterWrapper);

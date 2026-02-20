@@ -146,7 +146,7 @@ export function once(
   eventType: string,
   handler: EventListener,
   options: boolean | EventListenerOptions = false,
-): void {
+): () => void {
   let nextCB: EventListener;
 
   // eslint-disable-next-line prefer-const
@@ -156,6 +156,8 @@ export function once(
   };
 
   on(element, eventType, nextCB, options);
+
+  return () => off(element, eventType, nextCB);
 }
 
 export function randomId(): string {

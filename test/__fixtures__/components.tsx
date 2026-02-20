@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 
 import ReactFloater from '../../src';
@@ -37,6 +37,44 @@ export function Floaters(props: Omit<Props, 'content' | 'component'>) {
       </button>
     </>
   );
+}
+
+export function InlineComponentWrapper({
+  initialOpen = true,
+  onMount,
+  ...floaterProps
+}: Omit<Props, 'content' | 'component'> & { initialOpen?: boolean; onMount: () => void }) {
+  // Mimics consumers like react-joyride that store refs in state, triggering re-renders
+  const [, setElement] = useState<HTMLElement | null>(null);
+  const [popper, setPopper] = useState<any>(null);
+
+  return (
+    <ReactFloater
+      {...floaterProps}
+      // eslint-disable-next-line react/no-unstable-nested-components
+      component={() => (
+        <div ref={setElement}>
+          <MountTracker onMount={onMount} />
+        </div>
+      )}
+      getPopper={(instance, type) => {
+        if (type === 'floater' && !popper) {
+          setPopper(instance);
+        }
+      }}
+      open={initialOpen}
+    >
+      <button type="button">target</button>
+    </ReactFloater>
+  );
+}
+
+export function MountTracker({ onMount }: { onMount: () => void }) {
+  useEffect(() => {
+    onMount();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  return <div>tracked</div>;
 }
 
 const Wrapper = styled.div`
