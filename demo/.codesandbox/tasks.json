@@ -1,0 +1,19 @@
+{
+  "$schema": "https://codesandbox.io/schemas/tasks.json",
+  "setupTasks": [
+    {
+      "name": "Install Dependencies",
+      "command": "corepack enable pnpm && pnpm install"
+    }
+  ],
+  "tasks": {
+    "dev": {
+      "name": "Dev Server",
+      "command": "pnpm dev",
+      "runAtStart": true,
+      "preview": {
+        "port": 3000
+      }
+    }
+  }
+}
