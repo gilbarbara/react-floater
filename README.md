@@ -1,8 +1,11 @@
 # React Floater
 
-[![NPM version](https://badge.fury.io/js/react-floater.svg)](https://www.npmjs.com/package/react-floater) [![CI](https://github.com/gilbarbara/react-floater/actions/workflows/main.yml/badge.svg)](https://github.com/gilbarbara/react-floater/actions/workflows/main.yml) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=gilbarbara_react-floater&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=gilbarbara_react-floater) [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=gilbarbara_react-floater&metric=coverage)](https://sonarcloud.io/summary/new_code?id=gilbarbara_react-floater)
+[![NPM version](https://badge.fury.io/js/react-floater.svg)](https://www.npmjs.com/package/react-floater) [![CI](https://github.com/gilbarbara/react-floater/actions/workflows/ci.yml/badge.svg)](https://github.com/gilbarbara/react-floater/actions/workflows/ci.yml) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=gilbarbara_react-floater&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=gilbarbara_react-floater) [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=gilbarbara_react-floater&metric=coverage)](https://sonarcloud.io/summary/new_code?id=gilbarbara_react-floater)
 
 **Flexible, customizable, and accessible tooltips, popovers, and guided hints for React.**
+
+> **Maintenance Mode:** This library is built on Popper.js v2, which is no longer actively maintained.
+> For new projects, we recommend using [Floating UI](https://floating-ui.com/) directly.
 
 [**View the live demo →**](https://codesandbox.io/s/github/gilbarbara/react-floater/tree/main/demo)
 
