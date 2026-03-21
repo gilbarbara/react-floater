@@ -7,13 +7,17 @@ export const fixCjsDts = async (options?: Partial<ReplaceContentOptions>) => {
     name: 'fix-cjs-dts',
 
     callback: content => {
-      const result = /(?<toReplace>\/\/#endregion\n(?<code>export .+))/u.exec(content);
+      const result =
+        /(?<toReplace>\/\/#endregion\n(?<code>export .+)\n(?<sourceMap>\/\/# sourceMappingURL=\S+))/u.exec(
+          content,
+        );
       const { code, toReplace } = result?.groups ?? {};
 
       const exportEqual = 'export = ReactFloater;';
 
       if (code) {
-        const statement = `    ${code}
+        const statement = `declare namespace ReactFloater {
+    ${code}
 }
 
 ${exportEqual}`;
